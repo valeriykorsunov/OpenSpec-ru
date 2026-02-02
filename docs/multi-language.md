@@ -1,10 +1,10 @@
-# Multi-Language Guide
+# Руководство по мультиязычности
 
-Configure OpenSpec to generate artifacts in languages other than English.
+Настройте OpenSpec для генерации артефактов на языках, отличных от английского.
 
-## Quick Setup
+## Быстрая настройка
 
-Add a language instruction to your `openspec/config.yaml`:
+Добавьте языковую инструкцию в ваш `openspec/config.yaml`:
 
 ```yaml
 schema: spec-driven
@@ -13,15 +13,15 @@ context: |
   Language: Portuguese (pt-BR)
   All artifacts must be written in Brazilian Portuguese.
 
-  # Your other project context below...
+  # Другой контекст вашего проекта ниже...
   Tech stack: TypeScript, React, Node.js
 ```
 
-That's it. All generated artifacts will now be in Portuguese.
+Вот и всё. Все сгенерированные артефакты теперь будут на португальском языке.
 
-## Language Examples
+## Примеры языков
 
-### Portuguese (Brazil)
+### Португальский (Бразилия)
 
 ```yaml
 context: |
@@ -29,7 +29,7 @@ context: |
   All artifacts must be written in Brazilian Portuguese.
 ```
 
-### Spanish
+### Испанский
 
 ```yaml
 context: |
@@ -37,7 +37,7 @@ context: |
   Todos los artefactos deben escribirse en español.
 ```
 
-### Chinese (Simplified)
+### Китайский (Упрощенный)
 
 ```yaml
 context: |
@@ -45,7 +45,7 @@ context: |
   所有产出物必须用简体中文撰写。
 ```
 
-### Japanese
+### Японский
 
 ```yaml
 context: |
@@ -53,7 +53,7 @@ context: |
   すべての成果物は日本語で作成してください。
 ```
 
-### French
+### Французский
 
 ```yaml
 context: |
@@ -61,7 +61,7 @@ context: |
   Tous les artefacts doivent être rédigés en français.
 ```
 
-### German
+### Немецкий
 
 ```yaml
 context: |
@@ -69,11 +69,19 @@ context: |
   Alle Artefakte müssen auf Deutsch verfasst werden.
 ```
 
-## Tips
+### Русский
 
-### Handle Technical Terms
+```yaml
+context: |
+  Language: Russian
+  All artifacts must be written in Russian.
+```
 
-Decide how to handle technical terminology:
+## Советы
+
+### Обработка технических терминов
+
+Решите, как обрабатывать техническую терминологию:
 
 ```yaml
 context: |
@@ -83,9 +91,9 @@ context: |
   - Code examples and file paths remain in English
 ```
 
-### Combine with Other Context
+### Сочетание с другим контекстом
 
-Language settings work alongside your other project context:
+Настройки языка работают вместе с другим контекстом вашего проекта:
 
 ```yaml
 schema: spec-driven
@@ -98,18 +106,18 @@ context: |
   Database: PostgreSQL with Prisma ORM
 ```
 
-## Verification
+## Проверка
 
-To verify your language config is working:
+Чтобы проверить, что конфигурация языка работает:
 
 ```bash
-# Check the instructions - should show your language context
+# Проверьте инструкции - должен отображаться ваш языковой контекст
 openspec instructions proposal --change my-change
 
-# Output will include your language context
+# Вывод будет включать ваш языковой контекст
 ```
 
-## Related Documentation
+## Связанная документация
 
-- [Customization Guide](./customization.md) - Project configuration options
-- [Workflows Guide](./workflows.md) - Full workflow documentation
+- [Руководство по настройке](./customization.md) - Опции конфигурации проекта
+- [Руководство по рабочим процессам](./workflows.md) - Полная документация рабочих процессов
