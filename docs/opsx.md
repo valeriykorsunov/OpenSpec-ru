@@ -1,79 +1,79 @@
-# OPSX Workflow
+# Рабочий процесс OPSX
 
-> Feedback welcome on [Discord](https://discord.gg/YctCnvvshC).
+> Приветствуются отзывы в [Discord](https://discord.gg/YctCnvvshC).
 
-## What Is It?
+## Что это?
 
-OPSX is now the standard workflow for OpenSpec.
+OPSX теперь является стандартным рабочим процессом для OpenSpec.
 
-It's a **fluid, iterative workflow** for OpenSpec changes. No more rigid phases — just actions you can take anytime.
+Это **гибкий, итеративный рабочий процесс** для изменений в OpenSpec. Больше никаких жестких фаз — только действия, которые вы можете выполнять в любое время.
 
-## Why This Exists
+## Зачем это нужно
 
-The legacy OpenSpec workflow works, but it's **locked down**:
+Устаревший рабочий процесс OpenSpec работает, но он **замкнут**:
 
-- **Instructions are hardcoded** — buried in TypeScript, you can't change them
-- **All-or-nothing** — one big command creates everything, can't test individual pieces
-- **Fixed structure** — same workflow for everyone, no customization
-- **Black box** — when AI output is bad, you can't tweak the prompts
+- **Инструкции жестко закодированы** — спрятаны в TypeScript, вы не можете их изменить
+- **Все или ничего** — одна большая команда создает все сразу, нельзя протестировать отдельные части
+- **Фиксированная структура** — одинаковый рабочий процесс для всех, никакой настройки
+- **Черный ящик** — когда ИИ выдает плохой результат, вы не можете подправить промпты
 
-**OPSX opens it up.** Now anyone can:
+**OPSX открывает возможности.** Теперь любой может:
 
-1. **Experiment with instructions** — edit a template, see if the AI does better
-2. **Test granularly** — validate each artifact's instructions independently
-3. **Customize workflows** — define your own artifacts and dependencies
-4. **Iterate quickly** — change a template, test immediately, no rebuild
+1. **Экспериментировать с инструкциями** — отредактировать шаблон, проверить, справится ли ИИ лучше
+2. **Тестировать гранулярно** — проверять инструкции для каждого артефакта независимо
+3. **Настраивать рабочие процессы** — определять свои собственные артефакты и зависимости
+4. **Быстро итерировать** — изменить шаблон, протестировать немедленно, без пересборки
 
 ```
-Legacy workflow:                      OPSX:
+Устаревший процесс:                   OPSX:
 ┌────────────────────────┐           ┌────────────────────────┐
-│  Hardcoded in package  │           │  schema.yaml           │◄── You edit this
-│  (can't change)        │           │  templates/*.md        │◄── Or this
+│  Зашито в пакете       │           │  schema.yaml           │◄── Вы редактируете это
+│  (нельзя изменить)     │           │  templates/*.md        │◄── Или это
 │        ↓               │           │        ↓               │
-│  Wait for new release  │           │  Instant effect        │
+│  Ждать нового релиза   │           │  Мгновенный эффект     │
 │        ↓               │           │        ↓               │
-│  Hope it's better      │           │  Test it yourself      │
+│  Надеяться на лучшее   │           │  Проверить самому      │
 └────────────────────────┘           └────────────────────────┘
 ```
 
-**This is for everyone:**
-- **Teams** — create workflows that match how you actually work
-- **Power users** — tweak prompts to get better AI outputs for your codebase
-- **OpenSpec contributors** — experiment with new approaches without releases
+**Это для всех:**
+- **Команды** — создавайте рабочие процессы, соответствующие тому, как вы реально работаете
+- **Продвинутые пользователи** — настраивайте промпты для получения лучших результатов ИИ для вашей кодовой базы
+- **Контрибьюторы OpenSpec** — экспериментируйте с новыми подходами без необходимости релизов
 
-We're all still learning what works best. OPSX lets us learn together.
+Мы все еще учимся тому, что работает лучше всего. OPSX позволяет нам учиться вместе.
 
-## The User Experience
+## Пользовательский опыт
 
-**The problem with linear workflows:**
-You're "in planning phase", then "in implementation phase", then "done". But real work doesn't work that way. You implement something, realize your design was wrong, need to update specs, continue implementing. Linear phases fight against how work actually happens.
+**Проблема линейных рабочих процессов:**
+Вы находитесь "в фазе планирования", затем "в фазе реализации", затем "готово". Но реальная работа так не строится. Вы что-то реализуете, понимаете, что дизайн был неправильным, нужно обновить спецификации, продолжить реализацию. Линейные фазы противоречат тому, как на самом деле происходит работа.
 
-**OPSX approach:**
-- **Actions, not phases** — create, implement, update, archive — do any of them anytime
-- **Dependencies are enablers** — they show what's possible, not what's required next
+**Подход OPSX:**
+- **Действия, а не фазы** — создавайте, реализуйте, обновляйте, архивируйте — делайте что угодно в любое время
+- **Зависимости как инструменты** — они показывают, что возможно, а не что требуется следующим
 
 ```
-  proposal ──→ specs ──→ design ──→ tasks ──→ implement
+  предложение ──→ спецификации ──→ дизайн ──→ задачи ──→ реализация
 ```
 
-## Setup
+## Настройка
 
 ```bash
-# Make sure you have openspec installed — skills are automatically generated
+# Убедитесь, что у вас установлен openspec — навыки генерируются автоматически
 openspec init
 ```
 
-This creates skills in `.claude/skills/` (or equivalent) that AI coding assistants auto-detect.
+Это создает навыки в `.claude/skills/` (или эквиваленте), которые автоматически обнаруживаются ИИ-ассистентами по коду.
 
-During setup, you'll be prompted to create a **project config** (`openspec/config.yaml`). This is optional but recommended.
+Во время настройки вам будет предложено создать **конфигурацию проекта** (`openspec/config.yaml`). Это необязательно, но рекомендуется.
 
-## Project Configuration
+## Конфигурация проекта
 
-Project config lets you set defaults and inject project-specific context into all artifacts.
+Конфигурация проекта позволяет задавать значения по умолчанию и внедрять контекст, специфичный для проекта, во все артефакты.
 
-### Creating Config
+### Создание конфигурации
 
-Config is created during `openspec init`, or manually:
+Конфигурация создается во время `openspec init` или вручную:
 
 ```yaml
 # openspec/config.yaml
@@ -95,399 +95,399 @@ rules:
     - Include sequence diagrams for complex flows
 ```
 
-### Config Fields
+### Поля конфигурации
 
-| Field | Type | Description |
+| Поле | Тип | Описание |
 |-------|------|-------------|
-| `schema` | string | Default schema for new changes (e.g., `spec-driven`) |
-| `context` | string | Project context injected into all artifact instructions |
-| `rules` | object | Per-artifact rules, keyed by artifact ID |
+| `schema` | string | Схема по умолчанию для новых изменений (например, `spec-driven`) |
+| `context` | string | Контекст проекта, внедряемый во все инструкции артефактов |
+| `rules` | object | Правила для каждого артефакта, по ID артефакта |
 
-### How It Works
+### Как это работает
 
-**Schema precedence** (highest to lowest):
-1. CLI flag (`--schema <name>`)
-2. Change metadata (`.openspec.yaml` in change directory)
-3. Project config (`openspec/config.yaml`)
-4. Default (`spec-driven`)
+**Приоритет схем** (от высшего к низшему):
+1. Флаг CLI (`--schema <name>`)
+2. Метаданные изменения (`.openspec.yaml` в директории изменения)
+3. Конфигурация проекта (`openspec/config.yaml`)
+4. По умолчанию (`spec-driven`)
 
-**Context injection:**
-- Context is prepended to every artifact's instructions
-- Wrapped in `<context>...</context>` tags
-- Helps AI understand your project's conventions
+**Внедрение контекста:**
+- Контекст добавляется в начало инструкций каждого артефакта
+- Обернут в теги `<context>...</context>`
+- Помогает ИИ понять конвенции вашего проекта
 
-**Rules injection:**
-- Rules are only injected for matching artifacts
-- Wrapped in `<rules>...</rules>` tags
-- Appear after context, before the template
+**Внедрение правил:**
+- Правила внедряются только для соответствующих артефактов
+- Обернуты в теги `<rules>...</rules>`
+- Появляются после контекста, перед шаблоном
 
-### Artifact IDs by Schema
+### ID артефактов по схемам
 
-**spec-driven** (default):
-- `proposal` — Change proposal
-- `specs` — Specifications
-- `design` — Technical design
-- `tasks` — Implementation tasks
+**spec-driven** (по умолчанию):
+- `proposal` — Предложение изменения
+- `specs` — Спецификации
+- `design` — Технический дизайн
+- `tasks` — Задачи реализации
 
-### Config Validation
+### Валидация конфигурации
 
-- Unknown artifact IDs in `rules` generate warnings
-- Schema names are validated against available schemas
-- Context has a 50KB size limit
-- Invalid YAML is reported with line numbers
+- Неизвестные ID артефактов в `rules` вызывают предупреждения
+- Имена схем проверяются на наличие доступных схем
+- Контекст имеет лимит размера 50KB
+- Невалидный YAML сообщается с номерами строк
 
-### Troubleshooting
+### Устранение неполадок
 
 **"Unknown artifact ID in rules: X"**
-- Check artifact IDs match your schema (see list above)
-- Run `openspec schemas --json` to see artifact IDs for each schema
+- Проверьте, что ID артефактов соответствуют вашей схеме (см. список выше)
+- Запустите `openspec schemas --json`, чтобы увидеть ID артефактов для каждой схемы
 
-**Config not being applied:**
-- Ensure file is at `openspec/config.yaml` (not `.yml`)
-- Check YAML syntax with a validator
-- Config changes take effect immediately (no restart needed)
+**Конфигурация не применяется:**
+- Убедитесь, что файл находится по пути `openspec/config.yaml` (не `.yml`)
+- Проверьте синтаксис YAML валидатором
+- Изменения конфигурации вступают в силу немедленно (перезапуск не требуется)
 
-**Context too large:**
-- Context is limited to 50KB
-- Summarize or link to external docs instead
+**Контекст слишком большой:**
+- Контекст ограничен 50KB
+- Сократите или дайте ссылку на внешнюю документацию
 
-## Commands
+## Команды
 
-| Command | What it does |
-|---------|--------------|
-| `/opsx:explore` | Think through ideas, investigate problems, clarify requirements |
-| `/opsx:new` | Start a new change |
-| `/opsx:continue` | Create the next artifact (based on what's ready) |
-| `/opsx:ff` | Fast-forward — create all planning artifacts at once |
-| `/opsx:apply` | Implement tasks, updating artifacts as needed |
-| `/opsx:sync` | Sync delta specs to main (optional—archive prompts if needed) |
-| `/opsx:archive` | Archive when done |
+| Команда | Что делает |
+|---------|------------|
+| `/opsx:explore` | Обдумать идеи, исследовать проблемы, уточнить требования |
+| `/opsx:new` | Начать новое изменение |
+| `/opsx:continue` | Создать следующий артефакт (на основе того, что готово) |
+| `/opsx:ff` | Перемотка вперед — создать все артефакты планирования сразу |
+| `/opsx:apply` | Реализовать задачи, обновляя артефакты по мере необходимости |
+| `/opsx:sync` | Синхронизировать дельта-спецификации с основными (опционально — архивировать промпты при необходимости) |
+| `/opsx:archive` | Архивировать после завершения |
 
-## Usage
+## Использование
 
-### Explore an idea
+### Исследовать идею
 ```
 /opsx:explore
 ```
-Think through ideas, investigate problems, compare options. No structure required - just a thinking partner. When insights crystallize, transition to `/opsx:new` or `/opsx:ff`.
+Обдумайте идеи, исследуйте проблемы, сравните варианты. Структура не требуется — просто партнер для размышлений. Когда идеи кристаллизуются, переходите к `/opsx:new` или `/opsx:ff`.
 
-### Start a new change
+### Начать новое изменение
 ```
 /opsx:new
 ```
-You'll be asked what you want to build and which workflow schema to use.
+Вас спросят, что вы хотите создать и какую схему рабочего процесса использовать.
 
-### Create artifacts
+### Создать артефакты
 ```
 /opsx:continue
 ```
-Shows what's ready to create based on dependencies, then creates one artifact. Use repeatedly to build up your change incrementally.
+Показывает, что готово к созданию на основе зависимостей, затем создает один артефакт. Используйте многократно для постепенного построения вашего изменения.
 
 ```
 /opsx:ff add-dark-mode
 ```
-Creates all planning artifacts at once. Use when you have a clear picture of what you're building.
+Создает все артефакты планирования сразу. Используйте, когда у вас есть четкое представление о том, что вы строите.
 
-### Implement (the fluid part)
+### Реализовать (гибкая часть)
 ```
 /opsx:apply
 ```
-Works through tasks, checking them off as you go. If you're juggling multiple changes, you can run `/opsx:apply <name>`; otherwise it should infer from the conversation and prompt you to choose if it can't tell.
+Проходит по задачам, отмечая их по мере выполнения. Если вы ведете несколько изменений, можно запустить `/opsx:apply <name>`; иначе он должен понять из разговора и предложить выбрать, если не сможет определить.
 
-### Finish up
+### Завершить
 ```
-/opsx:archive   # Move to archive when done (prompts to sync specs if needed)
+/opsx:archive   # Переместить в архив по завершении (предлагает синхронизировать спецификации при необходимости)
 ```
 
-## When to Update vs. Start Fresh
+## Когда обновлять, а когда начинать заново
 
-You can always edit your proposal or specs before implementation. But when does refining become "this is different work"?
+Вы всегда можете отредактировать предложение или спецификации перед реализацией. Но когда уточнение становится "это уже другая работа"?
 
-### What a Proposal Captures
+### Что фиксирует Предложение
 
-A proposal defines three things:
-1. **Intent** — What problem are you solving?
-2. **Scope** — What's in/out of bounds?
-3. **Approach** — How will you solve it?
+Предложение определяет три вещи:
+1. **Намерение** — Какую проблему вы решаете?
+2. **Объем** — Что входит/не входит в рамки?
+3. **Подход** — Как вы будете это решать?
 
-The question is: which changed, and by how much?
+Вопрос в том: что изменилось и насколько сильно?
 
-### Update the Existing Change When:
+### Обновляйте существующее изменение, когда:
 
-**Same intent, refined execution**
-- You discover edge cases you didn't consider
-- The approach needs tweaking but the goal is unchanged
-- Implementation reveals the design was slightly off
+**То же намерение, уточненное исполнение**
+- Вы обнаружили крайние случаи, которые не учли
+- Подход требует доработки, но цель не изменилась
+- Реализация показала, что дизайн был немного неточным
 
-**Scope narrows**
-- You realize full scope is too big, want to ship MVP first
-- "Add dark mode" → "Add dark mode toggle (system preference in v2)"
+**Объем сужается**
+- Вы поняли, что полный объем слишком велик, хотите сначала выпустить MVP
+- "Добавить темную тему" → "Добавить переключатель темной темы (системная настройка в v2)"
 
-**Learning-driven corrections**
-- Codebase isn't structured how you thought
-- A dependency doesn't work as expected
-- "Use CSS variables" → "Use Tailwind's dark: prefix instead"
+**Корректировки на основе обучения**
+- Кодовая база структурирована не так, как вы думали
+- Зависимость работает не так, как ожидалось
+- "Использовать CSS переменные" → "Использовать префикс dark: из Tailwind"
 
-### Start a New Change When:
+### Начинайте новое изменение, когда:
 
-**Intent fundamentally changed**
-- The problem itself is different now
-- "Add dark mode" → "Add comprehensive theme system with custom colors, fonts, spacing"
+**Намерение фундаментально изменилось**
+- Сама проблема теперь другая
+- "Добавить темную тему" → "Добавить комплексную систему тем с кастомными цветами, шрифтами, отступами"
 
-**Scope exploded**
-- Change grew so much it's essentially different work
-- Original proposal would be unrecognizable after updates
-- "Fix login bug" → "Rewrite auth system"
+**Объем раздулся**
+- Изменение выросло настолько, что это по сути другая работа
+- Оригинальное предложение было бы неузнаваемым после обновлений
+- "Исправить баг входа" → "Переписать систему авторизации"
 
-**Original is completable**
-- The original change can be marked "done"
-- New work stands alone, not a refinement
-- Complete "Add dark mode MVP" → Archive → New change "Enhance dark mode"
+**Оригинал можно завершить**
+- Оригинальное изменение может быть помечено как "готово"
+- Новая работа стоит отдельно, а не является уточнением
+- Завершить "Добавить темную тему MVP" → Архив → Новое изменение "Улучшить темную тему"
 
-### The Heuristics
+### Эвристика
 
 ```
                         ┌─────────────────────────────────────┐
-                        │     Is this the same work?          │
+                        │       Это та же работа?             │
                         └──────────────┬──────────────────────┘
                                        │
                     ┌──────────────────┼──────────────────┐
                     │                  │                  │
                     ▼                  ▼                  ▼
-             Same intent?      >50% overlap?      Can original
-             Same problem?     Same scope?        be "done" without
-                    │                  │          these changes?
+             То же намерение?  >50% перекрытия?   Может оригинал
+             Та же проблема?   Тот же объем?      быть "готов" без
+                    │                  │          этих изменений?
                     │                  │                  │
           ┌────────┴────────┐  ┌──────┴──────┐   ┌───────┴───────┐
           │                 │  │             │   │               │
-         YES               NO YES           NO  NO              YES
+         ДА                НЕТ ДА           НЕТ НЕТ             ДА
           │                 │  │             │   │               │
           ▼                 ▼  ▼             ▼   ▼               ▼
-       UPDATE            NEW  UPDATE       NEW  UPDATE          NEW
+       ОБНОВИТЬ           НОВОЕ ОБНОВИТЬ   НОВОЕ ОБНОВИТЬ      НОВОЕ
 ```
 
-| Test | Update | New Change |
-|------|--------|------------|
-| **Identity** | "Same thing, refined" | "Different work" |
-| **Scope overlap** | >50% overlaps | <50% overlaps |
-| **Completion** | Can't be "done" without changes | Can finish original, new work stands alone |
-| **Story** | Update chain tells coherent story | Patches would confuse more than clarify |
+| Тест | Обновить | Новое изменение |
+|------|----------|-----------------|
+| **Идентичность** | "То же самое, уточнено" | "Другая работа" |
+| **Перекрытие объема** | >50% перекрывается | <50% перекрывается |
+| **Завершение** | Не может быть "готово" без изменений | Можно закончить оригинал, новая работа самостоятельна |
+| **История** | Цепочка обновлений рассказывает связную историю | Патчи запутают больше, чем прояснят |
 
-### The Principle
+### Принцип
 
-> **Update preserves context. New change provides clarity.**
+> **Обновление сохраняет контекст. Новое изменение дает ясность.**
 >
-> Choose update when the history of your thinking is valuable.
-> Choose new when starting fresh would be clearer than patching.
+> Выбирайте обновление, когда история вашего мышления ценна.
+> Выбирайте новое, когда начать с чистого листа будет понятнее, чем латать.
 
-Think of it like git branches:
-- Keep committing while working on the same feature
-- Start a new branch when it's genuinely new work
-- Sometimes merge a partial feature and start fresh for phase 2
+Думайте об этом как о ветках git:
+- Продолжайте коммитить, работая над той же фичей
+- Начинайте новую ветку, когда это действительно новая работа
+- Иногда сливайте частичную фичу и начинайте заново для фазы 2
 
-## What's Different?
+## В чем отличия?
 
 | | Legacy (`/openspec:proposal`) | OPSX (`/opsx:*`) |
 |---|---|---|
-| **Structure** | One big proposal document | Discrete artifacts with dependencies |
-| **Workflow** | Linear phases: plan → implement → archive | Fluid actions — do anything anytime |
-| **Iteration** | Awkward to go back | Update artifacts as you learn |
-| **Customization** | Fixed structure | Schema-driven (define your own artifacts) |
+| **Структура** | Один большой документ предложения | Дискретные артефакты с зависимостями |
+| **Рабочий процесс** | Линейные фазы: план → реализация → архив | Гибкие действия — делайте что угодно в любое время |
+| **Итерация** | Неудобно возвращаться назад | Обновляйте артефакты по мере обучения |
+| **Настройка** | Фиксированная структура | Управляемый схемой (определяйте свои артефакты) |
 
-**The key insight:** work isn't linear. OPSX stops pretending it is.
+**Ключевой инсайт:** работа не линейна. OPSX перестает притворяться, что это так.
 
-## Architecture Deep Dive
+## Глубокое погружение в архитектуру
 
-This section explains how OPSX works under the hood and how it compares to the legacy workflow.
+Этот раздел объясняет, как OPSX работает "под капотом" и как он сравнивается с устаревшим рабочим процессом.
 
-### Philosophy: Phases vs Actions
+### Философия: Фазы против Действий
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                         LEGACY WORKFLOW                                      │
-│                    (Phase-Locked, All-or-Nothing)                           │
+│                       УСТАРЕВШИЙ ПРОЦЕСС (LEGACY)                           │
+│                 (Заблокированные фазы, Все или ничего)                      │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
-│   ┌──────────────┐      ┌──────────────┐      ┌──────────────┐             │
-│   │   PLANNING   │ ───► │ IMPLEMENTING │ ───► │   ARCHIVING  │             │
-│   │    PHASE     │      │    PHASE     │      │    PHASE     │             │
-│   └──────────────┘      └──────────────┘      └──────────────┘             │
+│   ┌──────────────┐      ┌──────────────┐      ┌──────────────┐              │
+│   │     ФАЗА     │ ───► │     ФАЗА     │ ───► │     ФАЗА     │              │
+│   │ ПЛАНИРОВАНИЯ │      │  РЕАЛИЗАЦИИ  │      │ АРХИВАЦИИ    │              │
+│   └──────────────┘      └──────────────┘      └──────────────┘              │
 │         │                     │                     │                       │
 │         ▼                     ▼                     ▼                       │
-│   /openspec:proposal   /openspec:apply      /openspec:archive              │
+│   /openspec:proposal   /openspec:apply      /openspec:archive               │
 │                                                                             │
-│   • Creates ALL artifacts at once                                          │
-│   • Can't go back to update specs during implementation                    │
-│   • Phase gates enforce linear progression                                  │
+│   • Создает ВСЕ артефакты за один раз                                       │
+│   • Нельзя вернуться для обновления спецификаций во время реализации        │
+│   • Фазовые шлюзы принуждают к линейному прогрессу                          │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 
 
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                            OPSX WORKFLOW                                     │
-│                      (Fluid Actions, Iterative)                             │
+│                            ПРОЦЕСС OPSX                                     │
+│                     (Гибкие действия, Итеративный)                          │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
 │              ┌────────────────────────────────────────────┐                 │
-│              │           ACTIONS (not phases)             │                 │
+│              │           ДЕЙСТВИЯ (не фазы)               │                 │
 │              │                                            │                 │
-│              │   new ◄──► continue ◄──► apply ◄──► archive │                 │
+│              │   new ◄──► continue ◄──► apply ◄──► archive│                 │
 │              │    │          │           │           │    │                 │
 │              │    └──────────┴───────────┴───────────┘    │                 │
-│              │              any order                     │                 │
+│              │             любой порядок                  │                 │
 │              └────────────────────────────────────────────┘                 │
 │                                                                             │
-│   • Create artifacts one at a time OR fast-forward                         │
-│   • Update specs/design/tasks during implementation                        │
-│   • Dependencies enable progress, phases don't exist                       │
+│   • Создавайте артефакты по одному ИЛИ перематывайте вперед                 │
+│   • Обновляйте спецификации/дизайн/задачи во время реализации               │
+│   • Зависимости позволяют прогресс, фаз не существует                       │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Component Architecture
+### Архитектура компонентов
 
-**Legacy workflow** uses hardcoded templates in TypeScript:
+**Устаревший процесс** использует жестко закодированные шаблоны в TypeScript:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                      LEGACY WORKFLOW COMPONENTS                              │
+│                   КОМПОНЕНТЫ УСТАРЕВШЕГО ПРОЦЕССА                           │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
-│   Hardcoded Templates (TypeScript strings)                                  │
+│   Жестко закодированные шаблоны (строки TypeScript)                         │
 │                    │                                                        │
 │                    ▼                                                        │
-│   Configurators (18+ classes, one per editor)                               │
+│   Конфигураторы (18+ классов, один на редактор)                             │
 │                    │                                                        │
 │                    ▼                                                        │
-│   Generated Command Files (.claude/commands/openspec/*.md)                  │
+│   Сгенерированные файлы команд (.claude/commands/openspec/*.md)             │
 │                                                                             │
-│   • Fixed structure, no artifact awareness                                  │
-│   • Change requires code modification + rebuild                             │
+│   • Фиксированная структура, нет осведомленности об артефактах              │
+│   • Изменение требует модификации кода + пересборки                         │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-**OPSX** uses external schemas and a dependency graph engine:
+**OPSX** использует внешние схемы и движок графа зависимостей:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                         OPSX COMPONENTS                                      │
+│                         КОМПОНЕНТЫ OPSX                                     │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
-│   Schema Definitions (YAML)                                                 │
+│   Определения схем (YAML)                                                   │
 │   ┌─────────────────────────────────────────────────────────────────────┐   │
 │   │  name: spec-driven                                                  │   │
 │   │  artifacts:                                                         │   │
 │   │    - id: proposal                                                   │   │
 │   │      generates: proposal.md                                         │   │
-│   │      requires: []              ◄── Dependencies                     │   │
+│   │      requires: []              ◄── Зависимости                      │   │
 │   │    - id: specs                                                      │   │
-│   │      generates: specs/**/*.md  ◄── Glob patterns                    │   │
-│   │      requires: [proposal]      ◄── Enables after proposal           │   │
+│   │      generates: specs/**/*.md  ◄── Glob паттерны                    │   │
+│   │      requires: [proposal]      ◄── Включается после proposal        │   │
 │   └─────────────────────────────────────────────────────────────────────┘   │
 │                    │                                                        │
 │                    ▼                                                        │
-│   Artifact Graph Engine                                                     │
+│   Движок графа артефактов                                                   │
 │   ┌─────────────────────────────────────────────────────────────────────┐   │
-│   │  • Topological sort (dependency ordering)                           │   │
-│   │  • State detection (filesystem existence)                           │   │
-│   │  • Rich instruction generation (templates + context)                │   │
+│   │  • Топологическая сортировка (упорядочивание зависимостей)          │   │
+│   │  • Обнаружение состояния (существование в файловой системе)         │   │
+│   │  • Генерация богатых инструкций (шаблоны + контекст)                │   │
 │   └─────────────────────────────────────────────────────────────────────┘   │
 │                    │                                                        │
 │                    ▼                                                        │
-│   Skill Files (.claude/skills/openspec-*/SKILL.md)                          │
+│   Файлы навыков (.claude/skills/openspec-*/SKILL.md)                        │
 │                                                                             │
-│   • Cross-editor compatible (Claude Code, Cursor, Windsurf)                 │
-│   • Skills query CLI for structured data                                    │
-│   • Fully customizable via schema files                                     │
+│   • Совместимость между редакторами (Claude Code, Cursor, Windsurf)         │
+│   • CLI запросов навыков для структурированных данных                       │
+│   • Полная настраиваемость через файлы схем                                 │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Dependency Graph Model
+### Модель графа зависимостей
 
-Artifacts form a directed acyclic graph (DAG). Dependencies are **enablers**, not gates:
+Артефакты формируют направленный ациклический граф (DAG). Зависимости — это **инструменты**, а не шлюзы:
 
 ```
                               proposal
-                             (root node)
+                             (корневой узел)
                                   │
                     ┌─────────────┴─────────────┐
                     │                           │
                     ▼                           ▼
                  specs                       design
-              (requires:                  (requires:
+              (требует:                   (требует:
                proposal)                   proposal)
                     │                           │
                     └─────────────┬─────────────┘
                                   │
                                   ▼
                                tasks
-                           (requires:
+                           (требует:
                            specs, design)
                                   │
                                   ▼
                           ┌──────────────┐
-                          │ APPLY PHASE  │
-                          │ (requires:   │
+                          │ ФАЗА ПРИМЕН. │
+                          │ (требует:    │
                           │  tasks)      │
                           └──────────────┘
 ```
 
-**State transitions:**
+**Переходы состояний:**
 
 ```
-   BLOCKED ────────────────► READY ────────────────► DONE
+   ЗАБЛОКИРОВАНО ──────────► ГОТОВО ─────────────► ЗАВЕРШЕНО
       │                        │                       │
-   Missing                  All deps               File exists
-   dependencies             are DONE               on filesystem
+   Отсутствуют              Все зависимости        Файл существует
+   зависимости              ЗАВЕРШЕНЫ              в файловой системе
 ```
 
-### Information Flow
+### Поток информации
 
-**Legacy workflow** — agent receives static instructions:
+**Устаревший процесс** — агент получает статические инструкции:
 
 ```
-  User: "/openspec:proposal"
+  Пользователь: "/openspec:proposal"
            │
            ▼
   ┌─────────────────────────────────────────┐
-  │  Static instructions:                   │
-  │  • Create proposal.md                   │
-  │  • Create tasks.md                      │
-  │  • Create design.md                     │
-  │  • Create specs/<capability>/spec.md    │
+  │  Статические инструкции:                │
+  │  • Создать proposal.md                  │
+  │  • Создать tasks.md                     │
+  │  • Создать design.md                    │
+  │  • Создать specs/<capability>/spec.md   │
   │                                         │
-  │  No awareness of what exists or         │
-  │  dependencies between artifacts         │
+  │  Нет осведомленности о том, что         │
+  │  существует, или о зависимостях         │
   └─────────────────────────────────────────┘
            │
            ▼
-  Agent creates ALL artifacts in one go
+  Агент создает ВСЕ артефакты за один раз
 ```
 
-**OPSX** — agent queries for rich context:
+**OPSX** — агент запрашивает богатый контекст:
 
 ```
-  User: "/opsx:continue"
+  Пользователь: "/opsx:continue"
            │
            ▼
   ┌──────────────────────────────────────────────────────────────────────────┐
-  │  Step 1: Query current state                                             │
+  │  Шаг 1: Запрос текущего состояния                                        │
   │  ┌────────────────────────────────────────────────────────────────────┐  │
   │  │  $ openspec status --change "add-auth" --json                      │  │
   │  │                                                                    │  │
   │  │  {                                                                 │  │
   │  │    "artifacts": [                                                  │  │
   │  │      {"id": "proposal", "status": "done"},                         │  │
-  │  │      {"id": "specs", "status": "ready"},      ◄── First ready      │  │
+  │  │      {"id": "specs", "status": "ready"},      ◄── Первый готовый   │  │
   │  │      {"id": "design", "status": "ready"},                          │  │
   │  │      {"id": "tasks", "status": "blocked", "missingDeps": ["specs"]}│  │
   │  │    ]                                                               │  │
   │  │  }                                                                 │  │
   │  └────────────────────────────────────────────────────────────────────┘  │
   │                                                                          │
-  │  Step 2: Get rich instructions for ready artifact                        │
+  │  Шаг 2: Получение богатых инструкций для готового артефакта              │
   │  ┌────────────────────────────────────────────────────────────────────┐  │
   │  │  $ openspec instructions specs --change "add-auth" --json          │  │
   │  │                                                                    │  │
@@ -498,72 +498,73 @@ Artifacts form a directed acyclic graph (DAG). Dependencies are **enablers**, no
   │  │  }                                                                 │  │
   │  └────────────────────────────────────────────────────────────────────┘  │
   │                                                                          │
-  │  Step 3: Read dependencies → Create ONE artifact → Show what's unlocked  │
+  │  Шаг 3: Чтение зависимостей → Создание ОДНОГО артефакта → Показ того,    │
+  │         что разблокировано                                               │
   └──────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Iteration Model
+### Модель итерации
 
-**Legacy workflow** — awkward to iterate:
+**Устаревший процесс** — неудобно итерировать:
 
 ```
   ┌─────────┐     ┌─────────┐     ┌─────────┐
   │/proposal│ ──► │ /apply  │ ──► │/archive │
   └─────────┘     └─────────┘     └─────────┘
        │               │
-       │               ├── "Wait, the design is wrong"
+       │               ├── "Погодите, дизайн неправильный"
        │               │
-       │               ├── Options:
-       │               │   • Edit files manually (breaks context)
-       │               │   • Abandon and start over
-       │               │   • Push through and fix later
+       │               ├── Опции:
+       │               │   • Редактировать файлы вручную (ломает контекст)
+       │               │   • Бросить и начать заново
+       │               │   • Пробиться и исправить позже
        │               │
-       │               └── No official "go back" mechanism
+       │               └── Нет официального механизма "назад"
        │
-       └── Creates ALL artifacts at once
+       └── Создает ВСЕ артефакты за один раз
 ```
 
-**OPSX** — natural iteration:
+**OPSX** — естественная итерация:
 
 ```
   /opsx:new ───► /opsx:continue ───► /opsx:apply ───► /opsx:archive
       │                │                  │
-      │                │                  ├── "The design is wrong"
+      │                │                  ├── "Дизайн неправильный"
       │                │                  │
       │                │                  ▼
-      │                │            Just edit design.md
-      │                │            and continue!
+      │                │            Просто отредактируйте design.md
+      │                │            и продолжайте!
       │                │                  │
       │                │                  ▼
-      │                │         /opsx:apply picks up
-      │                │         where you left off
+      │                │         /opsx:apply подхватывает
+      │                │         там, где вы остановились
       │                │
-      │                └── Creates ONE artifact, shows what's unlocked
+      │                └── Создает ОДИН артефакт, показывает, что разблокировано
       │
-      └── Scaffolds change, waits for direction
+      └── Создает структуру изменения, ждет указаний
 ```
 
-### Custom Schemas
+### Кастомные схемы
 
-Create custom workflows using the schema management commands:
+Создавайте кастомные рабочие процессы, используя команды управления схемами:
 
 ```bash
-# Create a new schema from scratch (interactive)
+# Создать новую схему с нуля (интерактивно)
 openspec schema init my-workflow
 
-# Or fork an existing schema as a starting point
+# Или форкнуть существующую схему как отправную точку
 openspec schema fork spec-driven my-workflow
 
-# Validate your schema structure
+# Валидировать структуру схемы
 openspec schema validate my-workflow
 
-# See where a schema resolves from (useful for debugging)
+# Посмотреть, откуда разрешается схема (полезно для отладки)
 openspec schema which my-workflow
 ```
 
-Schemas are stored in `openspec/schemas/` (project-local, version controlled) or `~/.local/share/openspec/schemas/` (user global).
+Схемы хранятся в `openspec/schemas/` (локально в проекте, под контролем версий) или `~/.local/share/openspec/schemas/` (глобально для пользователя).
 
-**Schema structure:**
+**Структура схемы:**
 ```
 openspec/schemas/research-first/
 ├── schema.yaml
@@ -573,72 +574,72 @@ openspec/schemas/research-first/
     └── tasks.md
 ```
 
-**Example schema.yaml:**
+**Пример schema.yaml:**
 ```yaml
 name: research-first
 artifacts:
-  - id: research        # Added before proposal
+  - id: research        # Добавлено перед proposal
     generates: research.md
     requires: []
 
   - id: proposal
     generates: proposal.md
-    requires: [research]  # Now depends on research
+    requires: [research]  # Теперь зависит от research
 
   - id: tasks
     generates: tasks.md
     requires: [proposal]
 ```
 
-**Dependency Graph:**
+**Граф зависимостей:**
 ```
    research ──► proposal ──► tasks
 ```
 
-### Summary
+### Итог
 
-| Aspect | Legacy | OPSX |
+| Аспект | Legacy | OPSX |
 |--------|----------|------|
-| **Templates** | Hardcoded TypeScript | External YAML + Markdown |
-| **Dependencies** | None (all at once) | DAG with topological sort |
-| **State** | Phase-based mental model | Filesystem existence |
-| **Customization** | Edit source, rebuild | Create schema.yaml |
-| **Iteration** | Phase-locked | Fluid, edit anything |
-| **Editor Support** | 18+ configurator classes | Single skills directory |
+| **Шаблоны** | Жестко закодированный TypeScript | Внешний YAML + Markdown |
+| **Зависимости** | Нет (все сразу) | DAG с топологической сортировкой |
+| **Состояние** | Ментальная модель фаз | Существование в файловой системе |
+| **Настройка** | Редактировать исходник, пересобирать | Создать schema.yaml |
+| **Итерация** | Заблокированные фазы | Гибкость, редактируйте что угодно |
+| **Поддержка редакторов** | 18+ классов конфигураторов | Единая директория навыков |
 
-## Schemas
+## Схемы
 
-Schemas define what artifacts exist and their dependencies. Currently available:
+Схемы определяют, какие артефакты существуют и их зависимости. В настоящее время доступны:
 
-- **spec-driven** (default): proposal → specs → design → tasks
+- **spec-driven** (по умолчанию): proposal → specs → design → tasks
 
 ```bash
-# List available schemas
+# Список доступных схем
 openspec schemas
 
-# See all schemas with their resolution sources
+# Посмотреть все схемы с их источниками разрешения
 openspec schema which --all
 
-# Create a new schema interactively
+# Создать новую схему интерактивно
 openspec schema init my-workflow
 
-# Fork an existing schema for customization
+# Форкнуть существующую схему для настройки
 openspec schema fork spec-driven my-workflow
 
-# Validate schema structure before use
+# Валидировать структуру схемы перед использованием
 openspec schema validate my-workflow
 ```
 
-## Tips
+## Советы
 
-- Use `/opsx:explore` to think through an idea before committing to a change
-- `/opsx:ff` when you know what you want, `/opsx:continue` when exploring
-- During `/opsx:apply`, if something's wrong — fix the artifact, then continue
-- Tasks track progress via checkboxes in `tasks.md`
-- Check status anytime: `openspec status --change "name"`
+- Используйте `/opsx:explore`, чтобы обдумать идею перед тем, как фиксировать изменение
+- `/opsx:ff`, когда вы знаете, чего хотите, `/opsx:continue`, когда исследуете
+- Во время `/opsx:apply`, если что-то не так — исправьте артефакт, затем продолжайте
+- Задачи отслеживают прогресс через чекбоксы в `tasks.md`
+- Проверяйте статус в любое время: `openspec status --change "name"`
 
-## Feedback
+## Обратная связь
 
-This is rough. That's intentional — we're learning what works.
+Это черновой вариант. Это намеренно — мы изучаем, что работает.
 
-Found a bug? Have ideas? Join us on [Discord](https://discord.gg/YctCnvvshC) or open an issue on [GitHub](https://github.com/Fission-AI/openspec/issues).
+Нашли баг? Есть идеи? Присоединяйтесь к нам в [Discord](https://discord.gg/YctCnvvshC) или откройте issue на [GitHub](https://github.com/Fission-AI/openspec/issues).
