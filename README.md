@@ -15,7 +15,7 @@
 </p>
 
 <details>
-<summary><strong>The most loved spec framework.</strong></summary>
+<summary><strong>Самый любимый фреймворк спецификаций.</strong></summary>
 
 [![Stars](https://img.shields.io/github/stars/Fission-AI/OpenSpec?style=flat-square&label=Stars)](https://github.com/Fission-AI/OpenSpec/stargazers)
 [![Downloads](https://img.shields.io/npm/dm/@fission-ai/openspec?style=flat-square&label=Downloads/mo)](https://www.npmjs.com/package/@fission-ai/openspec)
@@ -23,182 +23,181 @@
 
 </details>
 <p></p>
-Our philosophy:
+Наша философия:
 
 ```text
-→ fluid not rigid
-→ iterative not waterfall
-→ easy not complex
-→ built for brownfield not just greenfield
-→ scalable from personal projects to enterprises
+→ гибкость, а не жесткость
+→ итеративность, а не водопад (waterfall)
+→ простота, а не сложность
+→ создано для существующих проектов (brownfield), а не только для новых (greenfield)
+→ масштабируемость от личных проектов до корпоративных
 ```
 
 > [!TIP]
-> **New workflow now available!** We've rebuilt OpenSpec with a new artifact-guided workflow.
+> **Доступен новый рабочий процесс!** Мы перестроили OpenSpec с новым рабочим процессом, ориентированным на артефакты.
 >
-> Run `/opsx:onboard` to get started. → [Learn more here](docs/opsx.md)
+> Запустите `/opsx:onboard`, чтобы начать. → [Узнайте больше здесь](docs/opsx.md)
 
 <p align="center">
-  Follow <a href="https://x.com/0xTab">@0xTab on X</a> for updates · Join the <a href="https://discord.gg/YctCnvvshC">OpenSpec Discord</a> for help and questions.
+  Следите за <a href="https://x.com/0xTab">@0xTab в X</a> для обновлений · Присоединяйтесь к <a href="https://discord.gg/YctCnvvshC">OpenSpec Discord</a> для помощи и вопросов.
 </p>
 
-### Teams
+### Команды
 
-Using OpenSpec in a team? [Email here](mailto:teams@openspec.dev) for access to our Slack channel.
+Используете OpenSpec в команде? [Напишите сюда](mailto:teams@openspec.dev) для доступа к нашему каналу в Slack.
 
-<!-- TODO: Add GIF demo of /opsx:new → /opsx:archive workflow -->
+<!-- TODO: Добавить GIF-демонстрацию рабочего процесса /opsx:new → /opsx:archive -->
 
-## See it in action
+## Посмотрите в действии
 
 ```text
-You: /opsx:new add-dark-mode
-AI:  Created openspec/changes/add-dark-mode/
-     Ready to create: proposal
+Вы: /opsx:new add-dark-mode
+ИИ: Создан openspec/changes/add-dark-mode/
+     Готов создать: proposal (предложение)
 
-You: /opsx:ff   # "fast-forward" - generate all planning docs
-AI:  ✓ proposal.md — why we're doing this, what's changing
-     ✓ specs/       — requirements and scenarios
-     ✓ design.md    — technical approach
-     ✓ tasks.md     — implementation checklist
-     Ready for implementation!
+Вы: /opsx:ff   # "fast-forward" - сгенерировать все документы планирования
+ИИ:  ✓ proposal.md — зачем мы это делаем, что меняется
+     ✓ specs/       — требования и сценарии
+     ✓ design.md    — технический подход
+     ✓ tasks.md     — чек-лист реализации
+     Готово к реализации!
 
-You: /opsx:apply
-AI:  Implementing tasks...
-     ✓ 1.1 Add theme context provider
-     ✓ 1.2 Create toggle component
-     ✓ 2.1 Add CSS variables
-     ✓ 2.2 Wire up localStorage
-     All tasks complete!
+Вы: /opsx:apply
+ИИ:  Реализация задач...
+     ✓ 1.1 Добавить провайдер контекста темы
+     ✓ 1.2 Создать компонент переключателя
+     ✓ 2.1 Добавить CSS переменные
+     ✓ 2.2 Подключить localStorage
+     Все задачи выполнены!
 
-You: /opsx:archive
-AI:  Archived to openspec/changes/archive/2025-01-23-add-dark-mode/
-     Specs updated. Ready for the next feature.
+Вы: /opsx:archive
+ИИ:  Заархивировано в openspec/changes/archive/2025-01-23-add-dark-mode/
+     Спецификации обновлены. Готов к следующей функции.
 ```
 
 <details>
-<summary><strong>OpenSpec Dashboard</strong></summary>
+<summary><strong>Панель управления OpenSpec</strong></summary>
 
 <p align="center">
-  <img src="assets/openspec_dashboard.png" alt="OpenSpec dashboard preview" width="90%">
+  <img src="assets/openspec_dashboard.png" alt="Предварительный просмотр панели OpenSpec" width="90%">
 </p>
 
 </details>
 
-## Quick Start
+## Быстрый старт
 
-**Requires Node.js 20.19.0 or higher.**
+**Требуется Node.js 20.19.0 или выше.**
 
-Install OpenSpec globally:
+Установите OpenSpec глобально:
 
 ```bash
 npm install -g @fission-ai/openspec@latest
 ```
 
-Then navigate to your project directory and initialize:
+Затем перейдите в директорию вашего проекта и инициализируйте:
 
 ```bash
 cd your-project
 openspec init
 ```
 
-Now tell your AI: `/opsx:new <what-you-want-to-build>`
+Теперь скажите вашему ИИ: `/opsx:new <что-вы-хотите-создать>`
 
 > [!NOTE]
-> Not sure if your tool is supported? [View the full list](docs/supported-tools.md) – we support 20+ tools and growing.
+> Не уверены, поддерживается ли ваш инструмент? [Посмотрите полный список](docs/supported-tools.md) – мы поддерживаем 20+ инструментов, и список растет.
 >
-> Also works with pnpm, yarn, bun, and nix. [See installation options](docs/installation.md).
+> Также работает с pnpm, yarn, bun и nix. [См. варианты установки](docs/installation.md).
 
-## Docs
+## Документация
 
-→ **[Getting Started](docs/getting-started.md)**: first steps<br>
-→ **[Workflows](docs/workflows.md)**: combos and patterns<br>
-→ **[Commands](docs/commands.md)**: slash commands & skills<br>
-→ **[CLI](docs/cli.md)**: terminal reference<br>
-→ **[Supported Tools](docs/supported-tools.md)**: tool integrations & install paths<br>
-→ **[Concepts](docs/concepts.md)**: how it all fits<br>
-→ **[Multi-Language](docs/multi-language.md)**: multi-language support<br>
-→ **[Customization](docs/customization.md)**: make it yours
+→ **[Начало работы](docs/getting-started.md)**: первые шаги<br>
+→ **[Рабочие процессы](docs/workflows.md)**: комбинации и паттерны<br>
+→ **[Команды](docs/commands.md)**: слэш-команды и навыки<br>
+→ **[CLI](docs/cli.md)**: справочник терминала<br>
+→ **[Поддерживаемые инструменты](docs/supported-tools.md)**: интеграции инструментов и пути установки<br>
+→ **[Концепции](docs/concepts.md)**: как это всё работает вместе<br>
+→ **[Мультиязычность](docs/multi-language.md)**: поддержка нескольких языков<br>
+→ **[Кастомизация](docs/customization.md)**: сделайте его своим
 
+## Почему OpenSpec?
 
-## Why OpenSpec?
+ИИ-ассистенты для кодинга мощны, но непредсказуемы, когда требования живут только в истории чата. OpenSpec добавляет легкий слой спецификаций, чтобы вы согласовали, что строить, до того, как будет написан код.
 
-AI coding assistants are powerful but unpredictable when requirements live only in chat history. OpenSpec adds a lightweight spec layer so you agree on what to build before any code is written.
+- **Согласуйте перед созданием** — человек и ИИ согласовывают спецификации до написания кода
+- **Оставайтесь организованными** — каждое изменение получает свою папку с предложением, спецификациями, дизайном и задачами
+- **Работайте гибко** — обновляйте любой артефакт в любое время, без жестких этапов
+- **Используйте свои инструменты** — работает с 20+ ИИ-ассистентами через слэш-команды
 
-- **Agree before you build** — human and AI align on specs before code gets written
-- **Stay organized** — each change gets its own folder with proposal, specs, design, and tasks
-- **Work fluidly** — update any artifact anytime, no rigid phase gates
-- **Use your tools** — works with 20+ AI assistants via slash commands
+### Сравнение
 
-### How we compare
+**vs. [Spec Kit](https://github.com/github/spec-kit)** (GitHub) — Тщательный, но тяжеловесный. Жесткие этапы, много Markdown, установка Python. OpenSpec легче и позволяет итерироваться свободно.
 
-**vs. [Spec Kit](https://github.com/github/spec-kit)** (GitHub) — Thorough but heavyweight. Rigid phase gates, lots of Markdown, Python setup. OpenSpec is lighter and lets you iterate freely.
+**vs. [Kiro](https://kiro.dev)** (AWS) — Мощный, но вы заперты в их IDE и ограничены моделями Claude. OpenSpec работает с инструментами, которые вы уже используете.
 
-**vs. [Kiro](https://kiro.dev)** (AWS) — Powerful but you're locked into their IDE and limited to Claude models. OpenSpec works with the tools you already use.
+**vs. ничего** — ИИ-кодинг без спецификаций означает расплывчатые промпты и непредсказуемые результаты. OpenSpec привносит предсказуемость без лишних церемоний.
 
-**vs. nothing** — AI coding without specs means vague prompts and unpredictable results. OpenSpec brings predictability without the ceremony.
+## Обновление OpenSpec
 
-## Updating OpenSpec
-
-**Upgrade the package**
+**Обновить пакет**
 
 ```bash
 npm install -g @fission-ai/openspec@latest
 ```
 
-**Refresh agent instructions**
+**Обновить инструкции агента**
 
-Run this inside each project to regenerate AI guidance and ensure the latest slash commands are active:
+Запустите это внутри каждого проекта, чтобы перегенерировать руководство для ИИ и убедиться, что активны последние слэш-команды:
 
 ```bash
 openspec update
 ```
 
-## Usage Notes
+## Примечания по использованию
 
-**Model selection**: OpenSpec works best with high-reasoning models. We recommend Opus 4.5 and GPT 5.2 for both planning and implementation.
+**Выбор модели**: OpenSpec лучше всего работает с моделями с высоким уровнем рассуждений. Мы рекомендуем Opus 4.5 и GPT 5.2 как для планирования, так и для реализации.
 
-**Context hygiene**: OpenSpec benefits from a clean context window. Clear your context before starting implementation and maintain good context hygiene throughout your session.
+**Гигиена контекста**: OpenSpec выигрывает от чистого окна контекста. Очищайте контекст перед началом реализации и поддерживайте хорошую гигиену контекста на протяжении всей сессии.
 
-## Contributing
+## Участие в разработке (Contributing)
 
-**Small fixes** — Bug fixes, typo corrections, and minor improvements can be submitted directly as PRs.
+**Небольшие исправления** — Исправления ошибок, опечаток и незначительные улучшения можно отправлять напрямую в виде PR.
 
-**Larger changes** — For new features, significant refactors, or architectural changes, please submit an OpenSpec change proposal first so we can align on intent and goals before implementation begins.
+**Более крупные изменения** — Для новых функций, значительного рефакторинга или архитектурных изменений, пожалуйста, сначала отправьте предложение по изменению OpenSpec, чтобы мы могли согласовать намерения и цели до начала реализации.
 
-When writing proposals, keep the OpenSpec philosophy in mind: we serve a wide variety of users across different coding agents, models, and use cases. Changes should work well for everyone.
+При написании предложений помните о философии OpenSpec: мы обслуживаем широкий круг пользователей с разными агентами кодинга, моделями и вариантами использования. Изменения должны хорошо работать для всех.
 
-**AI-generated code is welcome** — as long as it's been tested and verified. PRs containing AI-generated code should mention the coding agent and model used (e.g., "Generated with Claude Code using claude-opus-4-5-20251101").
+**ИИ-генерированный код приветствуется** — при условии, что он был протестирован и проверен. PR, содержащие код, сгенерированный ИИ, должны упоминать использованного агента и модель (например, "Сгенерировано с помощью Claude Code используя claude-opus-4-5-20251101").
 
-### Development
+### Разработка
 
-- Install dependencies: `pnpm install`
-- Build: `pnpm run build`
-- Test: `pnpm test`
-- Develop CLI locally: `pnpm run dev` or `pnpm run dev:cli`
-- Conventional commits (one-line): `type(scope): subject`
+- Установка зависимостей: `pnpm install`
+- Сборка: `pnpm run build`
+- Тест: `pnpm test`
+- Локальная разработка CLI: `pnpm run dev` или `pnpm run dev:cli`
+- Обычные коммиты (в одну строку): `type(scope): subject`
 
-## Other
+## Другое
 
 <details>
-<summary><strong>Telemetry</strong></summary>
+<summary><strong>Телеметрия</strong></summary>
 
-OpenSpec collects anonymous usage stats.
+OpenSpec собирает анонимную статистику использования.
 
-We collect only command names and version to understand usage patterns. No arguments, paths, content, or PII. Automatically disabled in CI.
+Мы собираем только имена команд и версию, чтобы понимать паттерны использования. Никаких аргументов, путей, контента или PII (персональных данных). Автоматически отключено в CI.
 
-**Opt-out:** `export OPENSPEC_TELEMETRY=0` or `export DO_NOT_TRACK=1`
+**Отказаться:** `export OPENSPEC_TELEMETRY=0` или `export DO_NOT_TRACK=1`
 
 </details>
 
 <details>
-<summary><strong>Maintainers & Advisors</strong></summary>
+<summary><strong>Мейнтейнеры и Советники</strong></summary>
 
-See [MAINTAINERS.md](MAINTAINERS.md) for the list of core maintainers and advisors who help guide the project.
+Смотрите [MAINTAINERS.md](MAINTAINERS.md) для списка основных мейнтейнеров и советников, которые помогают направлять проект.
 
 </details>
 
 
 
-## License
+## Лицензия
 
 MIT
