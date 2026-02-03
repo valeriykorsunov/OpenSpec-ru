@@ -1,31 +1,31 @@
-# Concepts
+# Концепции (Concepts)
 
-This guide explains the core ideas behind OpenSpec and how they fit together. For practical usage, see [Getting Started](getting-started.md) and [Workflows](workflows.md).
+Это руководство объясняет основные идеи, лежащие в основе OpenSpec, и то, как они взаимосвязаны. Для практического использования см. разделы [Начало работы](getting-started.md) и [Процессы](workflows.md).
 
-## Philosophy
+## Философия
 
-OpenSpec is built around four principles:
+OpenSpec строится на четырех принципах:
 
 ```
-fluid not rigid       — no phase gates, work on what makes sense
-iterative not waterfall — learn as you build, refine as you go
-easy not complex      — lightweight setup, minimal ceremony
-brownfield-first      — works with existing codebases, not just greenfield
+гибкость, а не жесткость — никаких фазовых шлюзов, работайте над тем, что важно
+итеративность, а не водопад — учитесь в процессе сборки, уточняйте по ходу дела
+простота, а не сложность — легкая настройка, минимум церемоний
+сначала brownfield — работает с существующими кодовыми базами, а не только с новыми
 ```
 
-### Why These Principles Matter
+### Почему эти принципы важны
 
-**Fluid not rigid.** Traditional spec systems lock you into phases: first you plan, then you implement, then you're done. OpenSpec is more flexible — you can create artifacts in any order that makes sense for your work.
+**Гибкость, а не жесткость.** Традиционные системы спецификаций привязывают вас к фазам: сначала вы планируете, затем реализуете, затем завершаете. OpenSpec более гибок — вы можете создавать артефакты в любом порядке, который имеет смысл для вашей работы.
 
-**Iterative not waterfall.** Requirements change. Understanding deepens. What seemed like a good approach at the start might not hold up after you see the codebase. OpenSpec embraces this reality.
+**Итеративность, а не водопад.** Требования меняются. Понимание углубляется. То, что казалось хорошим подходом в начале, может не выдержать проверки кодом. OpenSpec принимает эту реальность.
 
-**Easy not complex.** Some spec frameworks require extensive setup, rigid formats, or heavyweight processes. OpenSpec stays out of your way. Initialize in seconds, start working immediately, customize only if you need to.
+**Простота, а не сложность.** Некоторые фреймворки спецификаций требуют сложной настройки, жестких форматов или тяжеловесных процессов. OpenSpec не мешает вам. Инициализируйте за секунды, начинайте работать немедленно, кастомизируйте только если это необходимо.
 
-**Brownfield-first.** Most software work isn't building from scratch — it's modifying existing systems. OpenSpec's delta-based approach makes it easy to specify changes to existing behavior, not just describe new systems.
+**Сначала brownfield.** Большинство задач в разработке — это не создание с нуля, а модификация существующих систем. Дельта-ориентированный подход OpenSpec позволяет легко специфицировать изменения в существующем поведении, а не только описывать новые системы.
 
-## The Big Picture
+## Общая картина
 
-OpenSpec organizes your work into two main areas:
+OpenSpec организует вашу работу в две основные области:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -34,218 +34,218 @@ OpenSpec organizes your work into two main areas:
 │   ┌─────────────────────┐      ┌──────────────────────────────┐ │
 │   │       specs/        │      │         changes/              │ │
 │   │                     │      │                               │ │
-│   │  Source of truth    │◄─────│  Proposed modifications       │ │
-│   │  How your system    │ merge│  Each change = one folder     │ │
-│   │  currently works    │      │  Contains artifacts + deltas  │ │
+│   │  Источник истины    │◄─────│  Предлагаемые модификации     │ │
+│   │  Как ваша система   │слияние│  Каждое изменение = одна папка│ │
+│   │  сейчас работает    │      │  Содержит артефакты + дельты  │ │
 │   │                     │      │                               │ │
 │   └─────────────────────┘      └──────────────────────────────┘ │
 │                                                                  │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-**Specs** are the source of truth — they describe how your system currently behaves.
+**Спецификации (Specs)** — это источник истины, они описывают текущее поведение вашей системы.
 
-**Changes** are proposed modifications — they live in separate folders until you're ready to merge them.
+**Изменения (Changes)** — это предлагаемые модификации, которые живут в отдельных папках до тех пор, пока вы не будете готовы их объединить.
 
-This separation is key. You can work on multiple changes in parallel without conflicts. You can review a change before it affects the main specs. And when you archive a change, its deltas merge cleanly into the source of truth.
+Это разделение является ключевым. Вы можете работать над несколькими изменениями параллельно без конфликтов. Вы можете проверить изменение до того, как оно повлияет на основные спецификации. И когда вы архивируете изменение, его дельты чисто вливаются в источник истины.
 
-## Specs
+## Спецификации (Specs)
 
-Specs describe your system's behavior using structured requirements and scenarios.
+Спецификации описывают поведение вашей системы с использованием структурированных требований и сценариев.
 
-### Structure
+### Структура
 
 ```
 openspec/specs/
 ├── auth/
-│   └── spec.md           # Authentication behavior
+│   └── spec.md           # Поведение аутентификации
 ├── payments/
-│   └── spec.md           # Payment processing
+│   └── spec.md           # Обработка платежей
 ├── notifications/
-│   └── spec.md           # Notification system
+│   └── spec.md           # Система уведомлений
 └── ui/
-    └── spec.md           # UI behavior and themes
+    └── spec.md           # Поведение UI и темы
 ```
 
-Organize specs by domain — logical groupings that make sense for your system. Common patterns:
+Организуйте спецификации по доменам — логическим группам, которые имеют смысл для вашей системы. Распространенные паттерны:
 
-- **By feature area**: `auth/`, `payments/`, `search/`
-- **By component**: `api/`, `frontend/`, `workers/`
-- **By bounded context**: `ordering/`, `fulfillment/`, `inventory/`
+- **По функциональным областям**: `auth/`, `payments/`, `search/`
+- **По компонентам**: `api/`, `frontend/`, `workers/`
+- **По ограниченным контекстам (bounded contexts)**: `ordering/`, `fulfillment/`, `inventory/`
 
-### Spec Format
+### Формат спецификаций
 
-A spec contains requirements, and each requirement has scenarios:
+Спецификация содержит требования, и каждое требование имеет сценарии:
 
 ```markdown
-# Auth Specification
+# Спецификация Auth
 
-## Purpose
-Authentication and session management for the application.
+## Цель
+Аутентификация и управление сессиями для приложения.
 
-## Requirements
+## Требования
 
-### Requirement: User Authentication
-The system SHALL issue a JWT token upon successful login.
+### Требование: Аутентификация пользователя
+Система ДОЛЖНА выдавать JWT-токен при успешном входе.
 
-#### Scenario: Valid credentials
-- GIVEN a user with valid credentials
-- WHEN the user submits login form
-- THEN a JWT token is returned
-- AND the user is redirected to dashboard
+#### Сценарий: Верные учетные данные
+- ДАНО: пользователь с верными учетными данными
+- КОГДА: пользователь отправляет форму входа
+- ТОГДА: возвращается JWT-токен
+- И: пользователь перенаправляется на дашборд
 
-#### Scenario: Invalid credentials
-- GIVEN invalid credentials
-- WHEN the user submits login form
-- THEN an error message is displayed
-- AND no token is issued
+#### Сценарий: Неверные учетные данные
+- ДАНО: неверные учетные данные
+- КОГДА: пользователь отправляет форму входа
+- ТОГДА: отображается сообщение об ошибке
+- И: токен не выдается
 
-### Requirement: Session Expiration
-The system MUST expire sessions after 30 minutes of inactivity.
+### Требование: Истечение срока сессии
+Система ДОЛЖНА аннулировать сессии после 30 минут бездействия.
 
-#### Scenario: Idle timeout
-- GIVEN an authenticated session
-- WHEN 30 minutes pass without activity
-- THEN the session is invalidated
-- AND the user must re-authenticate
+#### Сценарий: Тайм-аут при бездействии
+- ДАНО: аутентифицированная сессия
+- КОГДА: проходит 30 минут без активности
+- ТОГДА: сессия становится недействительной
+- И: пользователь должен снова пройти аутентификацию
 ```
 
-**Key elements:**
+**Ключевые элементы:**
 
-| Element | Purpose |
+| Элемент | Назначение |
 |---------|---------|
-| `## Purpose` | High-level description of this spec's domain |
-| `### Requirement:` | A specific behavior the system must have |
-| `#### Scenario:` | A concrete example of the requirement in action |
-| SHALL/MUST/SHOULD | RFC 2119 keywords indicating requirement strength |
+| `## Цель` | Высокоуровневое описание области этой спецификации |
+| `### Требование:` | Конкретное поведение, которым должна обладать система |
+| `#### Сценарий:` | Конкретный пример реализации требования в действии |
+| SHALL/MUST/SHOULD | Ключевые слова RFC 2119, указывающие на строгость требования |
 
-### Why Structure Specs This Way
+### Почему спецификации структурированы именно так
 
-**Requirements are the "what"** — they state what the system should do without specifying implementation.
+**Требования — это "Что"** — они формулируют, что система должна делать, без указания реализации.
 
-**Scenarios are the "when"** — they provide concrete examples that can be verified. Good scenarios:
-- Are testable (you could write an automated test for them)
-- Cover both happy path and edge cases
-- Use Given/When/Then or similar structured format
+**Сценарии — это "Когда"** — они предоставляют конкретные примеры, которые можно проверить. Хорошие сценарии:
+- Тестируемы (вы могли бы написать для них автоматизированный тест).
+- Охватывают как основной сценарий (happy path), так и граничные случаи.
+- Используют формат Дано/Когда/Тогда (Given/When/Then) или аналогичный структурированный формат.
 
-**RFC 2119 keywords** (SHALL, MUST, SHOULD, MAY) communicate intent:
-- **MUST/SHALL** — absolute requirement
-- **SHOULD** — recommended, but exceptions exist
-- **MAY** — optional
+**Ключевые слова RFC 2119** (SHALL, MUST, SHOULD, MAY) передают намерение:
+- **MUST/SHALL (ДОЛЖНА)** — абсолютное требование.
+- **SHOULD (СЛЕДУЕТ)** — рекомендуется, но могут быть исключения.
+- **MAY (МОЖЕТ)** — опционально.
 
-## Changes
+## Изменения (Changes)
 
-A change is a proposed modification to your system, packaged as a folder with everything needed to understand and implement it.
+Изменение — это предлагаемая модификация вашей системы, упакованная в папку со всем необходимым для её понимания и реализации.
 
-### Change Structure
+### Структура изменения
 
 ```
 openspec/changes/add-dark-mode/
-├── proposal.md           # Why and what
-├── design.md             # How (technical approach)
-├── tasks.md              # Implementation checklist
-├── .openspec.yaml        # Change metadata (optional)
-└── specs/                # Delta specs
+├── proposal.md           # Почему и Что
+├── design.md             # Как (технический подход)
+├── tasks.md              # Список задач для реализации
+├── .openspec.yaml        # Метаданные изменения (опционально)
+└── specs/                # Дельта-спецификации
     └── ui/
-        └── spec.md       # What's changing in ui/spec.md
+        └── spec.md       # Что меняется в ui/spec.md
 ```
 
-Each change is self-contained. It has:
-- **Artifacts** — documents that capture intent, design, and tasks
-- **Delta specs** — specifications for what's being added, modified, or removed
-- **Metadata** — optional configuration for this specific change
+Каждое изменение самодостаточно. Оно содержит:
+- **Артефакты** — документы, фиксирующие намерения, дизайн и задачи.
+- **Дельта-спецификации** — описание того, что добавляется, изменяется или удаляется.
+- **Метаданные** — опциональная конфигурация для этого конкретного изменения.
 
-### Why Changes Are Folders
+### Почему изменения — это папки
 
-Packaging a change as a folder has several benefits:
+Упаковка изменения в виде папки дает несколько преимуществ:
 
-1. **Everything together.** Proposal, design, tasks, and specs live in one place. No hunting through different locations.
+1. **Все вместе.** Предложение, дизайн, задачи и спецификации живут в одном месте. Не нужно искать их по разным локациям.
 
-2. **Parallel work.** Multiple changes can exist simultaneously without conflicting. Work on `add-dark-mode` while `fix-auth-bug` is also in progress.
+2. **Параллельная работа.** Несколько изменений могут существовать одновременно без конфликтов. Работайте над `add-dark-mode`, пока `fix-auth-bug` также находится в процессе.
 
-3. **Clean history.** When archived, changes move to `changes/archive/` with their full context preserved. You can look back and understand not just what changed, but why.
+3. **Чистая история.** При архивации изменения перемещаются в `changes/archive/` с сохранением полного контекста. Вы можете оглянуться назад и понять не только что изменилось, но и почему.
 
-4. **Review-friendly.** A change folder is easy to review — open it, read the proposal, check the design, see the spec deltas.
+4. **Удобство обзора.** Папку изменения легко рецензировать — откройте её, прочитайте предложение, проверьте дизайн, посмотрите дельты спецификаций.
 
-## Artifacts
+## Артефакты
 
-Artifacts are the documents within a change that guide the work.
+Артефакты — это документы внутри изменения, которые направляют работу.
 
-### The Artifact Flow
+### Поток артефактов
 
 ```
-proposal ──────► specs ──────► design ──────► tasks ──────► implement
-    │               │             │              │
-   why            what           how          steps
- + scope        changes       approach      to take
+предложение ──────► спецификации ──────► дизайн ──────► задачи ──────► реализация
+      │               │                   │              │
+    почему           что                 как            шаги
+  + объем         изменения            подход         которые нужно предпринять
 ```
 
-Artifacts build on each other. Each artifact provides context for the next.
+Артефакты строятся друг на друге. Каждый артефакт предоставляет контекст для следующего.
 
-### Artifact Types
+### Типы артефактов
 
-#### Proposal (`proposal.md`)
+#### Предложение (`proposal.md`)
 
-The proposal captures **intent**, **scope**, and **approach** at a high level.
+Предложение фиксирует **намерения**, **объем** и **подход** на высоком уровне.
 
 ```markdown
-# Proposal: Add Dark Mode
+# Предложение: Добавить темную тему
 
-## Intent
-Users have requested a dark mode option to reduce eye strain
-during nighttime usage and match system preferences.
+## Намерение
+Пользователи запрашивали возможность включения темной темы для снижения 
+нагрузки на глаза в ночное время и соответствия системным предпочтениям.
 
-## Scope
-In scope:
-- Theme toggle in settings
-- System preference detection
-- Persist preference in localStorage
+## Объем
+В рамках задачи:
+- Переключатель темы в настройках
+- Определение системных предпочтений
+- Сохранение предпочтений в localStorage
 
-Out of scope:
-- Custom color themes (future work)
-- Per-page theme overrides
+Вне рамок:
+- Пользовательские цветовые темы (будущая работа)
+- Переопределение темы для отдельных страниц
 
-## Approach
-Use CSS custom properties for theming with a React context
-for state management. Detect system preference on first load,
-allow manual override.
+## Подход
+Использовать CSS-переменные для темизации и React context для управления 
+состоянием. Определять системные предпочтения при первой загрузке, 
+позволять ручное переопределение.
 ```
 
-**When to update the proposal:**
-- Scope changes (narrowing or expanding)
-- Intent clarifies (better understanding of the problem)
-- Approach fundamentally shifts
+**Когда обновлять предложение:**
+- Изменяется объем (сужается или расширяется).
+- Проясняются намерения (лучшее понимание проблемы).
+- Принципиально меняется подход.
 
-#### Specs (delta specs in `specs/`)
+#### Спецификации (дельта-спецификации в `specs/`)
 
-Delta specs describe **what's changing** relative to the current specs. See [Delta Specs](#delta-specs) below.
+Дельта-спецификации описывают, **что меняется** относительно текущих спецификаций. См. раздел [Дельта-спецификации](#дельта-спецификации) ниже.
 
-#### Design (`design.md`)
+#### Дизайн (`design.md`)
 
-The design captures **technical approach** and **architecture decisions**.
+Дизайн фиксирует **технический подход** и **архитектурные решения**.
 
 ```markdown
-# Design: Add Dark Mode
+# Дизайн: Добавить темную тему
 
-## Technical Approach
-Theme state managed via React Context to avoid prop drilling.
-CSS custom properties enable runtime switching without class toggling.
+## Технический подход
+Состояние темы управляется через React Context, чтобы избежать проброса пропсов (prop drilling).
+CSS-переменные позволяют переключать тему в рантайме без смены классов.
 
-## Architecture Decisions
+## Архитектурные решения
 
-### Decision: Context over Redux
-Using React Context for theme state because:
-- Simple binary state (light/dark)
-- No complex state transitions
-- Avoids adding Redux dependency
+### Решение: Context вместо Redux
+Использование React Context для состояния темы, потому что:
+- Простое бинарное состояние (светлая/темная)
+- Нет сложных переходов состояний
+- Позволяет избежать добавления зависимости Redux
 
-### Decision: CSS Custom Properties
-Using CSS variables instead of CSS-in-JS because:
-- Works with existing stylesheet
-- No runtime overhead
-- Browser-native solution
+### Решение: CSS-переменные
+Использование CSS-переменных вместо CSS-in-JS, потому что:
+- Работает с существующими таблицами стилей
+- Нет накладных расходов во время выполнения
+- Нативное решение браузера
 
-## Data Flow
+## Поток данных
 ```
 ThemeProvider (context)
        │
@@ -256,113 +256,113 @@ ThemeToggle ◄──► localStorage
 CSS Variables (applied to :root)
 ```
 
-## File Changes
-- `src/contexts/ThemeContext.tsx` (new)
-- `src/components/ThemeToggle.tsx` (new)
-- `src/styles/globals.css` (modified)
+## Изменения файлов
+- `src/contexts/ThemeContext.tsx` (новый)
+- `src/components/ThemeToggle.tsx` (новый)
+- `src/styles/globals.css` (изменен)
 ```
 
-**When to update the design:**
-- Implementation reveals the approach won't work
-- Better solution discovered
-- Dependencies or constraints change
+**Когда обновлять дизайн:**
+- Реализация показала, что подход не сработает.
+- Найдено лучшее решение.
+- Изменились зависимости или ограничения.
 
-#### Tasks (`tasks.md`)
+#### Задачи (`tasks.md`)
 
-Tasks are the **implementation checklist** — concrete steps with checkboxes.
+Задачи — это **чек-лист реализации**, конкретные шаги с флажками.
 
 ```markdown
-# Tasks
+# Задачи
 
-## 1. Theme Infrastructure
-- [ ] 1.1 Create ThemeContext with light/dark state
-- [ ] 1.2 Add CSS custom properties for colors
-- [ ] 1.3 Implement localStorage persistence
-- [ ] 1.4 Add system preference detection
+## 1. Инфраструктура тем
+- [ ] 1.1 Создать ThemeContext с состояниями light/dark
+- [ ] 1.2 Добавить CSS-переменные для цветов
+- [ ] 1.3 Реализовать сохранение в localStorage
+- [ ] 1.4 Добавить определение системных предпочтений
 
-## 2. UI Components
-- [ ] 2.1 Create ThemeToggle component
-- [ ] 2.2 Add toggle to settings page
-- [ ] 2.3 Update Header to include quick toggle
+## 2. UI Компоненты
+- [ ] 2.1 Создать компонент ThemeToggle
+- [ ] 2.2 Добавить переключатель на страницу настроек
+- [ ] 2.3 Обновить Header, включив быстрый переключатель
 
-## 3. Styling
-- [ ] 3.1 Define dark theme color palette
-- [ ] 3.2 Update components to use CSS variables
-- [ ] 3.3 Test contrast ratios for accessibility
+## 3. Стилизация
+- [ ] 3.1 Определить палитру цветов для темной темы
+- [ ] 3.2 Обновить компоненты для использования CSS-переменных
+- [ ] 3.3 Проверить коэффициенты контрастности для доступности
 ```
 
-**Task best practices:**
-- Group related tasks under headings
-- Use hierarchical numbering (1.1, 1.2, etc.)
-- Keep tasks small enough to complete in one session
-- Check tasks off as you complete them
+**Лучшие практики для задач:**
+- Группируйте связанные задачи под заголовками.
+- Используйте иерархическую нумерацию (1.1, 1.2 и т.д.).
+- Делайте задачи достаточно мелкими, чтобы их можно было выполнить за одну сессию.
+- Отмечайте задачи по мере их выполнения.
 
-## Delta Specs
+## Дельта-спецификации
 
-Delta specs are the key concept that makes OpenSpec work for brownfield development. They describe **what's changing** rather than restating the entire spec.
+Дельта-спецификации — это ключевая концепция, которая позволяет OpenSpec работать с существующими проектами (brownfield). Они описывают, **что меняется**, а не пересказывают всю спецификацию целиком.
 
-### The Format
+### Формат
 
 ```markdown
-# Delta for Auth
+# Дельта для Auth
 
-## ADDED Requirements
+## ДОБАВЛЕННЫЕ требования
 
-### Requirement: Two-Factor Authentication
-The system MUST support TOTP-based two-factor authentication.
+### Требование: Двухфакторная аутентификация
+Система ДОЛЖНА поддерживать двухфакторную аутентификацию на основе TOTP.
 
-#### Scenario: 2FA enrollment
-- GIVEN a user without 2FA enabled
-- WHEN the user enables 2FA in settings
-- THEN a QR code is displayed for authenticator app setup
-- AND the user must verify with a code before activation
+#### Сценарий: Регистрация 2FA
+- ДАНО: пользователь с отключенным 2FA
+- КОГДА: пользователь включает 2FA в настройках
+- ТОГДА: отображается QR-код для настройки приложения-аутентификатора
+- И: пользователь должен подтвердить активацию кодом
 
-#### Scenario: 2FA login
-- GIVEN a user with 2FA enabled
-- WHEN the user submits valid credentials
-- THEN an OTP challenge is presented
-- AND login completes only after valid OTP
+#### Сценарий: Вход с 2FA
+- ДАНО: пользователь с включенным 2FA
+- КОГДА: пользователь вводит верные учетные данные
+- ТОГДА: предъявляется запрос OTP
+- И: вход завершается только после ввода верного OTP
 
-## MODIFIED Requirements
+## ИЗМЕНЕННЫЕ требования
 
-### Requirement: Session Expiration
-The system MUST expire sessions after 15 minutes of inactivity.
-(Previously: 30 minutes)
+### Требование: Тайм-аут сессии
+Система ДОЛЖНА аннулировать сессии после 15 минут бездействия.
+(Ранее: 30 минут)
 
-#### Scenario: Idle timeout
-- GIVEN an authenticated session
-- WHEN 15 minutes pass without activity
-- THEN the session is invalidated
+#### Сценарий: Тайм-аут при бездействии
+- ДАНО: аутентифицированная сессия
+- КОГДА: проходит 15 минут без активности
+- ТОГДА: сессия становится недействительной
 
-## REMOVED Requirements
+## УДАЛЕННЫЕ требования
 
-### Requirement: Remember Me
-(Deprecated in favor of 2FA. Users should re-authenticate each session.)
+### Требование: Запомнить меня
+(Устарело в пользу 2FA. Пользователи должны проходить аутентификацию в каждой сессии.)
 ```
 
-### Delta Sections
+### Разделы дельты
 
-| Section | Meaning | What Happens on Archive |
+| Раздел | Значение | Что происходит при архивации |
 |---------|---------|------------------------|
-| `## ADDED Requirements` | New behavior | Appended to main spec |
-| `## MODIFIED Requirements` | Changed behavior | Replaces existing requirement |
-| `## REMOVED Requirements` | Deprecated behavior | Deleted from main spec |
+| `## ДОБАВЛЕННЫЕ требования` | Новое поведение | Дописывается в основную спецификацию |
+| `## ИЗМЕНЕННЫЕ требования` | Измененное поведение | Заменяет существующее требование |
+| `## УДАЛЕННЫЕ требования` | Устаревшее поведение | Удаляется из основной спецификации |
 
-### Why Deltas Instead of Full Specs
+### Почему дельты, а не полные спецификации
 
-**Clarity.** A delta shows exactly what's changing. Reading a full spec, you'd have to diff it mentally against the current version.
+**Ясность.** Дельта показывает именно то, что меняется. Читая полную спецификацию, вам пришлось бы мысленно сравнивать её с текущей версией.
 
-**Conflict avoidance.** Two changes can touch the same spec file without conflicting, as long as they modify different requirements.
+**Избежание конфликтов.** Два изменения могут затрагивать один и тот же файл спецификации без конфликтов, если они изменяют разные требования.
 
-**Review efficiency.** Reviewers see the change, not the unchanged context. Focus on what matters.
+**Эффективность обзора.** Рецензенты видят само изменение, а не неизменный контекст. Внимание фокусируется на главном.
 
-**Brownfield fit.** Most work modifies existing behavior. Deltas make modifications first-class, not an afterthought.
+**Соответствие brownfield.** Большинство работ модифицирует существующее поведение. Дельты делают модификации первоклассными элементами процесса.
 
-## Schemas
+## Схемы (Schemas)
 
-Schemas define the artifact types and their dependencies for a workflow.
+Схемы определяют типы артефактов и их зависимости для рабочего процесса.
 
-### How Schemas Work
+### Как работают схемы
 
 ```yaml
 # openspec/schemas/spec-driven/schema.yaml
@@ -370,69 +370,69 @@ name: spec-driven
 artifacts:
   - id: proposal
     generates: proposal.md
-    requires: []              # No dependencies, can create first
+    requires: []              # Нет зависимостей, можно создавать первым
 
   - id: specs
     generates: specs/**/*.md
-    requires: [proposal]      # Needs proposal before creating
+    requires: [proposal]      # Требуется предложение перед созданием
 
   - id: design
     generates: design.md
-    requires: [proposal]      # Can create in parallel with specs
+    requires: [proposal]      # Можно создавать параллельно со спецификациями
 
   - id: tasks
     generates: tasks.md
-    requires: [specs, design] # Needs both specs and design first
+    requires: [specs, design] # Требуются и спецификации, и дизайн
 ```
 
-**Artifacts form a dependency graph:**
+**Артефакты образуют граф зависимостей:**
 
 ```
-                    proposal
-                   (root node)
+                    предложение
+                  (корневой узел)
                        │
          ┌─────────────┴─────────────┐
          │                           │
          ▼                           ▼
-      specs                       design
-   (requires:                  (requires:
-    proposal)                   proposal)
+  спецификации                    дизайн
+   (требует:                   (требует:
+   предложение)                 предложение)
          │                           │
          └─────────────┬─────────────┘
                        │
                        ▼
-                    tasks
-                (requires:
-                specs, design)
+                    задачи
+                (требует:
+                спецификации, дизайн)
 ```
 
-**Dependencies are enablers, not gates.** They show what's possible to create, not what you must create next. You can skip design if you don't need it. You can create specs before or after design — both depend only on proposal.
+**Зависимости — это возможности, а не шлюзы.** Они показывают, что можно создать, а не то, что вы обязаны создать следующим. Вы можете пропустить дизайн, если он вам не нужен. Вы можете создавать спецификации до или после дизайна — оба зависят только от предложения.
 
-### Built-in Schemas
+### Встроенные схемы
 
-**spec-driven** (default)
+**spec-driven** (по умолчанию)
 
-The standard workflow for spec-driven development:
+Стандартный рабочий процесс для разработки, ориентированной на спецификации:
 
 ```
-proposal → specs → design → tasks → implement
+предложение → спецификации → дизайн → задачи → реализация
 ```
 
-Best for: Most feature work where you want to agree on specs before implementation.
+Лучше всего подходит для: большинства задач по разработке фич, где вы хотите согласовать спецификации перед реализацией.
 
-### Custom Schemas
+### Пользовательские схемы
 
-Create custom schemas for your team's workflow:
+Создавайте кастомные схемы для рабочего процесса вашей команды:
 
 ```bash
-# Create from scratch
+# Создать с нуля
 openspec schema init research-first
 
-# Or fork an existing one
+# Или форкнуть существующую
 openspec schema fork spec-driven research-first
 ```
 
-**Example custom schema:**
+**Пример кастомной схемы:**
 
 ```yaml
 # openspec/schemas/research-first/schema.yaml
@@ -440,27 +440,27 @@ name: research-first
 artifacts:
   - id: research
     generates: research.md
-    requires: []           # Do research first
+    requires: []           # Сначала проводим исследование
 
   - id: proposal
     generates: proposal.md
-    requires: [research]   # Proposal informed by research
+    requires: [research]   # Предложение основывается на исследовании
 
   - id: tasks
     generates: tasks.md
-    requires: [proposal]   # Skip specs/design, go straight to tasks
+    requires: [proposal]   # Пропускаем спецификации/дизайн, переходим к задачам
 ```
 
-See [Customization](customization.md) for full details on creating and using custom schemas.
+Полную информацию о создании и использовании кастомных схем см. в разделе [Кастомизация](customization.md).
 
-## Archive
+## Архив (Archive)
 
-Archiving completes a change by merging its delta specs into the main specs and preserving the change for history.
+Архивация завершает изменение, объединяя его дельта-спецификации с основными спецификациями и сохраняя изменение для истории.
 
-### What Happens When You Archive
+### Что происходит при архивации
 
 ```
-Before archive:
+До архивации:
 
 openspec/
 ├── specs/
@@ -469,22 +469,22 @@ openspec/
 └── changes/                         │
     └── add-2fa/                     │
         ├── proposal.md              │
-        ├── design.md                │ merge
+        ├── design.md                │ слияние
         ├── tasks.md                 │
         └── specs/                   │
             └── auth/                │
                 └── spec.md ─────────┘
 
 
-After archive:
+После архивации:
 
 openspec/
 ├── specs/
 │   └── auth/
-│       └── spec.md        # Now includes 2FA requirements
+│       └── spec.md        # Теперь включает требования 2FA
 └── changes/
     └── archive/
-        └── 2025-01-24-add-2fa/    # Preserved for history
+        └── 2025-01-24-add-2fa/    # Сохранено для истории
             ├── proposal.md
             ├── design.md
             ├── tasks.md
@@ -493,90 +493,90 @@ openspec/
                     └── spec.md
 ```
 
-### The Archive Process
+### Процесс архивации
 
-1. **Merge deltas.** Each delta spec section (ADDED/MODIFIED/REMOVED) is applied to the corresponding main spec.
+1. **Слияние дельт.** Каждый раздел дельта-спецификации (ADDED/MODIFIED/REMOVED) применяется к соответствующей основной спецификации.
 
-2. **Move to archive.** The change folder moves to `changes/archive/` with a date prefix for chronological ordering.
+2. **Перемещение в архив.** Папка изменения перемещается в `changes/archive/` с префиксом даты для хронологического порядка.
 
-3. **Preserve context.** All artifacts remain intact in the archive. You can always look back to understand why a change was made.
+3. **Сохранение контекста.** Все артефакты остаются нетронутыми в архиве. Вы всегда можете оглянуться назад, чтобы понять, почему было сделано то или иное изменение.
 
-### Why Archive Matters
+### Почему архив важен
 
-**Clean state.** Active changes (`changes/`) shows only work in progress. Completed work moves out of the way.
+**Чистое состояние.** В активных изменениях (`changes/`) отображается только работа, находящаяся в процессе. Завершенная работа убирается с пути.
 
-**Audit trail.** The archive preserves the full context of every change — not just what changed, but the proposal explaining why, the design explaining how, and the tasks showing the work done.
+**Аудит.** Архив сохраняет полный контекст каждого изменения — не только то, что изменилось, но и предложение, объясняющее "почему", дизайн, объясняющий "как", и задачи, показывающие выполненную работу.
 
-**Spec evolution.** Specs grow organically as changes are archived. Each archive merges its deltas, building up a comprehensive specification over time.
+**Эволюция спецификаций.** Спецификации растут органично по мере архивации изменений. Каждая архивация вливает свои дельты, выстраивая со временем всеобъемлющую спецификацию системы.
 
-## How It All Fits Together
+## Как все это работает вместе
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                              OPENSPEC FLOW                                   │
+│                            ПОТОК OPENSPEC                                   │
 │                                                                              │
 │   ┌────────────────┐                                                         │
-│   │  1. START      │  /opsx:new creates a change folder                      │
-│   │     CHANGE     │                                                         │
+│   │  1. НАЧАЛО     │  /opsx:new создает папку изменения                      │
+│   │     ИЗМЕНЕНИЯ  │                                                         │
 │   └───────┬────────┘                                                         │
 │           │                                                                  │
 │           ▼                                                                  │
 │   ┌────────────────┐                                                         │
-│   │  2. CREATE     │  /opsx:ff or /opsx:continue                             │
-│   │     ARTIFACTS  │  Creates proposal → specs → design → tasks              │
-│   │                │  (based on schema dependencies)                         │
+│   │  2. СОЗДАНИЕ   │  /opsx:ff или /opsx:continue                             │
+│   │     АРТЕФАКТОВ │  Создает предложение → спецификации → дизайн → задачи   │
+│   │                │  (на основе зависимостей схемы)                         │
 │   └───────┬────────┘                                                         │
 │           │                                                                  │
 │           ▼                                                                  │
 │   ┌────────────────┐                                                         │
-│   │  3. IMPLEMENT  │  /opsx:apply                                            │
-│   │     TASKS      │  Work through tasks, checking them off                  │
-│   │                │◄──── Update artifacts as you learn                      │
+│   │  3. РЕАЛИЗАЦИЯ │  /opsx:apply                                            │
+│   │     ЗАДАЧ      │  Выполнение задач, отметка выполненных                  │
+│   │                │◄──── Обновляйте артефакты по мере обучения              │
 │   └───────┬────────┘                                                         │
 │           │                                                                  │
 │           ▼                                                                  │
 │   ┌────────────────┐                                                         │
-│   │  4. VERIFY     │  /opsx:verify (optional)                                │
-│   │     WORK       │  Check implementation matches specs                     │
+│   │  4. ПРОВЕРКА   │  /opsx:verify (опционально)                              │
+│   │     РАБОТЫ     │  Проверка соответствия реализации спецификациям         │
 │   └───────┬────────┘                                                         │
 │           │                                                                  │
 │           ▼                                                                  │
 │   ┌────────────────┐     ┌──────────────────────────────────────────────┐   │
-│   │  5. ARCHIVE    │────►│  Delta specs merge into main specs           │   │
-│   │     CHANGE     │     │  Change folder moves to archive/             │   │
-│   └────────────────┘     │  Specs are now the updated source of truth   │   │
+│   │  5. АРХИВАЦИЯ  │────►│  Дельта-спецификации вливаются в основные     │   │
+│   │     ИЗМЕНЕНИЯ  │     │  Папка изменения перемещается в архив        │   │
+│   └────────────────┘     │  Спецификации теперь актуальный источник истины│   │
 │                          └──────────────────────────────────────────────┘   │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-**The virtuous cycle:**
+**Благотворный цикл:**
 
-1. Specs describe current behavior
-2. Changes propose modifications (as deltas)
-3. Implementation makes the changes real
-4. Archive merges deltas into specs
-5. Specs now describe the new behavior
-6. Next change builds on updated specs
+1. Спецификации описывают текущее поведение.
+2. Изменения предлагают модификации (в виде дельт).
+3. Реализация воплощает изменения в жизнь.
+4. Архивация вливает дельты в спецификации.
+5. Спецификации теперь описывают новое поведение.
+6. Следующее изменение строится на обновленных спецификациях.
 
-## Glossary
+## Глоссарий
 
-| Term | Definition |
+| Термин | Определение |
 |------|------------|
-| **Artifact** | A document within a change (proposal, design, tasks, or delta specs) |
-| **Archive** | The process of completing a change and merging its deltas into main specs |
-| **Change** | A proposed modification to the system, packaged as a folder with artifacts |
-| **Delta spec** | A spec that describes changes (ADDED/MODIFIED/REMOVED) relative to current specs |
-| **Domain** | A logical grouping for specs (e.g., `auth/`, `payments/`) |
-| **Requirement** | A specific behavior the system must have |
-| **Scenario** | A concrete example of a requirement, typically in Given/When/Then format |
-| **Schema** | A definition of artifact types and their dependencies |
-| **Spec** | A specification describing system behavior, containing requirements and scenarios |
-| **Source of truth** | The `openspec/specs/` directory, containing the current agreed-upon behavior |
+| **Артефакт (Artifact)** | Документ внутри изменения (предложение, дизайн, задачи или дельта-спецификации) |
+| **Архив (Archive)** | Процесс завершения изменения и слияния его дельт с основными спецификациями |
+| **Изменение (Change)** | Предлагаемая модификация системы, упакованная в папку с артефактами |
+| **Дельта-спецификация (Delta spec)** | Спецификация, описывающая изменения (ADDED/MODIFIED/REMOVED) относительно текущих спецификаций |
+| **Домен (Domain)** | Логическая группировка спецификаций (например, `auth/`, `payments/`) |
+| **Требование (Requirement)** | Конкретное поведение, которым должна обладать система |
+| **Сценарий (Scenario)** | Конкретный пример требования, обычно в формате Дано/Когда/Тогда |
+| **Схема (Schema)** | Определение типов артефактов и их зависимостей |
+| **Спецификация (Spec)** | Документ, описывающий поведение системы, содержащий требования и сценарии |
+| **Источник истины (Source of truth)** | Директория `openspec/specs/`, содержащая текущее согласованное поведение системы |
 
-## Next Steps
+## Следующие шаги
 
-- [Getting Started](getting-started.md) - Practical first steps
-- [Workflows](workflows.md) - Common patterns and when to use each
-- [Commands](commands.md) - Full command reference
-- [Customization](customization.md) - Create custom schemas and configure your project
+- [Начало работы](getting-started.md) — практические первые шаги
+- [Процессы](workflows.md) — распространенные паттерны и случаи использования
+- [Команды](commands.md) — полный справочник команд
+- [Кастомизация](customization.md) — создание кастомных схем и настройка проекта

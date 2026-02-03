@@ -1,425 +1,425 @@
-# Workflows
+# Процессы (Workflows)
 
-This guide covers common workflow patterns for OpenSpec and when to use each one. For basic setup, see [Getting Started](getting-started.md). For command reference, see [Commands](commands.md).
+В данном руководстве рассматриваются распространенные паттерны рабочих процессов для OpenSpec и случаи использования каждого из них. Для базовой настройки см. раздел [Начало работы](getting-started.md). Для ознакомления с командами см. [Команды](commands.md).
 
-## Philosophy: Actions, Not Phases
+## Философия: Действия, а не фазы
 
-Traditional workflows force you through phases: planning, then implementation, then done. But real work doesn't fit neatly into boxes.
+Традиционные рабочие процессы заставляют вас проходить через фазы: планирование, затем реализация, затем завершение. Но реальная работа редко укладывается в такие жесткие рамки.
 
-OPSX takes a different approach:
+OPSX использует другой подход:
 
 ```text
-Traditional (phase-locked):
+Традиционный (фиксированные фазы):
 
-  PLANNING ────────► IMPLEMENTING ────────► DONE
+  ПЛАНИРОВАНИЕ ────────► РЕАЛИЗАЦИЯ ────────► ГОТОВО
       │                    │
-      │   "Can't go back"  │
+      │   "Нельзя назад"   │
       └────────────────────┘
 
-OPSX (fluid actions):
+OPSX (гибкие действия):
 
-  proposal ──► specs ──► design ──► tasks ──► implement
+  предложение ──► спецификации ──► дизайн ──► задачи ──► реализация
 ```
 
-**Key principles:**
+**Ключевые принципы:**
 
-- **Actions, not phases** - Commands are things you can do, not stages you're stuck in
-- **Dependencies are enablers** - They show what's possible, not what's required next
+- **Действия, а не фазы** — Команды — это то, что вы можете делать в любой момент, а не стадии, в которых вы застряли.
+- **Зависимости — это возможности** — Они показывают, что можно сделать, а не то, что обязательно должно быть следующим.
 
-> **Customization:** OPSX workflows are driven by schemas that define artifact sequences. See [Customization](customization.md) for details on creating custom schemas.
+> **Кастомизация:** Рабочие процессы OPSX управляются схемами, которые определяют последовательность артефактов. Подробности создания пользовательских схем см. в разделе [Кастомизация](customization.md).
 
-## Workflow Patterns
+## Паттерны рабочих процессов
 
-### Quick Feature
+### Быстрая фича (Quick Feature)
 
-When you know what you want to build and just need to execute:
+Когда вы точно знаете, что хотите создать, и вам просто нужно это выполнить:
 
 ```text
 /opsx:new ──► /opsx:ff ──► /opsx:apply ──► /opsx:verify ──► /opsx:archive
 ```
 
-**Example conversation:**
+**Пример диалога:**
 
 ```text
-You: /opsx:new add-logout-button
+Вы: /opsx:new add-logout-button
 
-AI:  Created openspec/changes/add-logout-button/
-     Ready to create: proposal
+ИИ: Создана папка openspec/changes/add-logout-button/
+    Готов к созданию: предложение (proposal)
 
-You: /opsx:ff
+Вы: /opsx:ff
 
-AI:  Creating all planning artifacts...
-     ✓ proposal.md
-     ✓ specs/
-     ✓ design.md
-     ✓ tasks.md
-     Ready for implementation!
+ИИ: Создаю все артефакты планирования...
+    ✓ proposal.md
+    ✓ specs/
+    ✓ design.md
+    ✓ tasks.md
+    Готов к реализации!
 
-You: /opsx:apply
+Вы: /opsx:apply
 
-AI:  Working through tasks...
-     ✓ Added logout button to header
-     ✓ Implemented session clearing
-     ✓ Added confirmation dialog
-     All tasks complete!
+ИИ: Выполняю задачи...
+    ✓ Добавлена кнопка выхода в шапку
+    ✓ Реализована очистка сессии
+    ✓ Добавлено диалоговое окно подтверждения
+    Все задачи выполнены!
 
-You: /opsx:archive
+Вы: /opsx:archive
 
-AI:  ✓ Merged specs
-     ✓ Archived change
+ИИ: ✓ Спецификации объединены
+    ✓ Изменение архивировано
 ```
 
-**Best for:** Small to medium features, bug fixes, straightforward changes.
+**Лучше всего подходит для:** небольших и средних фич, исправления багов, простых изменений.
 
-### Exploratory
+### Исследовательский процесс (Exploratory)
 
-When requirements are unclear or you need to investigate first:
+Когда требования неясны или вам нужно сначала провести исследование:
 
 ```text
 /opsx:explore ──► /opsx:new ──► /opsx:continue ──► ... ──► /opsx:apply
 ```
 
-**Example conversation:**
+**Пример диалога:**
 
 ```text
-You: /opsx:explore
+Вы: /opsx:explore
 
-AI:  What would you like to explore?
+ИИ: Что бы вы хотели исследовать?
 
-You: I want to improve page load performance but I'm not sure
-     where the bottlenecks are.
+Вы: Я хочу улучшить производительность загрузки страницы, но не уверен, 
+    где именно находятся узкие места.
 
-AI:  Let me help investigate...
-     [Analyzes bundle sizes, identifies slow queries, reviews
-     component render patterns]
+ИИ: Позвольте мне провести исследование...
+    [Анализирует размеры бандлов, выявляет медленные запросы, изучает 
+    паттерны рендеринга компонентов]
 
-     I found three main bottlenecks:
-     1. Large unoptimized images
-     2. Synchronous data fetching in ProductList
-     3. Re-renders from context changes
+    Я нашел три основных узких места:
+    1. Большие неоптимизированные изображения
+    2. Синхронная загрузка данных в ProductList
+    3. Повторные рендеринги из-за изменений контекста
 
-     Which would you like to address first?
+    С чего бы вы хотели начать?
 
-You: Let's tackle the data fetching issue.
+Вы: Давайте займемся проблемой загрузки данных.
 
-You: /opsx:new optimize-product-list-fetching
+Вы: /opsx:new optimize-product-list-fetching
 
-AI:  Created change. Ready to create: proposal
+ИИ: Изменение создано. Готов к созданию: предложение (proposal)
 
-You: /opsx:continue
+Вы: /opsx:continue
 
-AI:  Creating proposal based on our exploration...
-     [Writes proposal incorporating investigation insights]
+ИИ: Создаю предложение на основе нашего исследования...
+    [Пишет предложение, включая результаты исследования]
 
-     Ready to create: specs, design
-     Which would you like next?
+    Готов к созданию: спецификации (specs), дизайн (design)
+    Что создадим следующим?
 
-You: /opsx:continue
+Вы: /opsx:continue
 
-AI:  Creating specs...
+ИИ: Создаю спецификации...
 ```
 
-**Best for:** Performance optimization, debugging, architectural decisions, unclear requirements.
+**Лучше всего подходит для:** оптимизации производительности, отладки, архитектурных решений, неясных требований.
 
-### Parallel Changes
+### Параллельные изменения
 
-Work on multiple changes at once:
+Работа над несколькими изменениями одновременно:
 
 ```text
-Change A: /opsx:new ──► /opsx:ff ──► /opsx:apply (in progress)
+Изменение А: /opsx:new ──► /opsx:ff ──► /opsx:apply (в процессе)
                                          │
-                                    context switch
+                               переключение контекста
                                          │
-Change B: /opsx:new ──► /opsx:ff ──────► /opsx:apply
+Изменение Б: /opsx:new ──► /opsx:ff ──────► /opsx:apply
 ```
 
-**Example conversation:**
+**Пример диалога:**
 
 ```text
-You: I'm working on add-dark-mode but got pulled into a bug fix
+Вы: Я работаю над add-dark-mode, но мне нужно срочно исправить баг
 
-You: /opsx:new fix-login-redirect
+Вы: /opsx:new fix-login-redirect
 
-AI:  Created openspec/changes/fix-login-redirect/
+ИИ: Создана папка openspec/changes/fix-login-redirect/
 
-You: /opsx:ff
+Вы: /opsx:ff
 
-AI:  ✓ Created planning artifacts
+ИИ: ✓ Артефакты планирования созданы
 
-You: /opsx:apply
+Вы: /opsx:apply
 
-AI:  Working on fix-login-redirect...
-     [Implements the fix]
-     All tasks complete!
+ИИ: Работаю над fix-login-redirect...
+    [Реализует исправление]
+    Все задачи выполнены!
 
-You: /opsx:archive
+Вы: /opsx:archive
 
-AI:  ✓ Archived fix-login-redirect
+ИИ: ✓ Изменение fix-login-redirect архивировано
 
-You: Let's get back to dark mode
+Вы: Давай вернемся к темной теме
 
-You: /opsx:apply add-dark-mode
+Вы: /opsx:apply add-dark-mode
 
-AI:  Resuming add-dark-mode...
-     Picking up at task 2.3: Update Header...
+ИИ: Возобновляю работу над add-dark-mode...
+    Продолжаем с задачи 2.3: Обновить Header...
 ```
 
-**Best for:** Parallel work streams, urgent interrupts, team collaboration.
+**Лучше всего подходит для:** параллельных потоков работы, срочных задач, командного взаимодействия.
 
-When you have multiple completed changes, use `/opsx:bulk-archive`:
+Если у вас есть несколько завершенных изменений, используйте `/opsx:bulk-archive`:
 
 ```text
-You: /opsx:bulk-archive
+Вы: /opsx:bulk-archive
 
-AI:  Found 3 completed changes:
-     - add-dark-mode (all tasks done)
-     - fix-login-redirect (all tasks done)
-     - update-footer (all tasks done)
+ИИ: Найдено 3 завершенных изменения:
+    - add-dark-mode (все задачи выполнены)
+    - fix-login-redirect (все задачи выполнены)
+    - update-footer (все задачи выполнены)
 
-     Checking for spec conflicts...
-     ⚠ add-dark-mode and update-footer both touch specs/ui/
+    Проверка конфликтов спецификаций...
+    ⚠ add-dark-mode и update-footer оба затрагивают specs/ui/
 
-     Inspecting codebase to resolve...
-     Both changes are implemented. Will apply in chronological order.
+    Анализ кодовой базы для разрешения...
+    Оба изменения реализованы. Будут применены в хронологическом порядке.
 
-     Archive all 3 changes?
+    Архивировать все 3 изменения?
 
-You: Yes
+Вы: Да
 
-AI:  ✓ Archived add-dark-mode
-     ✓ Archived fix-login-redirect
-     ✓ Archived update-footer
-     Specs merged in order: add-dark-mode → update-footer
+ИИ: ✓ Изменение add-dark-mode архивировано
+    ✓ Изменение fix-login-redirect архивировано
+    ✓ Изменение update-footer архивировано
+    Спецификации объединены в порядке: add-dark-mode → update-footer
 ```
 
-Bulk archive detects when multiple changes touch the same specs and resolves conflicts by checking what's actually implemented.
+Массовое архивирование определяет, когда несколько изменений затрагивают одни и те же спецификации, и разрешает конфликты, проверяя, что фактически реализовано.
 
-### Completing a Change
+### Завершение изменения
 
-The recommended completion flow:
+Рекомендуемый процесс завершения:
 
 ```text
 /opsx:apply ──► /opsx:verify ──► /opsx:archive
                     │                 │
-              validates          prompts to sync
-              implementation     if needed
+              проверяет          предлагает синхронизацию
+              реализацию         при необходимости
 ```
 
-#### Verify: Check Your Work
+#### Verify: Проверка работы
 
-`/opsx:verify` validates implementation against your artifacts across three dimensions:
+`/opsx:verify` проверяет реализацию на соответствие вашим артефактам по трем измерениям:
 
 ```text
-You: /opsx:verify
+Вы: /opsx:verify
 
-AI:  Verifying add-auth...
+ИИ: Проверка add-auth...
 
-     COMPLETENESS
-     ✓ All 12 tasks in tasks.md are checked
-     ✓ All requirements in specs have corresponding code
-     ⚠ Scenario "Session timeout after inactivity" not tested
+     ПОЛНОТА (COMPLETENESS)
+     ✓ Все 12 задач в tasks.md отмечены
+     ✓ Все требования в спецификациях имеют соответствующий код
+     ⚠ Сценарий "Тайм-аут сессии после бездействия" не протестирован
 
-     CORRECTNESS
-     ✓ Implementation matches spec intent
-     ✓ Edge cases from scenarios are handled
-     ✓ Error states match spec definitions
+     КОРРЕКТНОСТЬ (CORRECTNESS)
+     ✓ Реализация соответствует намерениям в спецификации
+     ✓ Граничные случаи из сценариев обработаны
+     ✓ Состояния ошибок соответствуют определениям в спецификации
 
-     COHERENCE
-     ✓ Design decisions reflected in code structure
-     ✓ Naming conventions consistent with design.md
-     ⚠ Design mentions "event-driven" but implementation uses polling
+     СОГЛАСОВАННОСТЬ (COHERENCE)
+     ✓ Архитектурные решения отражены в структуре кода
+     ✓ Соглашения о именовании соответствуют design.md
+     ⚠ В дизайне упоминается "событийно-ориентированный" подход, но в реализации используется опрос (polling)
 
-     SUMMARY
+     ИТОГ
      ─────────────────────────────
-     Critical issues: 0
-     Warnings: 2
-     Ready to archive: Yes (with warnings)
+     Критические проблемы: 0
+     Предупреждения: 2
+     Готов к архивации: Да (с предупреждениями)
 
-     Recommendations:
-     1. Add test for session timeout scenario
-     2. Consider refactoring to event-driven as designed, or update design.md
+     Рекомендации:
+     1. Добавить тест для сценария тайм-аута сессии
+     2. Рассмотреть возможность рефакторинга на событийно-ориентированный подход, как было задумано, либо обновить design.md
 ```
 
-**What verify checks:**
+**Что проверяет verify:**
 
-| Dimension | What it validates |
+| Измерение | Что проверяется |
 |-----------|------------------|
-| Completeness | All tasks done, all requirements implemented, scenarios covered |
-| Correctness | Implementation matches spec intent, edge cases handled |
-| Coherence | Design decisions reflected in code, patterns consistent |
+| Полнота | Все задачи выполнены, все требования реализованы, сценарии покрыты |
+| Корректность | Реализация соответствует спецификации, граничные случаи обработаны |
+| Согласованность | Дизайнерские решения отражены в коде, паттерны последовательны |
 
-Verify won't block archive, but it surfaces issues you might want to address first.
+Verify не блокирует архивацию, но выявляет проблемы, которые стоит устранить перед завершением.
 
-#### Archive: Finalize the Change
+#### Archive: Финализация изменения
 
-`/opsx:archive` completes the change and moves it to the archive:
+`/opsx:archive` завершает работу над изменением и перемещает его в архив:
 
 ```text
-You: /opsx:archive
+Вы: /opsx:archive
 
-AI:  Archiving add-auth...
+ИИ: Архивирую add-auth...
 
-     Artifact status:
-     ✓ proposal.md exists
-     ✓ specs/ exists
-     ✓ design.md exists
-     ✓ tasks.md exists (12/12 tasks complete)
+     Статус артефактов:
+     ✓ proposal.md существует
+     ✓ specs/ существует
+     ✓ design.md существует
+     ✓ tasks.md существует (выполнено 12 из 12 задач)
 
-     Delta specs: Not yet synced to main
-     → Would you like to sync now?
+     Дельта-спецификации: еще не синхронизированы с основной веткой
+     → Хотите синхронизировать сейчас?
 
-You: Yes
+Вы: Да
 
-AI:  ✓ Synced specs to openspec/specs/auth/spec.md
-     ✓ Moved to openspec/changes/archive/2025-01-24-add-auth/
+ИИ: ✓ Спецификации синхронизированы в openspec/specs/auth/spec.md
+    ✓ Изменение перемещено в openspec/changes/archive/2025-01-24-add-auth/
 
-     Change archived successfully.
+    Изменение успешно архивировано.
 ```
 
-Archive will prompt if specs aren't synced. It won't block on incomplete tasks, but it will warn you.
+Archive предложит синхронизацию, если спецификации еще не обновлены. Команда не заблокирует процесс при невыполненных задачах, но выдаст предупреждение.
 
-## When to Use What
+## Когда и что использовать
 
-### `/opsx:ff` vs `/opsx:continue`
+### `/opsx:ff` против `/opsx:continue`
 
-| Situation | Use |
+| Ситуация | Используйте |
 |-----------|-----|
-| Clear requirements, ready to build | `/opsx:ff` |
-| Exploring, want to review each step | `/opsx:continue` |
-| Want to iterate on proposal before specs | `/opsx:continue` |
-| Time pressure, need to move fast | `/opsx:ff` |
-| Complex change, want control | `/opsx:continue` |
+| Четкие требования, готовы к сборке | `/opsx:ff` |
+| Исследование, хотите проверять каждый шаг | `/opsx:continue` |
+| Хотите доработать предложение перед спецификациями | `/opsx:continue` |
+| Ограничение по времени, нужно действовать быстро | `/opsx:ff` |
+| Сложное изменение, нужен полный контроль | `/opsx:continue` |
 
-**Rule of thumb:** If you can describe the full scope upfront, use `/opsx:ff`. If you're figuring it out as you go, use `/opsx:continue`.
+**Золотое правило:** Если вы можете описать весь объем работы сразу — используйте `/opsx:ff`. Если вы разбираетесь в процессе — используйте `/opsx:continue`.
 
-### When to Update vs Start Fresh
+### Обновить существующее или начать новое?
 
-A common question: when is updating an existing change okay, and when should you start a new one?
+Частый вопрос: когда допустимо обновлять существующее изменение, а когда следует начинать новое?
 
-**Update the existing change when:**
+**Обновляйте существующее изменение, если:**
 
-- Same intent, refined execution
-- Scope narrows (MVP first, rest later)
-- Learning-driven corrections (codebase isn't what you expected)
-- Design tweaks based on implementation discoveries
+- То же намерение, уточненное исполнение.
+- Объем сужается (сначала MVP, остальное позже).
+- Исправления на основе изученного (кодовая база оказалась не такой, как ожидалось).
+- Корректировки дизайна на основе открытий в процессе реализации.
 
-**Start a new change when:**
+**Начинайте новое изменение, если:**
 
-- Intent fundamentally changed
-- Scope exploded to different work entirely
-- Original change can be marked "done" standalone
-- Patches would confuse more than clarify
+- Намерение принципиально изменилось.
+- Объем разросся до совершенно другой задачи.
+- Оригинальное изменение может быть помечено как "готово" само по себе.
+- Доработки скорее запутают, чем прояснят ситуацию.
 
 ```text
                      ┌─────────────────────────────────────┐
-                     │     Is this the same work?          │
+                     │     Это та же самая работа?         │
                      └──────────────┬──────────────────────┘
                                     │
                  ┌──────────────────┼──────────────────┐
                  │                  │                  │
                  ▼                  ▼                  ▼
-          Same intent?      >50% overlap?      Can original
-          Same problem?     Same scope?        be "done" without
-                 │                  │          these changes?
+          То же намерение?   Перекрытие >50%?    Можно ли считать
+          Та же проблема?    Тот же объем?       оригинал "готовым"
+                 │                  │            без этих правок?
                  │                  │                  │
        ┌────────┴────────┐  ┌──────┴──────┐   ┌───────┴───────┐
        │                 │  │             │   │               │
-      YES               NO YES           NO  NO              YES
+       ДА               НЕТ ДА           НЕТ НЕТ              ДА
        │                 │  │             │   │               │
        ▼                 ▼  ▼             ▼   ▼               ▼
-    UPDATE            NEW  UPDATE       NEW  UPDATE          NEW
+    ОБНОВИТЬ          НОВОЕ ОБНОВИТЬ       НОВОЕ ОБНОВИТЬ      НОВОЕ
 ```
 
-**Example: "Add dark mode"**
+**Пример: "Добавить темную тему"**
 
-- "Need to also support custom themes" → New change (scope exploded)
-- "System preference detection is harder than expected" → Update (same intent)
-- "Let's ship toggle first, add preferences later" → Update then archive, then new change
+- "Нужно также поддерживать пользовательские темы" → Новое изменение (объем разросся).
+- "Определение системных настроек оказалось сложнее, чем ожидалось" → Обновить (намерение то же).
+- "Давайте сначала выпустим переключатель, а настройки добавим позже" → Обновить, затем архивировать, затем новое изменение.
 
-## Best Practices
+## Лучшие практики
 
-### Keep Changes Focused
+### Фокусируйтесь на одном изменении
 
-One logical unit of work per change. If you're doing "add feature X and also refactor Y", consider two separate changes.
+Одна логическая единица работы на одно изменение. Если вы делаете "добавить фичу X и также отрефакторить Y", рассмотрите возможность создания двух отдельных изменений.
 
-**Why it matters:**
-- Easier to review and understand
-- Cleaner archive history
-- Can ship independently
-- Simpler rollback if needed
+**Почему это важно:**
+- Проще рецензировать и понимать.
+- Чистая история архива.
+- Можно выпускать независимо.
+- Проще откатить при необходимости.
 
-### Use `/opsx:explore` for Unclear Requirements
+### Используйте `/opsx:explore` для неясных требований
 
-Before committing to a change, explore the problem space:
+Прежде чем приступать к изменению, изучите проблему:
 
 ```text
-You: /opsx:explore
+Вы: /opsx:explore
 
-AI:  What would you like to explore?
+ИИ: Что бы вы хотели исследовать?
 
-You: How should we handle rate limiting for our API?
+Вы: Как нам реализовать ограничение частоты запросов (rate limiting) для нашего API?
 
-AI:  Let me investigate your current setup and options...
-     [Researches codebase, considers patterns]
+ИИ: Позвольте мне изучить вашу текущую настройку и варианты...
+    [Изучает кодовую базу, рассматривает паттерны]
 
-     I see three approaches we could take:
-     1. Middleware-based (simple, per-endpoint)
-     2. Redis-backed (scalable, shared state)
-     3. Token bucket per user (fair, complex)
+    Я вижу три подхода, которые мы могли бы использовать:
+    1. На основе middleware (просто, для каждого эндпоинта)
+    2. С использованием Redis (масштабируемо, общее состояние)
+    3. Token bucket для каждого пользователя (справедливо, сложно)
 
-     Your current stack suggests #1 or #2. What's your scale?
+    Ваш текущий стек предполагает варианты №1 или №2. Каков ваш масштаб?
 ```
 
-Exploration clarifies thinking before you create artifacts.
+Исследование проясняет мысли до того, как вы начнете создавать артефакты.
 
-### Verify Before Archiving
+### Проверяйте перед архивацией
 
-Use `/opsx:verify` to check implementation matches artifacts:
+Используйте `/opsx:verify`, чтобы убедиться, что реализация соответствует артефактам:
 
 ```text
-You: /opsx:verify
+Вы: /opsx:verify
 
-AI:  Verifying add-dark-mode...
+ИИ: Проверка add-dark-mode...
 
-     ✓ All tasks in tasks.md are checked
-     ✓ Requirements in specs have corresponding code
-     ✓ Design decisions are reflected in implementation
+     ✓ Все задачи в tasks.md отмечены
+     ✓ Требования в спецификациях имеют соответствующий код
+     ✓ Дизайнерские решения отражены в реализации
 
-     Ready to archive!
+     Готов к архивации!
 ```
 
-Catches mismatches before you close out the change.
+Это позволяет выявить несоответствия до того, как вы закроете задачу.
 
-### Name Changes Clearly
+### Называйте изменения четко
 
-Good names make `openspec list` useful:
+Хорошие названия делают `openspec list` полезным:
 
 ```text
-Good:                          Avoid:
+Хорошо:                        Избегайте:
 add-dark-mode                  feature-1
 fix-login-redirect             update
 optimize-product-query         changes
 implement-2fa                  wip
 ```
 
-## Command Quick Reference
+## Краткий справочник команд
 
-For full command details and options, see [Commands](commands.md).
+Полную информацию о командах и опциях см. в разделе [Команды](commands.md).
 
-| Command | Purpose | When to Use |
+| Команда | Цель | Когда использовать |
 |---------|---------|-------------|
-| `/opsx:explore` | Think through ideas | Unclear requirements, investigation |
-| `/opsx:new` | Start a change | Beginning any new work |
-| `/opsx:continue` | Create next artifact | Step-by-step artifact creation |
-| `/opsx:ff` | Create all planning artifacts | Clear scope, ready to build |
-| `/opsx:apply` | Implement tasks | Ready to write code |
-| `/opsx:verify` | Validate implementation | Before archiving, catch mismatches |
-| `/opsx:sync` | Merge delta specs | Optional—archive prompts if needed |
-| `/opsx:archive` | Complete the change | All work finished |
-| `/opsx:bulk-archive` | Archive multiple changes | Parallel work, batch completion |
+| `/opsx:explore` | Продумывание идей | Неясные требования, исследование |
+| `/opsx:new` | Начать изменение | В начале любой новой работы |
+| `/opsx:continue` | Создать следующий артефакт | Пошаговое создание артефактов |
+| `/opsx:ff` | Создать все артефакты планирования | Четкий объем, готовность к сборке |
+| `/opsx:apply` | Выполнить задачи | Готовность к написанию кода |
+| `/opsx:verify` | Проверить реализацию | Перед архивацией, для поиска несоответствий |
+| `/opsx:sync` | Синхронизировать дельта-спецификации | Опционально — archive предложит сама |
+| `/opsx:archive` | Завершить изменение | Вся работа закончена |
+| `/opsx:bulk-archive` | Архивировать несколько изменений | Параллельная работа, массовое завершение |
 
-## Next Steps
+## Следующие шаги
 
-- [Commands](commands.md) - Full command reference with options
-- [Concepts](concepts.md) - Deep dive into specs, artifacts, and schemas
-- [Customization](customization.md) - Create custom workflows
+- [Команды](commands.md) — Полный справочник команд с опциями
+- [Концепции](concepts.md) — Глубокое погружение в спецификации, артефакты и схемы
+- [Кастомизация](customization.md) — Создание собственных рабочих процессов

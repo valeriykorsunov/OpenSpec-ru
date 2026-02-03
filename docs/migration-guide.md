@@ -1,45 +1,45 @@
-# Migrating to OPSX
+# Переход на OPSX
 
-This guide helps you transition from the legacy OpenSpec workflow to OPSX. The migration is designed to be smooth—your existing work is preserved, and the new system offers more flexibility.
+Это руководство поможет вам перейти с устаревшего рабочего процесса OpenSpec на OPSX. Переход спроектирован так, чтобы быть плавным: ваша существующая работа сохраняется, а новая система предлагает больше гибкости.
 
-## What's Changing?
+## Что меняется?
 
-OPSX replaces the old phase-locked workflow with a fluid, action-based approach. Here's the key shift:
+OPSX заменяет старый рабочий процесс с жестко фиксированными фазами на гибкий подход, основанный на действиях. Вот ключевые отличия:
 
-| Aspect | Legacy | OPSX |
+| Аспект | Устаревший процесс | OPSX |
 |--------|--------|------|
-| **Commands** | `/openspec:proposal`, `/openspec:apply`, `/openspec:archive` | `/opsx:new`, `/opsx:continue`, `/opsx:apply`, and more |
-| **Workflow** | Create all artifacts at once | Create incrementally or all at once—your choice |
-| **Going back** | Awkward phase gates | Natural—update any artifact anytime |
-| **Customization** | Fixed structure | Schema-driven, fully hackable |
-| **Configuration** | `CLAUDE.md` with markers + `project.md` | Clean config in `openspec/config.yaml` |
+| **Команды** | `/openspec:proposal`, `/openspec:apply`, `/openspec:archive` | `/opsx:new`, `/opsx:continue`, `/opsx:apply` и другие |
+| **Процесс** | Создание всех артефактов сразу | Создание постепенно или сразу — на ваш выбор |
+| **Возврат назад** | Неудобные фазовые шлюзы | Естественный — обновление любого артефакта в любое время |
+| **Кастомизация** | Фиксированная структура | Управляется схемой, полная настраиваемость |
+| **Конфигурация** | `CLAUDE.md` с маркерами + `project.md` | Чистая конфигурация в `openspec/config.yaml` |
 
-**The philosophy change:** Work isn't linear. OPSX stops pretending it is.
+**Смена философии:** Работа не линейна. OPSX перестает притворяться, что это так.
 
 ---
 
-## Before You Begin
+## Перед началом
 
-### Your Existing Work Is Safe
+### Ваша существующая работа в безопасности
 
-The migration process is designed with preservation in mind:
+Процесс миграции разработан с учетом сохранения данных:
 
-- **Active changes in `openspec/changes/`** — Completely preserved. You can continue them with OPSX commands.
-- **Archived changes** — Untouched. Your history remains intact.
-- **Main specs in `openspec/specs/`** — Untouched. These are your source of truth.
-- **Your content in CLAUDE.md, AGENTS.md, etc.** — Preserved. Only the OpenSpec marker blocks are removed; everything you wrote stays.
+- **Активные изменения в `openspec/changes/`** — Полностью сохраняются. Вы можете продолжить работу над ними с помощью команд OPSX.
+- **Архивные изменения** — Не затрагиваются. Ваша история остается нетронутой.
+- **Основные спецификации в `openspec/specs/`** — Не затрагиваются. Это ваш "источник истины".
+- **Ваш контент в CLAUDE.md, AGENTS.md и т.д.** — Сохраняется. Удаляются только блоки маркеров OpenSpec; все, что вы написали, остается.
 
-### What Gets Removed
+### Что удаляется
 
-Only OpenSpec-managed files that are being replaced:
+Удаляются только файлы, управляемые OpenSpec, которые заменяются новыми:
 
-| What | Why |
+| Что | Почему |
 |------|-----|
-| Legacy slash command directories/files | Replaced by the new skills system |
-| `openspec/AGENTS.md` | Obsolete workflow trigger |
-| OpenSpec markers in `CLAUDE.md`, `AGENTS.md`, etc. | No longer needed |
+| Директории/файлы устаревших слеш-команд | Заменяются новой системой навыков (skills) |
+| `openspec/AGENTS.md` | Устаревший триггер рабочего процесса |
+| Маркеры OpenSpec в `CLAUDE.md`, `AGENTS.md` и т.д. | Больше не нужны |
 
-**Legacy command locations by tool** (examples—your tool may vary):
+**Расположение устаревших команд по инструментам** (примеры — в вашем инструменте может отличаться):
 
 - Claude Code: `.claude/commands/openspec/`
 - Cursor: `.cursor/commands/openspec-*.md`
@@ -47,329 +47,329 @@ Only OpenSpec-managed files that are being replaced:
 - Cline: `.clinerules/workflows/openspec-*.md`
 - Roo: `.roo/commands/openspec-*.md`
 - GitHub Copilot: `.github/prompts/openspec-*.prompt.md`
-- And others (Augment, Continue, Amazon Q, etc.)
+- И другие (Augment, Continue, Amazon Q и т.д.)
 
-The migration detects whichever tools you have configured and cleans up their legacy files.
+Миграция определяет, какие инструменты у вас настроены, и очищает их устаревшие файлы.
 
-The removal list may seem long, but these are all files that OpenSpec originally created. Your own content is never deleted.
+Список на удаление может показаться длинным, но все это файлы, которые OpenSpec изначально создал сам. Ваш собственный контент никогда не удаляется.
 
-### What Needs Your Attention
+### Что требует вашего внимания
 
-One file requires manual migration:
+Один файл требует ручного переноса:
 
-**`openspec/project.md`** — This file isn't deleted automatically because it may contain project context you've written. You'll need to:
+**`openspec/project.md`** — Этот файл не удаляется автоматически, так как он может содержать написанный вами контекст проекта. Вам потребуется:
 
-1. Review its contents
-2. Move useful context to `openspec/config.yaml` (see guidance below)
-3. Delete the file when ready
+1. Просмотреть его содержимое.
+2. Перенести полезный контекст в `openspec/config.yaml` (см. руководство ниже).
+3. Удалить файл, когда будете готовы.
 
-**Why we made this change:**
+**Почему мы внесли это изменение:**
 
-The old `project.md` was passive—agents might read it, might not, might forget what they read. We found reliability was inconsistent.
+Старый `project.md` был пассивным — агенты могли прочитать его, а могли и нет, или забыть прочитанное. Мы обнаружили, что надежность была нестабильной.
 
-The new `config.yaml` context is **actively injected into every OpenSpec planning request**. This means your project conventions, tech stack, and rules are always present when the AI is creating artifacts. Higher reliability.
+Контекст в новом `config.yaml` **активно внедряется в каждый запрос планирования OpenSpec**. Это означает, что соглашения вашего проекта, технологический стек и правила всегда присутствуют при создании артефактов ИИ. Это обеспечивает более высокую надежность.
 
-**The tradeoff:**
+**Компромисс:**
 
-Because context is injected into every request, you'll want to be concise. Focus on what really matters:
-- Tech stack and key conventions
-- Non-obvious constraints the AI needs to know
-- Rules that frequently got ignored before
+Поскольку контекст внедряется в каждый запрос, старайтесь быть лаконичными. Сосредоточьтесь на том, что действительно важно:
+- Технологический стек и ключевые соглашения.
+- Неочевидные ограничения, о которых ИИ должен знать.
+- Правила, которые раньше часто игнорировались.
 
-Don't worry about getting it perfect. We're still learning what works best here, and we'll be improving how context injection works as we experiment.
+Не беспокойтесь о том, чтобы сделать все идеально сразу. Мы все еще учимся тому, что работает лучше всего, и будем улучшать механизм внедрения контекста по мере экспериментов.
 
 ---
 
-## Running the Migration
+## Запуск миграции
 
-Both `openspec init` and `openspec update` detect legacy files and guide you through the same cleanup process. Use whichever fits your situation:
+Команды `openspec init` и `openspec update` обнаруживают устаревшие файлы и проводят вас через один и тот же процесс очистки. Используйте ту, которая подходит вашей ситуации:
 
-### Using `openspec init`
+### Использование `openspec init`
 
-Run this if you want to add new tools or reconfigure which tools are set up:
+Запустите это, если хотите добавить новые инструменты или перенастроить текущие:
 
 ```bash
 openspec init
 ```
 
-The init command detects legacy files and guides you through cleanup:
+Команда init обнаружит устаревшие файлы и предложит очистку:
 
 ```
-Upgrading to the new OpenSpec
+Обновление до нового OpenSpec
 
-OpenSpec now uses agent skills, the emerging standard across coding
-agents. This simplifies your setup while keeping everything working
-as before.
+OpenSpec теперь использует навыки агентов (agent skills) — развивающийся 
+стандарт для ИИ-ассистентов. Это упрощает настройку, сохраняя 
+функциональность.
 
-Files to remove
-No user content to preserve:
+Файлы для удаления
+Пользовательский контент отсутствует:
   • .claude/commands/openspec/
   • openspec/AGENTS.md
 
-Files to update
-OpenSpec markers will be removed, your content preserved:
+Файлы для обновления
+Маркеры OpenSpec будут удалены, ваш контент сохранен:
   • CLAUDE.md
   • AGENTS.md
 
-Needs your attention
+Требует вашего внимания
   • openspec/project.md
-    We won't delete this file. It may contain useful project context.
+    Мы не будем удалять этот файл. Он может содержать полезный контекст.
 
-    The new openspec/config.yaml has a "context:" section for planning
-    context. This is included in every OpenSpec request and works more
-    reliably than the old project.md approach.
+    В новом openspec/config.yaml есть раздел "context:" для планирования.
+    Он включается в каждый запрос OpenSpec и работает надежнее, чем 
+    старый подход с project.md.
 
-    Review project.md, move any useful content to config.yaml's context
-    section, then delete the file when ready.
+    Просмотрите project.md, перенесите полезный контент в раздел context 
+    файла config.yaml, затем удалите файл, когда будете готовы.
 
-? Upgrade and clean up legacy files? (Y/n)
+? Обновиться и очистить устаревшие файлы? (Y/n)
 ```
 
-**What happens when you say yes:**
+**Что произойдет при согласии:**
 
-1. Legacy slash command directories are removed
-2. OpenSpec markers are stripped from `CLAUDE.md`, `AGENTS.md`, etc. (your content stays)
-3. `openspec/AGENTS.md` is deleted
-4. New skills are installed in `.claude/skills/`
-5. `openspec/config.yaml` is created with a default schema
+1. Директории устаревших слеш-команд будут удалены.
+2. Маркеры OpenSpec будут удалены из `CLAUDE.md`, `AGENTS.md` и т.д. (ваш контент останется).
+3. `openspec/AGENTS.md` будет удален.
+4. Новые навыки будут установлены в `.claude/skills/`.
+5. Будет создан `openspec/config.yaml` со схемой по умолчанию.
 
-### Using `openspec update`
+### Использование `openspec update`
 
-Run this if you just want to migrate and refresh your existing tools to the latest version:
+Запустите это, если вы просто хотите обновить существующие инструменты до последней версии:
 
 ```bash
 openspec update
 ```
 
-The update command also detects and cleans up legacy artifacts, then refreshes your skills to the latest version.
+Команда update также обнаруживает и очищает устаревшие артефакты, а затем обновляет ваши навыки до последней версии.
 
-### Non-Interactive / CI Environments
+### Неинтерактивные среды / CI
 
-For scripted migrations:
+Для автоматизированной миграции:
 
 ```bash
 openspec init --force --tools claude
 ```
 
-The `--force` flag skips prompts and auto-accepts cleanup.
+Флаг `--force` пропускает запросы и автоматически принимает очистку.
 
 ---
 
-## Migrating project.md to config.yaml
+## Перенос project.md в config.yaml
 
-The old `openspec/project.md` was a freeform markdown file for project context. The new `openspec/config.yaml` is structured and—critically—**injected into every planning request** so your conventions are always present when the AI works.
+Старый `openspec/project.md` был текстовым файлом в формате markdown для контекста проекта. Новый `openspec/config.yaml` структурирован и — что критично — **внедряется в каждый запрос планирования**, поэтому ваши соглашения всегда учитываются при работе ИИ.
 
-### Before (project.md)
+### До (project.md)
 
 ```markdown
-# Project Context
+# Контекст проекта
 
-This is a TypeScript monorepo using React and Node.js.
-We use Jest for testing and follow strict ESLint rules.
-Our API is RESTful and documented in docs/api.md.
+Это monorepo на TypeScript с использованием React и Node.js.
+Мы используем Jest для тестирования и следуем строгим правилам ESLint.
+Наш API построен по принципам REST и документирован в docs/api.md.
 
-## Conventions
+## Соглашения
 
-- All public APIs must maintain backwards compatibility
-- New features should include tests
-- Use Given/When/Then format for specifications
+- Все публичные API должны сохранять обратную совместимость
+- Новые функции должны включать тесты
+- Используйте формат Given/When/Then для спецификаций
 ```
 
-### After (config.yaml)
+### После (config.yaml)
 
 ```yaml
 schema: spec-driven
 
 context: |
-  Tech stack: TypeScript, React, Node.js
-  Testing: Jest with React Testing Library
-  API: RESTful, documented in docs/api.md
-  We maintain backwards compatibility for all public APIs
+  Технологический стек: TypeScript, React, Node.js
+  Тестирование: Jest с React Testing Library
+  API: RESTful, документирован в docs/api.md
+  Мы сохраняем обратную совместимость для всех публичных API
 
 rules:
   proposal:
-    - Include rollback plan for risky changes
+    - Включать план отката для рискованных изменений
   specs:
-    - Use Given/When/Then format for scenarios
-    - Reference existing patterns before inventing new ones
+    - Использовать формат Given/When/Then для сценариев
+    - Ссылаться на существующие паттерны перед созданием новых
   design:
-    - Include sequence diagrams for complex flows
+    - Включать диаграммы последовательности для сложных процессов
 ```
 
-### Key Differences
+### Ключевые отличия
 
 | project.md | config.yaml |
 |------------|-------------|
-| Freeform markdown | Structured YAML |
-| One blob of text | Separate context and per-artifact rules |
-| Unclear when it's used | Context appears in ALL artifacts; rules appear in matching artifacts only |
-| No schema selection | Explicit `schema:` field sets default workflow |
+| Произвольный markdown | Структурированный YAML |
+| Единый блок текста | Раздельный контекст и правила для каждого артефакта |
+| Неясно, когда используется | Контекст появляется во ВСЕХ артефактах; правила — только в соответствующих |
+| Нет выбора схемы | Явное поле `schema:` задает процесс по умолчанию |
 
-### What to Keep, What to Drop
+### Что оставить, а что убрать
 
-When migrating, be selective. Ask yourself: "Does the AI need this for *every* planning request?"
+При миграции будьте избирательны. Спросите себя: "Нужно ли это ИИ для *каждого* запроса планирования?"
 
-**Good candidates for `context:`**
-- Tech stack (languages, frameworks, databases)
-- Key architectural patterns (monorepo, microservices, etc.)
-- Non-obvious constraints ("we can't use library X because...")
-- Critical conventions that often get ignored
+**Хорошие кандидаты для `context:`**
+- Технологический стек (языки, фреймворки, базы данных).
+- Ключевые архитектурные паттерны (monorepo, microservices и т.д.).
+- Неочевидные ограничения ("мы не можем использовать библиотеку X, потому что...").
+- Критически важные соглашения, которые часто игнорируются.
 
-**Move to `rules:` instead**
-- Artifact-specific formatting ("use Given/When/Then in specs")
-- Review criteria ("proposals must include rollback plans")
-- These only appear for the matching artifact, keeping other requests lighter
+**Перенесите в `rules:`**
+- Форматирование конкретных артефактов ("использовать Given/When/Then в спецификациях").
+- Критерии проверки ("предложения должны включать план отката").
+- Это будет появляться только для соответствующего артефакта, облегчая остальные запросы.
 
-**Leave out entirely**
-- General best practices the AI already knows
-- Verbose explanations that could be summarized
-- Historical context that doesn't affect current work
+**Уберите совсем**
+- Общие лучшие практики, которые ИИ и так знает.
+- Многословные объяснения, которые можно сократить.
+- Исторический контекст, не влияющий на текущую работу.
 
-### Migration Steps
+### Шаги миграции
 
-1. **Create config.yaml** (if not already created by init):
+1. **Создайте config.yaml** (если он еще не создан командой init):
    ```yaml
    schema: spec-driven
    ```
 
-2. **Add your context** (be concise—this goes into every request):
+2. **Добавьте ваш контекст** (будьте кратки — это идет в каждый запрос):
    ```yaml
    context: |
-     Your project background goes here.
-     Focus on what the AI genuinely needs to know.
+     Здесь описание вашего проекта.
+     Сосредоточьтесь на том, что ИИ действительно нужно знать.
    ```
 
-3. **Add per-artifact rules** (optional):
+3. **Добавьте правила для артефактов** (опционально):
    ```yaml
    rules:
      proposal:
-       - Your proposal-specific guidance
+       - Ваши рекомендации для предложений
      specs:
-       - Your spec-writing rules
+       - Ваши правила написания спецификаций
    ```
 
-4. **Delete project.md** once you've moved everything useful.
+4. **Удалите project.md**, когда перенесете все полезное.
 
-**Don't overthink it.** Start with the essentials and iterate. If you notice the AI missing something important, add it. If context feels bloated, trim it. This is a living document.
+**Не усложняйте.** Начните с самого важного и итерируйте. Если заметите, что ИИ упускает что-то важное — добавьте это. Если контекст кажется раздутым — сократите его. Это живой документ.
 
-### Need Help? Use This Prompt
+### Нужна помощь? Используйте этот промпт
 
-If you're unsure how to distill your project.md, ask your AI assistant:
+Если вы не уверены, как сократить ваш project.md, спросите своего ИИ-ассистента:
 
 ```
-I'm migrating from OpenSpec's old project.md to the new config.yaml format.
+Я перехожу со старого формата project.md OpenSpec на новый формат config.yaml.
 
-Here's my current project.md:
-[paste your project.md content]
+Вот мой текущий project.md:
+[вставьте содержимое вашего project.md]
 
-Please help me create a config.yaml with:
-1. A concise `context:` section (this gets injected into every planning request, so keep it tight—focus on tech stack, key constraints, and conventions that often get ignored)
-2. `rules:` for specific artifacts if any content is artifact-specific (e.g., "use Given/When/Then" belongs in specs rules, not global context)
+Пожалуйста, помоги мне создать config.yaml с:
+1. Лаконичным разделом `context:` (он внедряется в каждый запрос планирования, поэтому пиши кратко — сосредоточься на техстеке, ключевых ограничениях и соглашениях, которые часто игнорируются).
+2. Разделом `rules:` для конкретных артефактов, если контент специфичен для них (например, "использовать Given/When/Then" относится к правилам спецификаций, а не к глобальному контексту).
 
-Leave out anything generic that AI models already know. Be ruthless about brevity.
+Убери все общее, что ИИ и так знает. Будь беспощаден в сокращении.
 ```
 
-The AI will help you identify what's essential vs. what can be trimmed.
+ИИ поможет вам определить, что важно, а что можно убрать.
 
 ---
 
-## The New Commands
+## Новые команды
 
-After migration, you have 9 OPSX commands instead of 3:
+После миграции у вас будет 9 команд OPSX вместо 3:
 
-| Command | Purpose |
+| Команда | Назначение |
 |---------|---------|
-| `/opsx:explore` | Think through ideas with no structure |
-| `/opsx:new` | Start a new change |
-| `/opsx:continue` | Create the next artifact (one at a time) |
-| `/opsx:ff` | Fast-forward—create all planning artifacts at once |
-| `/opsx:apply` | Implement tasks from tasks.md |
-| `/opsx:verify` | Validate implementation matches specs |
-| `/opsx:sync` | Preview spec merge (optional—archive prompts if needed) |
-| `/opsx:archive` | Finalize and archive the change |
-| `/opsx:bulk-archive` | Archive multiple changes at once |
+| `/opsx:explore` | Продумывание идей без жесткой структуры |
+| `/opsx:new` | Начало нового изменения |
+| `/opsx:continue` | Создание следующего артефакта (по одному) |
+| `/opsx:ff` | Fast-forward — создание всех артефактов планирования сразу |
+| `/opsx:apply` | Реализация задач из tasks.md |
+| `/opsx:verify` | Проверка соответствия реализации спецификациям |
+| `/opsx:sync` | Предпросмотр объединения спецификаций (опционально) |
+| `/opsx:archive` | Финализация и архивация изменения |
+| `/opsx:bulk-archive` | Архивирование нескольких изменений сразу |
 
-### Command Mapping from Legacy
+### Соответствие команд старым версиям
 
-| Legacy | OPSX Equivalent |
+| Устаревшая команда | Эквивалент OPSX |
 |--------|-----------------|
-| `/openspec:proposal` | `/opsx:new` then `/opsx:ff` |
+| `/openspec:proposal` | `/opsx:new`, затем `/opsx:ff` |
 | `/openspec:apply` | `/opsx:apply` |
 | `/openspec:archive` | `/opsx:archive` |
 
-### New Capabilities
+### Новые возможности
 
-**Granular artifact creation:**
+**Гранулярное создание артефактов:**
 ```
 /opsx:continue
 ```
-Creates one artifact at a time based on dependencies. Use this when you want to review each step.
+Создает по одному артефакту за раз на основе зависимостей. Используйте, когда хотите проверять каждый шаг.
 
-**Exploration mode:**
+**Режим исследования:**
 ```
 /opsx:explore
 ```
-Think through ideas with a partner before committing to a change.
+Обсуждайте идеи с партнером перед тем, как зафиксировать изменение.
 
 ---
 
-## Understanding the New Architecture
+## Понимание новой архитектуры
 
-### From Phase-Locked to Fluid
+### От фиксированных фаз к гибкости
 
-The legacy workflow forced linear progression:
+Устаревший рабочий процесс навязывал линейную прогрессию:
 
 ```
 ┌──────────────┐      ┌──────────────┐      ┌──────────────┐
-│   PLANNING   │ ───► │ IMPLEMENTING │ ───► │   ARCHIVING  │
-│    PHASE     │      │    PHASE     │      │    PHASE     │
+│     ФАЗА     │ ───► │     ФАЗА     │ ───► │     ФАЗА     │
+│ ПЛАНИРОВАНИЯ │      │  РЕАЛИЗАЦИИ  │      │ АРХИВАЦИИ    │
 └──────────────┘      └──────────────┘      └──────────────┘
 
-If you're in implementation and realize the design is wrong?
-Too bad. Phase gates don't let you go back easily.
+Если вы в процессе реализации поняли, что дизайн неверен?
+Увы. Фазовые шлюзы не позволяют легко вернуться назад.
 ```
 
-OPSX uses actions, not phases:
+OPSX использует действия, а не фазы:
 
 ```
          ┌───────────────────────────────────────────────┐
-         │           ACTIONS (not phases)                │
+         │           ДЕЙСТВИЯ (не фазы)                  │
          │                                               │
          │     new ◄──► continue ◄──► apply ◄──► archive │
          │      │          │           │             │   │
          │      └──────────┴───────────┴─────────────┘   │
-         │                    any order                  │
+         │                любой порядок                  │
          └───────────────────────────────────────────────┘
 ```
 
-### Dependency Graph
+### Граф зависимостей
 
-Artifacts form a directed graph. Dependencies are enablers, not gates:
+Артефакты формируют направленный граф. Зависимости — это возможности, а не препятствия:
 
 ```
                         proposal
-                       (root node)
+                     (корневой узел)
                             │
               ┌─────────────┴─────────────┐
               │                           │
               ▼                           ▼
            specs                       design
-        (requires:                  (requires:
+        (требует:                   (требует:
          proposal)                   proposal)
               │                           │
               └─────────────┬─────────────┘
                             │
                             ▼
                          tasks
-                     (requires:
+                     (требует:
                      specs, design)
 ```
 
-When you run `/opsx:continue`, it checks what's ready and offers the next artifact. You can also create multiple ready artifacts in any order.
+При запуске `/opsx:continue` система проверяет, что готово, и предлагает следующий артефакт. Вы также можете создавать несколько готовых артефактов в любом порядке.
 
-### Skills vs Commands
+### Навыки против Команд
 
-The legacy system used tool-specific command files:
+Устаревшая система использовала файлы команд, специфичные для инструментов:
 
 ```
 .claude/commands/openspec/
@@ -378,7 +378,7 @@ The legacy system used tool-specific command files:
 └── archive.md
 ```
 
-OPSX uses the emerging **skills** standard:
+OPSX использует развивающийся стандарт **навыков (skills)**:
 
 ```
 .claude/skills/
@@ -389,31 +389,31 @@ OPSX uses the emerging **skills** standard:
 └── ...
 ```
 
-Skills are recognized across multiple AI coding tools and provide richer metadata.
+Навыки распознаются множеством инструментов для ИИ-программирования и предоставляют более богатые метаданные.
 
 ---
 
-## Continuing Existing Changes
+## Продолжение существующих изменений
 
-Your in-progress changes work seamlessly with OPSX commands.
+Ваши текущие изменения плавно интегрируются с командами OPSX.
 
-**Have an active change from the legacy workflow?**
+**У вас есть активное изменение из устаревшего рабочего процесса?**
 
 ```
 /opsx:apply add-my-feature
 ```
 
-OPSX reads the existing artifacts and continues from where you left off.
+OPSX прочитает существующие артефакты и продолжит с того места, где вы остановились.
 
-**Want to add more artifacts to an existing change?**
+**Хотите добавить больше артефактов к существующему изменению?**
 
 ```
 /opsx:continue add-my-feature
 ```
 
-Shows what's ready to create based on what already exists.
+Покажет, что готово к созданию на основе того, что уже существует.
 
-**Need to see status?**
+**Нужно увидеть статус?**
 
 ```bash
 openspec status --change add-my-feature
@@ -421,155 +421,155 @@ openspec status --change add-my-feature
 
 ---
 
-## The New Config System
+## Новая система конфигурации
 
-### config.yaml Structure
+### Структура config.yaml
 
 ```yaml
-# Required: Default schema for new changes
+# Обязательно: Схема по умолчанию для новых изменений
 schema: spec-driven
 
-# Optional: Project context (max 50KB)
-# Injected into ALL artifact instructions
+# Опционально: Контекст проекта (макс. 50 КБ)
+# Внедряется во ВСЕ инструкции артефактов
 context: |
-  Your project background, tech stack,
-  conventions, and constraints.
+  Описание вашего проекта, техстек,
+  соглашения и ограничения.
 
-# Optional: Per-artifact rules
-# Only injected into matching artifacts
+# Опционально: Правила для отдельных артефактов
+# Внедряются только в соответствующие артефакты
 rules:
   proposal:
-    - Include rollback plan
+    - Включать план отката
   specs:
-    - Use Given/When/Then format
+    - Использовать формат Given/When/Then
   design:
-    - Document fallback strategies
+    - Документировать стратегии отката
   tasks:
-    - Break into 2-hour maximum chunks
+    - Разбивать на задачи максимум по 2 часа
 ```
 
-### Schema Resolution
+### Разрешение схем
 
-When determining which schema to use, OPSX checks in order:
+При определении используемой схемы OPSX проверяет их в следующем порядке:
 
-1. **CLI flag**: `--schema <name>` (highest priority)
-2. **Change metadata**: `.openspec.yaml` in the change directory
-3. **Project config**: `openspec/config.yaml`
-4. **Default**: `spec-driven`
+1. **Флаг CLI**: `--schema <name>` (высший приоритет)
+2. **Метаданные изменения**: `.openspec.yaml` в директории изменения
+3. **Конфигурация проекта**: `openspec/config.yaml`
+4. **По умолчанию**: `spec-driven`
 
-### Available Schemas
+### Доступные схемы
 
-| Schema | Artifacts | Best For |
+| Схема | Артефакты | Лучше всего для |
 |--------|-----------|----------|
-| `spec-driven` | proposal → specs → design → tasks | Most projects |
+| `spec-driven` | proposal → specs → design → tasks | Большинства проектов |
 
-List all available schemas:
+Список всех доступных схем:
 
 ```bash
 openspec schemas
 ```
 
-### Custom Schemas
+### Кастомные схемы
 
-Create your own workflow:
+Создайте собственный рабочий процесс:
 
 ```bash
 openspec schema init my-workflow
 ```
 
-Or fork an existing one:
+Или форкните существующую:
 
 ```bash
 openspec schema fork spec-driven my-workflow
 ```
 
-See [Customization](customization.md) for details.
+Подробности см. в разделе [Кастомизация](customization.md).
 
 ---
 
-## Troubleshooting
+## Устранение неполадок
 
 ### "Legacy files detected in non-interactive mode"
 
-You're running in a CI or non-interactive environment. Use:
+Вы запускаете миграцию в CI или неинтерактивной среде. Используйте:
 
 ```bash
 openspec init --force
 ```
 
-### Commands not appearing after migration
+### Команды не появляются после миграции
 
-Restart your IDE. Skills are detected at startup.
+Перезапустите вашу IDE. Навыки обнаруживаются при запуске.
 
 ### "Unknown artifact ID in rules"
 
-Check that your `rules:` keys match your schema's artifact IDs:
+Убедитесь, что ключи в `rules:` соответствуют ID артефактов вашей схемы:
 
 - **spec-driven**: `proposal`, `specs`, `design`, `tasks`
 
-Run this to see valid artifact IDs:
+Запустите это, чтобы увидеть валидные ID артефактов:
 
 ```bash
 openspec schemas --json
 ```
 
-### Config not being applied
+### Конфигурация не применяется
 
-1. Ensure the file is at `openspec/config.yaml` (not `.yml`)
-2. Validate YAML syntax
-3. Config changes take effect immediately—no restart needed
+1. Убедитесь, что файл называется `openspec/config.yaml` (не `.yml`).
+2. Проверьте синтаксис YAML.
+3. Изменения конфигурации вступают в силу немедленно — перезагрузка не требуется.
 
-### project.md not migrated
+### project.md не мигрировал
 
-The system intentionally preserves `project.md` because it may contain your custom content. Review it manually, move useful parts to `config.yaml`, then delete it.
+Система намеренно сохраняет `project.md`, так как он может содержать ваш контент. Просмотрите его вручную, перенесите полезные части в `config.yaml`, затем удалите.
 
-### Want to see what would be cleaned up?
+### Хотите увидеть, что будет удалено?
 
-Run init and decline the cleanup prompt—you'll see the full detection summary without any changes being made.
+Запустите init и отклоните запрос на очистку — вы увидите сводку обнаруженных файлов без внесения изменений.
 
 ---
 
-## Quick Reference
+## Краткий справочник
 
-### Files After Migration
+### Файлы после миграции
 
 ```
 project/
 ├── openspec/
-│   ├── specs/                    # Unchanged
-│   ├── changes/                  # Unchanged
-│   │   └── archive/              # Unchanged
-│   └── config.yaml               # NEW: Project configuration
+│   ├── specs/                    # Без изменений
+│   ├── changes/                  # Без изменений
+│   │   └── archive/              # Без изменений
+│   └── config.yaml               # НОВОЕ: Конфигурация проекта
 ├── .claude/
-│   └── skills/                   # NEW: OPSX skills
+│   └── skills/                   # НОВОЕ: Навыки OPSX
 │       ├── openspec-explore/
 │       ├── openspec-new-change/
 │       └── ...
-├── CLAUDE.md                     # OpenSpec markers removed, your content preserved
-└── AGENTS.md                     # OpenSpec markers removed, your content preserved
+├── CLAUDE.md                     # Маркеры OpenSpec удалены, контент сохранен
+└── AGENTS.md                     # Маркеры OpenSpec удалены, контент сохранен
 ```
 
-### What's Gone
+### Что исчезло
 
-- `.claude/commands/openspec/` — replaced by `.claude/skills/`
-- `openspec/AGENTS.md` — obsolete
-- `openspec/project.md` — migrate to `config.yaml`, then delete
-- OpenSpec marker blocks in `CLAUDE.md`, `AGENTS.md`, etc.
+- `.claude/commands/openspec/` — заменено на `.claude/skills/`
+- `openspec/AGENTS.md` — устарело
+- `openspec/project.md` — перенесите в `config.yaml`, затем удалите
+- Блоки маркеров OpenSpec в `CLAUDE.md`, `AGENTS.md` и т.д.
 
-### Command Cheatsheet
+### Шпаргалка по командам
 
 ```
-/opsx:new          Start a change
-/opsx:continue     Create next artifact
-/opsx:ff           Create all planning artifacts
-/opsx:apply        Implement tasks
-/opsx:archive      Finish and archive
+/opsx:new          Начать изменение
+/opsx:continue     Создать следующий артефакт
+/opsx:ff           Создать все артефакты планирования
+/opsx:apply        Реализовать задачи
+/opsx:archive      Завершить и архивировать
 ```
 
 ---
 
-## Getting Help
+## Помощь
 
 - **Discord**: [discord.gg/YctCnvvshC](https://discord.gg/YctCnvvshC)
 - **GitHub Issues**: [github.com/Fission-AI/OpenSpec/issues](https://github.com/Fission-AI/OpenSpec/issues)
-- **Documentation**: [docs/opsx.md](opsx.md) for the full OPSX reference
+- **Документация**: [docs/opsx.md](opsx.md) — полный справочник OPSX

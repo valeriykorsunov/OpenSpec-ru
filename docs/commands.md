@@ -1,569 +1,569 @@
-# Commands
+# Команды (Commands)
 
-This is the reference for OpenSpec's slash commands. These commands are invoked in your AI coding assistant's chat interface (e.g., Claude Code, Cursor, Windsurf).
+Это справочник слеш-команд OpenSpec. Эти команды вызываются в чат-интерфейсе вашего ИИ-ассистента (например, Claude Code, Cursor, Windsurf).
 
-For workflow patterns and when to use each command, see [Workflows](workflows.md). For CLI commands, see [CLI](cli.md).
+Паттерны рабочих процессов и информацию о том, когда использовать каждую команду, см. в разделе [Процессы](workflows.md). Команды терминала описаны в разделе [CLI](cli.md).
 
-## Quick Reference
+## Краткий справочник
 
-| Command | Purpose |
+| Команда | Назначение |
 |---------|---------|
-| `/opsx:explore` | Think through ideas before committing to a change |
-| `/opsx:new` | Start a new change |
-| `/opsx:continue` | Create the next artifact based on dependencies |
-| `/opsx:ff` | Fast-forward: create all planning artifacts at once |
-| `/opsx:apply` | Implement tasks from the change |
-| `/opsx:verify` | Validate implementation matches artifacts |
-| `/opsx:sync` | Merge delta specs into main specs |
-| `/opsx:archive` | Archive a completed change |
-| `/opsx:bulk-archive` | Archive multiple changes at once |
-| `/opsx:onboard` | Guided tutorial through the complete workflow |
+| `/opsx:explore` | Проработка идей перед созданием изменения |
+| `/opsx:new` | Начать новое изменение |
+| `/opsx:continue` | Создать следующий артефакт на основе зависимостей |
+| `/opsx:ff` | Fast-forward: создание всех артефактов планирования одновременно |
+| `/opsx:apply` | Реализовать задачи из изменения |
+| `/opsx:verify` | Проверить соответствие реализации артефактам |
+| `/opsx:sync` | Слить дельта-спецификации с основными спецификациями |
+| `/opsx:archive` | Архивировать завершенное изменение |
+| `/opsx:bulk-archive` | Архивировать несколько изменений одновременно |
+| `/opsx:onboard` | Обучающее руководство по полному рабочему процессу |
 
 ---
 
-## Command Reference
+## Справочник команд
 
 ### `/opsx:explore`
 
-Think through ideas, investigate problems, and clarify requirements before committing to a change.
+Проработка идей, исследование проблем и уточнение требований перед фиксацией изменения.
 
-**Syntax:**
+**Синтаксис:**
 ```
 /opsx:explore [topic]
 ```
 
-**Arguments:**
-| Argument | Required | Description |
+**Аргументы:**
+| Аргумент | Обязательный | Описание |
 |----------|----------|-------------|
-| `topic` | No | What you want to explore or investigate |
+| `topic` | Нет | Тема, которую вы хотите изучить или исследовать |
 
-**What it does:**
-- Opens an exploratory conversation with no structure required
-- Investigates the codebase to answer questions
-- Compares options and approaches
-- Creates visual diagrams to clarify thinking
-- Can transition to `/opsx:new` when insights crystallize
+**Что она делает:**
+- Открывает исследовательский диалог без обязательной структуры
+- Исследует кодовую базу для ответа на вопросы
+- Сравнивает варианты и подходы
+- Создает визуальные диаграммы для прояснения идей
+- Может переходить к `/opsx:new`, когда идеи кристаллизуются
 
-**Example:**
+**Пример:**
 ```text
-You: /opsx:explore
+Вы: /opsx:explore
 
-AI:  What would you like to explore?
+ИИ: Что бы вы хотели изучить?
 
-You: How should we handle authentication for the mobile app?
+Вы: Как нам реализовать аутентификацию для мобильного приложения?
 
-AI:  Let me investigate your current auth setup...
-     [Analyzes codebase]
+ИИ: Позвольте мне изучить вашу текущую настройку аутентификации...
+     [Анализирует кодовую базу]
 
-     I see you're using session-based auth for the web app.
-     For mobile, we have three main options:
+     Я вижу, что для веб-приложения вы используете аутентификацию на основе сессий.
+     Для мобильных устройств у нас есть три основных варианта:
 
-     1. JWT tokens (stateless, works offline)
-     2. OAuth2 (if you need third-party login)
-     3. Extend current sessions (simpler, but requires connectivity)
+     1. JWT-токены (stateless, работают оффлайн)
+     2. OAuth2 (если нужен вход через сторонние сервисы)
+     3. Расширение текущих сессий (проще, но требует постоянного подключения)
 
-     Your API already has CORS configured. Which direction interests you?
+     Ваш API уже настроен для CORS. Какое направление вам интересно?
 
-You: Let's go with JWT. Can we start a change for that?
+Вы: Давайте выберем JWT. Можем начать изменение для этого?
 
-AI:  Ready when you are. Run /opsx:new add-jwt-auth to begin.
+ИИ: Готов, когда и вы. Запустите /opsx:new add-jwt-auth для начала.
 ```
 
-**Tips:**
-- Use when requirements are unclear or you need to investigate
-- No artifacts are created during exploration
-- Good for comparing multiple approaches before deciding
-- Can read files and search the codebase
+**Советы:**
+- Используйте, когда требования неясны или нужно провести исследование
+- Во время исследования артефакты не создаются
+- Подходит для сравнения нескольких подходов перед принятием решения
+- Может читать файлы и искать по кодовой базе
 
 ---
 
 ### `/opsx:new`
 
-Start a new change. Creates the change folder structure and scaffolds it with the selected schema.
+Начать новое изменение. Создает структуру папок изменения и подготавливает её в соответствии с выбранной схемой.
 
-**Syntax:**
+**Синтаксис:**
 ```
 /opsx:new [change-name] [--schema <schema-name>]
 ```
 
-**Arguments:**
-| Argument | Required | Description |
+**Аргументы:**
+| Аргумент | Обязательный | Описание |
 |----------|----------|-------------|
-| `change-name` | No | Name for the change folder (prompted if not provided) |
-| `--schema` | No | Workflow schema to use (default: from config or `spec-driven`) |
+| `change-name` | Нет | Имя папки изменения (запрашивается, если не указано) |
+| `--schema` | Нет | Схема рабочего процесса (по умолчанию из конфига или `spec-driven`) |
 
-**What it does:**
-- Creates `openspec/changes/<change-name>/` directory
-- Creates `.openspec.yaml` metadata file in the change folder
-- Shows the first artifact template ready for creation
-- Prompts for change name and schema if not provided
+**Что она делает:**
+- Создает директорию `openspec/changes/<change-name>/`
+- Создает файл метаданных `.openspec.yaml` в папке изменения
+- Показывает шаблон первого артефакта, готового к созданию
+- Запрашивает имя изменения и схему, если они не были указаны
 
-**What it creates:**
+**Что она создает:**
 ```
 openspec/changes/<change-name>/
-└── .openspec.yaml    # Change metadata (schema, created date)
+└── .openspec.yaml    # Метаданные изменения (схема, дата создания)
 ```
 
-**Example:**
+**Пример:**
 ```
-You: /opsx:new add-dark-mode
+Вы: /opsx:new add-dark-mode
 
-AI:  Created openspec/changes/add-dark-mode/
-     Schema: spec-driven
+ИИ: Создана директория openspec/changes/add-dark-mode/
+     Схема: spec-driven
 
-     Ready to create: proposal
-     Use /opsx:continue to create it, or /opsx:ff to create all artifacts.
+     Готов к созданию: proposal
+     Используйте /opsx:continue для его создания или /opsx:ff для создания всех артефактов.
 ```
 
-**Tips:**
-- Use descriptive names: `add-feature`, `fix-bug`, `refactor-module`
-- Avoid generic names like `update`, `changes`, `wip`
-- Schema can also be set in project config (`openspec/config.yaml`)
+**Советы:**
+- Используйте описательные имена: `add-feature`, `fix-bug`, `refactor-module`
+- Избегайте общих имен, таких как `update`, `changes`, `wip`
+- Схему также можно задать в конфигурации проекта (`openspec/config.yaml`)
 
 ---
 
 ### `/opsx:continue`
 
-Create the next artifact in the dependency chain. Creates one artifact at a time for incremental progress.
+Создать следующий артефакт в цепочке зависимостей. Создает по одному артефакту за раз для инкрементального прогресса.
 
-**Syntax:**
+**Синтаксис:**
 ```
 /opsx:continue [change-name]
 ```
 
-**Arguments:**
-| Argument | Required | Description |
+**Аргументы:**
+| Аргумент | Обязательный | Описание |
 |----------|----------|-------------|
-| `change-name` | No | Which change to continue (inferred from context if not provided) |
+| `change-name` | Нет | Какое изменение продолжить (определяется из контекста, если не указано) |
 
-**What it does:**
-- Queries the artifact dependency graph
-- Shows which artifacts are ready vs blocked
-- Creates the first ready artifact
-- Reads dependency files for context
-- Shows what becomes available after creation
+**Что она делает:**
+- Опрашивает граф зависимостей артефактов
+- Показывает, какие артефакты готовы, а какие заблокированы
+- Создает первый готовый артефакт
+- Читает файлы зависимостей для получения контекста
+- Показывает, что становится доступным после создания
 
-**Example:**
+**Пример:**
 ```
-You: /opsx:continue
+Вы: /opsx:continue
 
-AI:  Change: add-dark-mode
+ИИ: Изменение: add-dark-mode
 
-     Artifact status:
-     ✓ proposal    (done)
-     ◆ specs       (ready)
-     ◆ design      (ready)
-     ○ tasks       (blocked - needs: specs)
+     Статус артефактов:
+     ✓ proposal    (готово)
+     ◆ specs       (готово к созданию)
+     ◆ design      (готово к созданию)
+     ○ tasks       (заблокировано — требуется: specs)
 
-     Creating specs...
+     Создаю specs...
 
-     [Reads proposal.md, creates specs based on requirements]
+     [Читает proposal.md, создает спецификации на основе требований]
 
-     ✓ Created openspec/changes/add-dark-mode/specs/ui/spec.md
+     ✓ Создан openspec/changes/add-dark-mode/specs/ui/spec.md
 
-     Now available: tasks
-     Run /opsx:continue to create the next artifact.
+     Теперь доступно: tasks
+     Запустите /opsx:continue для создания следующего артефакта.
 ```
 
-**Tips:**
-- Use when you want to review each artifact before proceeding
-- Good for complex changes where you want control
-- Multiple artifacts may become ready simultaneously
-- You can edit created artifacts before continuing
+**Советы:**
+- Используйте, если хотите просматривать каждый артефакт перед продолжением
+- Подходит для сложных изменений, где важен контроль
+- Несколько артефактов могут стать готовыми одновременно
+- Вы можете редактировать созданные артефакты перед продолжением
 
 ---
 
 ### `/opsx:ff`
 
-Fast-forward through artifact creation. Creates all planning artifacts at once.
+Fast-forward (быстрая перемотка) создания артефактов. Создает все артефакты планирования одновременно.
 
-**Syntax:**
+**Синтаксис:**
 ```
 /opsx:ff [change-name]
 ```
 
-**Arguments:**
-| Argument | Required | Description |
+**Аргументы:**
+| Аргумент | Обязательный | Описание |
 |----------|----------|-------------|
-| `change-name` | No | Which change to fast-forward (inferred from context if not provided) |
+| `change-name` | Нет | Какое изменение ускорить (определяется из контекста, если не указано) |
 
-**What it does:**
-- Creates all artifacts in dependency order
-- Tracks progress via todo list
-- Stops when all `apply-required` artifacts are complete
-- Reads each dependency before creating the next artifact
+**Что она делает:**
+- Создает все артефакты в порядке их зависимостей
+- Отслеживает прогресс через список задач
+- Останавливается, когда все артефакты, помеченные как `apply-required`, завершены
+- Читает каждую зависимость перед созданием следующего артефакта
 
-**Example:**
+**Пример:**
 ```
-You: /opsx:ff add-dark-mode
+Вы: /opsx:ff add-dark-mode
 
-AI:  Fast-forwarding add-dark-mode...
+ИИ: Выполняю fast-forward для add-dark-mode...
 
-     ✓ Creating proposal.md
-     ✓ Creating specs/ui/spec.md
-     ✓ Creating design.md
-     ✓ Creating tasks.md
+     ✓ Создаю proposal.md
+     ✓ Создаю specs/ui/spec.md
+     ✓ Создаю design.md
+     ✓ Создаю tasks.md
 
-     All planning artifacts complete!
-     Ready for implementation. Run /opsx:apply to begin.
+     Все артефакты планирования созданы!
+     Готов к реализации. Запустите /opsx:apply для начала.
 ```
 
-**Tips:**
-- Use when you have a clear picture of what you're building
-- Faster than `/opsx:continue` for straightforward changes
-- You can still edit artifacts afterward
-- Good for small to medium features
+**Советы:**
+- Используйте, когда у вас есть четкое представление о том, что вы создаете
+- Быстрее, чем `/opsx:continue`, для простых изменений
+- Вы всё еще можете редактировать артефакты после их создания
+- Подходит для небольших и средних задач
 
 ---
 
 ### `/opsx:apply`
 
-Implement tasks from the change. Works through the task list, writing code and checking off items.
+Реализовать задачи из изменения. Проходит по списку задач, пишет код и отмечает выполненные пункты.
 
-**Syntax:**
+**Синтаксис:**
 ```
 /opsx:apply [change-name]
 ```
 
-**Arguments:**
-| Argument | Required | Description |
+**Аргументы:**
+| Аргумент | Обязательный | Описание |
 |----------|----------|-------------|
-| `change-name` | No | Which change to implement (inferred from context if not provided) |
+| `change-name` | Нет | Какое изменение реализовать (определяется из контекста, если не указано) |
 
-**What it does:**
-- Reads `tasks.md` and identifies incomplete tasks
-- Works through tasks one by one
-- Writes code, creates files, runs tests as needed
-- Marks tasks complete with checkboxes `[x]`
+**Что она делает:**
+- Читает `tasks.md` и находит незавершенные задачи
+- Работает над задачами по одной
+- Пишет код, создает файлы, запускает тесты при необходимости
+- Отмечает задачи как выполненные с помощью чекбоксов `[x]`
 
-**Example:**
+**Пример:**
 ```
-You: /opsx:apply
+Вы: /opsx:apply
 
-AI:  Implementing add-dark-mode...
+ИИ: Реализую add-dark-mode...
 
-     Reading tasks.md:
-     - [ ] 1.1 Create ThemeContext
-     - [ ] 1.2 Add CSS custom properties
-     - [ ] 1.3 Implement localStorage persistence
+     Читаю tasks.md:
+     - [ ] 1.1 Создать ThemeContext
+     - [ ] 1.2 Добавить кастомные CSS-свойства
+     - [ ] 1.3 Реализовать сохранение в localStorage
 
-     Working on 1.1: Create ThemeContext...
-     [Creates src/context/ThemeContext.tsx]
+     Работаю над 1.1: Создать ThemeContext...
+     [Создает src/context/ThemeContext.tsx]
 
-     ✓ 1.1 Complete
+     ✓ 1.1 Завершено
 
-     Working on 1.2: Add CSS custom properties...
-     [Updates src/styles/globals.css]
+     Работаю над 1.2: Добавить кастомные CSS-свойства...
+     [Обновляет src/styles/globals.css]
 
-     ✓ 1.2 Complete
+     ✓ 1.2 Завершено
      ...
 ```
 
-**Tips:**
-- Can resume where you left off if interrupted
-- Use for parallel changes by specifying the change name
-- Completion state is tracked in `tasks.md` checkboxes
+**Советы:**
+- Можно возобновить с того места, где вы остановились, если работа была прервана
+- Используйте для параллельных изменений, указывая имя изменения
+- Статус выполнения отслеживается через чекбоксы в `tasks.md`
 
 ---
 
 ### `/opsx:verify`
 
-Validate that implementation matches your change artifacts. Checks completeness, correctness, and coherence.
+Проверить соответствие реализации артефактам вашего изменения. Проверяет полноту, корректность и связность.
 
-**Syntax:**
+**Синтаксис:**
 ```
 /opsx:verify [change-name]
 ```
 
-**Arguments:**
-| Argument | Required | Description |
+**Аргументы:**
+| Аргумент | Обязательный | Описание |
 |----------|----------|-------------|
-| `change-name` | No | Which change to verify (inferred from context if not provided) |
+| `change-name` | Нет | Какое изменение проверить (определяется из контекста, если не указано) |
 
-**What it does:**
-- Checks three dimensions of implementation quality
-- Searches codebase for implementation evidence
-- Reports issues categorized as CRITICAL, WARNING, or SUGGESTION
-- Does not block archive, but surfaces issues
+**Что она делает:**
+- Проверяет три измерения качества реализации
+- Ищет в кодовой базе доказательства реализации
+- Сообщает о проблемах, классифицируя их как КРИТИЧЕСКИЕ (CRITICAL), ПРЕДУПРЕЖДЕНИЯ (WARNING) или ПРЕДЛОЖЕНИЯ (SUGGESTION)
+- Не блокирует архивацию, но выявляет проблемы
 
-**Verification dimensions:**
+**Измерения проверки:**
 
-| Dimension | What it validates |
+| Измерение | Что проверяется |
 |-----------|-------------------|
-| **Completeness** | All tasks done, all requirements implemented, scenarios covered |
-| **Correctness** | Implementation matches spec intent, edge cases handled |
-| **Coherence** | Design decisions reflected in code, patterns consistent |
+| **Полнота** | Все задачи выполнены, все требования реализованы, сценарии покрыты |
+| **Корректность** | Реализация соответствует намерению спецификации, граничные случаи обработаны |
+| **Связность** | Решения по дизайну отражены в коде, паттерны последовательны |
 
-**Example:**
+**Пример:**
 ```
-You: /opsx:verify
+Вы: /opsx:verify
 
-AI:  Verifying add-dark-mode...
+ИИ: Проверяю add-dark-mode...
 
-     COMPLETENESS
-     ✓ All 8 tasks in tasks.md are checked
-     ✓ All requirements in specs have corresponding code
-     ⚠ Scenario "System preference detection" has no test coverage
+     ПОЛНОТА
+     ✓ Все 8 задач в tasks.md отмечены
+     ✓ Все требования в спецификациях имеют соответствующий код
+     ⚠ Сценарий "Определение системных предпочтений" не имеет тестового покрытия
 
-     CORRECTNESS
-     ✓ Implementation matches spec intent
-     ✓ Edge cases from scenarios are handled
-     ✓ Error states match spec definitions
+     КОРРЕКТНОСТЬ
+     ✓ Реализация соответствует намерению спецификации
+     ✓ Граничные случаи из сценариев обработаны
+     ✓ Состояния ошибок соответствуют определениям в спецификации
 
-     COHERENCE
-     ✓ Design decisions reflected in code structure
-     ✓ Naming conventions consistent with design.md
-     ⚠ Design mentions "CSS variables" but implementation uses Tailwind classes
+     СВЯЗНОСТЬ
+     ✓ Дизайнерские решения отражены в структуре кода
+     ✓ Соглашения об именовании соответствуют design.md
+     ⚠ В дизайне упоминаются "CSS-переменные", но в реализации используются классы Tailwind
 
-     SUMMARY
+     ИТОГ
      ─────────────────────────────
-     Critical issues: 0
-     Warnings: 2
-     Ready to archive: Yes (with warnings)
+     Критические ошибки: 0
+     Предупреждения: 2
+     Готов к архивации: Да (с предупреждениями)
 
-     Recommendations:
-     1. Add test for system preference detection
-     2. Update design.md to reflect Tailwind usage, or refactor to use CSS variables
+     Рекомендации:
+     1. Добавить тест для определения системных предпочтений
+     2. Обновить design.md, чтобы отразить использование Tailwind, или провести рефакторинг для использования CSS-переменных
 ```
 
-**Tips:**
-- Run before archiving to catch mismatches early
-- Warnings don't block archive but indicate potential issues
-- Good for reviewing AI's work before committing
-- Can reveal drift between artifacts and implementation
+**Советы:**
+- Запускайте перед архивацией, чтобы на раннем этапе выявить несоответствия
+- Предупреждения не блокируют архивацию, но указывают на потенциальные проблемы
+- Хороший способ проверить работу ИИ перед фиксацией
+- Может выявить расхождения между артефактами и реализацией
 
 ---
 
 ### `/opsx:sync`
 
-**Optional command.** Merge delta specs from a change into main specs. Archive will prompt to sync if needed, so you typically don't need to run this manually.
+**Необязательная команда.** Сливает дельта-спецификации из изменения в основные спецификации. Команда архивации предложит синхронизацию при необходимости, поэтому обычно её не нужно запускать вручную.
 
-**Syntax:**
+**Синтаксис:**
 ```
 /opsx:sync [change-name]
 ```
 
-**Arguments:**
-| Argument | Required | Description |
+**Аргументы:**
+| Аргумент | Обязательный | Описание |
 |----------|----------|-------------|
-| `change-name` | No | Which change to sync (inferred from context if not provided) |
+| `change-name` | Нет | Какое изменение синхронизировать (определяется из контекста, если не указано) |
 
-**What it does:**
-- Reads delta specs from change folder
-- Parses ADDED/MODIFIED/REMOVED/RENAMED sections
-- Merges changes into main `openspec/specs/` directory
-- Preserves existing content not mentioned in delta
-- Does not archive the change (remains active)
+**Что она делает:**
+- Читает дельта-спецификации из папки изменения
+- Анализирует разделы ADDED/MODIFIED/REMOVED/RENAMED
+- Сливает изменения в основную директорию `openspec/specs/`
+- Сохраняет существующий контент, не упомянутый в дельте
+- Не архивирует изменение (оно остается активным)
 
-**Example:**
+**Пример:**
 ```text
-You: /opsx:sync
+Вы: /opsx:sync
 
-AI:  Syncing add-dark-mode delta specs...
+ИИ: Синхронизирую дельта-спецификации add-dark-mode...
 
-     Reading: openspec/changes/add-dark-mode/specs/ui/spec.md
-     Target:  openspec/specs/ui/spec.md
+     Читаю: openspec/changes/add-dark-mode/specs/ui/spec.md
+     Цель:  openspec/specs/ui/spec.md
 
-     Changes to apply:
-     ✓ ADDED: Theme Selection requirement (2 scenarios)
-     ✓ ADDED: Accessibility requirement (1 scenario)
+     Применяемые изменения:
+     ✓ ДОБАВЛЕНО: Требование выбора темы (2 сценария)
+     ✓ ДОБАВЛЕНО: Требование доступности (1 сценарий)
 
-     Merging...
-     ✓ openspec/specs/ui/spec.md updated
+     Слияние...
+     ✓ openspec/specs/ui/spec.md обновлен
 
-     Change remains active. Run /opsx:archive when ready to complete.
+     Изменение остается активным. Запустите /opsx:archive, когда будете готовы завершить работу.
 ```
 
-**When to use manually:**
+**Когда использовать вручную:**
 
-| Scenario | Use sync? |
+| Сценарий | Использовать sync? |
 |----------|-----------|
-| Long-running change, want specs in main before archiving | Yes |
-| Multiple parallel changes need the updated base specs | Yes |
-| Want to preview/review the merge separately | Yes |
-| Quick change, going straight to archive | No (archive handles it) |
+| Долгосрочное изменение, нужны спецификации в основной ветке до архивации | Да |
+| Нескольким параллельным изменениям нужны обновленные базовые спецификации | Да |
+| Хотите просмотреть/проверить слияние отдельно | Да |
+| Быстрое изменение, сразу переход к архивации | Нет (архивация сделает это сама) |
 
-**Tips:**
-- Sync is intelligent, not copy-paste
-- Can add scenarios to existing requirements without duplicating
-- Change stays active after sync (not archived)
-- Most users will never need to call this directly—archive prompts if needed
+**Советы:**
+- Синхронизация работает интеллектуально, а не простым копированием
+- Можно добавлять сценарии к существующим требованиям без дублирования
+- Изменение остается активным после синхронизации (не архивируется)
+- Большинству пользователей не придется вызывать это напрямую — архивация предложит это при необходимости
 
 ---
 
 ### `/opsx:archive`
 
-Archive a completed change. Finalizes the change and moves it to the archive folder.
+Архивировать завершенное изменение. Завершает изменение и перемещает его в папку архива.
 
-**Syntax:**
+**Синтаксис:**
 ```
 /opsx:archive [change-name]
 ```
 
-**Arguments:**
-| Argument | Required | Description |
+**Аргументы:**
+| Аргумент | Обязательный | Описание |
 |----------|----------|-------------|
-| `change-name` | No | Which change to archive (inferred from context if not provided) |
+| `change-name` | Нет | Какое изменение архивировать (определяется из контекста, если не указано) |
 
-**What it does:**
-- Checks artifact completion status
-- Checks task completion (warns if incomplete)
-- Offers to sync delta specs if not already synced
-- Moves change folder to `openspec/changes/archive/YYYY-MM-DD-<name>/`
-- Preserves all artifacts for audit trail
+**Что она делает:**
+- Проверяет статус завершения артефактов
+- Проверяет выполнение задач (предупреждает, если не все задачи выполнены)
+- Предлагает синхронизировать дельта-спецификации, если они еще не синхронизированы
+- Перемещает папку изменения в `openspec/changes/archive/ГГГГ-ММ-ДД-<имя>/`
+- Сохраняет все артефакты для истории и аудита
 
-**Example:**
+**Пример:**
 ```text
-You: /opsx:archive
+Вы: /opsx:archive
 
-AI:  Archiving add-dark-mode...
+ИИ: Архивирую add-dark-mode...
 
-     Artifact status:
-     ✓ proposal.md exists
-     ✓ specs/ exists
-     ✓ design.md exists
-     ✓ tasks.md exists (8/8 tasks complete)
+     Статус артефактов:
+     ✓ proposal.md существует
+     ✓ specs/ существует
+     ✓ design.md существует
+     ✓ tasks.md существует (8/8 задач выполнено)
 
-     Delta specs: Not yet synced
-     → Sync now? (recommended)
+     Дельта-спецификации: Еще не синхронизированы
+     → Синхронизировать сейчас? (рекомендуется)
 
-You: Yes
+Вы: Да
 
-AI:  ✓ Synced specs to openspec/specs/ui/spec.md
-     ✓ Moved to openspec/changes/archive/2025-01-24-add-dark-mode/
+ИИ: ✓ Спецификации синхронизированы в openspec/specs/ui/spec.md
+     ✓ Перемещено в openspec/changes/archive/2025-01-24-add-dark-mode/
 
-     Change archived successfully.
+     Изменение успешно архивировано.
 ```
 
-**Tips:**
-- Archive won't block on incomplete tasks, but will warn
-- Delta specs can be synced during archive or beforehand
-- Archived changes are preserved for history
-- Use `/opsx:verify` first to catch issues
+**Советы:**
+- Архивация не блокируется при наличии невыполненных задач, но выдает предупреждение
+- Дельта-спецификации можно синхронизировать во время архивации или заранее
+- Архивные изменения сохраняются для истории
+- Сначала используйте `/opsx:verify` для выявления проблем
 
 ---
 
 ### `/opsx:bulk-archive`
 
-Archive multiple completed changes at once. Handles spec conflicts between changes.
+Архивировать несколько завершенных изменений одновременно. Обрабатывает конфликты спецификаций между изменениями.
 
-**Syntax:**
+**Синтаксис:**
 ```
 /opsx:bulk-archive [change-names...]
 ```
 
-**Arguments:**
-| Argument | Required | Description |
+**Аргументы:**
+| Аргумент | Обязательный | Описание |
 |----------|----------|-------------|
-| `change-names` | No | Specific changes to archive (prompts to select if not provided) |
+| `change-names` | Нет | Конкретные изменения для архивации (предлагает выбрать, если не указаны) |
 
-**What it does:**
-- Lists all completed changes
-- Validates each change before archiving
-- Detects spec conflicts across changes
-- Resolves conflicts by checking what's actually implemented
-- Archives in chronological order
+**Что она делает:**
+- Выводит список всех завершенных изменений
+- Проверяет каждое изменение перед архивацией
+- Обнаруживает конфликты спецификаций между изменениями
+- Разрешает конфликты, проверяя, что фактически реализовано
+- Архивирует в хронологическом порядке
 
-**Example:**
+**Пример:**
 ```
-You: /opsx:bulk-archive
+Вы: /opsx:bulk-archive
 
-AI:  Found 3 completed changes:
-     - add-dark-mode (8/8 tasks complete)
-     - fix-login-bug (3/3 tasks complete)
-     - update-footer (2/2 tasks complete)
+ИИ: Найдено 3 завершенных изменения:
+     - add-dark-mode (8/8 задач выполнено)
+     - fix-login-bug (3/3 задачи выполнены)
+     - update-footer (2/2 задачи выполнены)
 
-     Checking for spec conflicts...
-     ⚠ add-dark-mode and update-footer both touch specs/ui/
+     Проверяю конфликты спецификаций...
+     ⚠ add-dark-mode и update-footer оба затрагивают specs/ui/
 
-     Inspecting codebase to resolve...
-     Both changes are implemented. Will merge in chronological order:
-     1. add-dark-mode (created Jan 20)
-     2. update-footer (created Jan 22)
+     Изучаю кодовую базу для разрешения...
+     Оба изменения реализованы. Слияние будет выполнено в хронологическом порядке:
+     1. add-dark-mode (создано 20 янв)
+     2. update-footer (создано 22 янв)
 
-     Archive all 3 changes?
+     Архивировать все 3 изменения?
 
-You: Yes
+Вы: Да
 
-AI:  ✓ Archived add-dark-mode
-     ✓ Archived fix-login-bug
-     ✓ Archived update-footer
-     Specs merged: add-dark-mode → update-footer
+ИИ: ✓ Архивировано add-dark-mode
+     ✓ Архивировано fix-login-bug
+     ✓ Архивировано update-footer
+     Спецификации слиты: add-dark-mode → update-footer
 ```
 
-**Tips:**
-- Good for parallel work streams
-- Conflict resolution is agentic (checks codebase)
-- Changes are archived in order of creation
-- Prompts before overwriting spec content
+**Советы:**
+- Подходит для параллельных рабочих потоков
+- Разрешение конфликтов выполняется интеллектуально (агентом)
+- Изменения архивируются в порядке их создания
+- Запрашивает подтверждение перед перезаписью контента спецификаций
 
 ---
 
 ### `/opsx:onboard`
 
-Guided onboarding through the complete OpenSpec workflow. An interactive tutorial using your actual codebase.
+Интерактивное руководство по полному рабочему процессу OpenSpec. Пошаговый туториал на примере вашей реальной кодовой базы.
 
-**Syntax:**
+**Синтаксис:**
 ```
 /opsx:onboard
 ```
 
-**What it does:**
-- Walks through a complete workflow cycle with narration
-- Scans your codebase for real improvement opportunities
-- Creates an actual change with real artifacts
-- Implements actual work (small, safe changes)
-- Archives the completed change
-- Explains each step as it happens
+**Что она делает:**
+- Проводит через полный цикл рабочего процесса с пояснениями
+- Сканирует вашу кодовую базу на предмет реальных возможностей для улучшения
+- Создает реальное изменение с настоящими артефактами
+- Реализует фактическую работу (небольшие, безопасные изменения)
+- Архивирует завершенное изменение
+- Объясняет каждый шаг в процессе выполнения
 
-**Phases:**
-1. Welcome and codebase analysis
-2. Finding an improvement opportunity
-3. Creating a change (`/opsx:new`)
-4. Writing the proposal
-5. Creating specs
-6. Writing the design
-7. Creating tasks
-8. Implementing tasks (`/opsx:apply`)
-9. Verifying implementation
-10. Archiving the change
-11. Summary and next steps
+**Фазы:**
+1. Приветствие и анализ кодовой базы
+2. Поиск возможности для улучшения
+3. Создание изменения (`/opsx:new`)
+4. Написание предложения (proposal)
+5. Создание спецификаций
+6. Написание дизайна
+7. Создание задач
+8. Реализация задач (`/opsx:apply`)
+9. Проверка реализации
+10. Архивация изменения
+11. Итоги и следующие шаги
 
-**Example:**
+**Пример:**
 ```
-You: /opsx:onboard
+Вы: /opsx:onboard
 
-AI:  Welcome to OpenSpec!
+ИИ: Добро пожаловать в OpenSpec!
 
-     I'll walk you through the complete workflow using your actual codebase.
-     We'll find something small to improve, create a proper change for it,
-     implement it, and archive it.
+     Я проведу вас через полный рабочий процесс на примере вашей реальной кодовой базы.
+     Мы найдем что-то небольшое для улучшения, создадим для этого полноценное изменение,
+     реализуем его и заархивируем.
 
-     Let me scan your codebase for opportunities...
+     Позвольте мне просканировать вашу кодовую базу на предмет возможностей...
 
-     [Analyzes codebase]
+     [Анализирует кодовую базу]
 
-     I found a few things we could work on:
-     1. Add input validation to the contact form
-     2. Improve error messages in the auth flow
-     3. Add loading states to async buttons
+     Я нашел несколько вещей, над которыми мы могли бы поработать:
+     1. Добавить валидацию ввода в контактную форму
+     2. Улучшить сообщения об ошибках в процессе аутентификации
+     3. Добавить состояния загрузки для асинхронных кнопок
 
-     Which interests you? (or suggest something else)
+     Что вас интересует? (или предложите свой вариант)
 ```
 
-**Tips:**
-- Best for new users learning the workflow
-- Uses real code, not toy examples
-- Creates a real change you can keep or discard
-- Takes 15-30 minutes to complete
+**Советы:**
+- Лучший способ для новых пользователей изучить рабочий процесс
+- Использует реальный код, а не абстрактные примеры
+- Создает настоящее изменение, которое вы можете оставить или отменить
+- Занимает 15-30 минут
 
 ---
 
-## Command Syntax by AI Tool
+## Синтаксис команд в различных ИИ-инструментах
 
-Different AI tools use slightly different command syntax. Use the format that matches your tool:
+Разные ИИ-инструменты используют немного отличающийся синтаксис команд. Используйте формат, соответствующий вашему инструменту:
 
-| Tool | Syntax Example |
+| Инструмент | Пример синтаксиса |
 |------|----------------|
 | Claude Code | `/opsx:new`, `/opsx:apply` |
 | Cursor | `/opsx-new`, `/opsx-apply` |
@@ -571,83 +571,83 @@ Different AI tools use slightly different command syntax. Use the format that ma
 | Copilot | `/opsx-new`, `/opsx-apply` |
 | Trae | `/openspec-new-change`, `/openspec-apply-change` |
 
-The functionality is identical regardless of syntax.
+Функциональность идентична независимо от синтаксиса.
 
 ---
 
-## Legacy Commands
+## Устаревшие команды (Legacy Commands)
 
-These commands use the older "all-at-once" workflow. They still work but OPSX commands are recommended.
+Эти команды используют старый рабочий процесс "всё за один раз". Они всё еще работают, но рекомендуется использовать команды OPSX.
 
-| Command | What it does |
+| Команда | Что она делает |
 |---------|--------------|
-| `/openspec:proposal` | Create all artifacts at once (proposal, specs, design, tasks) |
-| `/openspec:apply` | Implement the change |
-| `/openspec:archive` | Archive the change |
+| `/openspec:proposal` | Создать все артефакты сразу (предложение, спецификации, дизайн, задачи) |
+| `/openspec:apply` | Реализовать изменение |
+| `/openspec:archive` | Архивировать изменение |
 
-**When to use legacy commands:**
-- Existing projects using the old workflow
-- Simple changes where you don't need incremental artifact creation
-- Preference for the all-or-nothing approach
+**Когда использовать устаревшие команды:**
+- В существующих проектах, использующих старый рабочий процесс
+- Для простых изменений, где не нужно инкрементальное создание артефактов
+- Если вам больше нравится подход "всё или ничего"
 
-**Migrating to OPSX:**
-Legacy changes can be continued with OPSX commands. The artifact structure is compatible.
-
----
-
-## Troubleshooting
-
-### "Change not found"
-
-The command couldn't identify which change to work on.
-
-**Solutions:**
-- Specify the change name explicitly: `/opsx:apply add-dark-mode`
-- Check that the change folder exists: `openspec list`
-- Verify you're in the right project directory
-
-### "No artifacts ready"
-
-All artifacts are either complete or blocked by missing dependencies.
-
-**Solutions:**
-- Run `openspec status --change <name>` to see what's blocking
-- Check if required artifacts exist
-- Create missing dependency artifacts first
-
-### "Schema not found"
-
-The specified schema doesn't exist.
-
-**Solutions:**
-- List available schemas: `openspec schemas`
-- Check spelling of schema name
-- Create the schema if it's custom: `openspec schema init <name>`
-
-### Commands not recognized
-
-The AI tool doesn't recognize OpenSpec commands.
-
-**Solutions:**
-- Ensure OpenSpec is initialized: `openspec init`
-- Regenerate skills: `openspec update`
-- Check that `.claude/skills/` directory exists (for Claude Code)
-- Restart your AI tool to pick up new skills
-
-### Artifacts not generating properly
-
-The AI creates incomplete or incorrect artifacts.
-
-**Solutions:**
-- Add project context in `openspec/config.yaml`
-- Add per-artifact rules for specific guidance
-- Provide more detail in your change description
-- Use `/opsx:continue` instead of `/opsx:ff` for more control
+**Переход на OPSX:**
+Изменения, созданные устаревшими командами, можно продолжить с помощью команд OPSX. Структура артефактов совместима.
 
 ---
 
-## Next Steps
+## Устранение неполадок
 
-- [Workflows](workflows.md) - Common patterns and when to use each command
-- [CLI](cli.md) - Terminal commands for management and validation
-- [Customization](customization.md) - Create custom schemas and workflows
+### "Change not found" (Изменение не найдено)
+
+Команда не смогла определить, над каким изменением нужно работать.
+
+**Решения:**
+- Укажите имя изменения явно: `/opsx:apply add-dark-mode`
+- Проверьте, существует ли папка изменения: `openspec list`
+- Убедитесь, что вы находитесь в правильной директории проекта
+
+### "No artifacts ready" (Нет готовых артефактов)
+
+Все артефакты либо завершены, либо заблокированы отсутствующими зависимостями.
+
+**Решения:**
+- Запустите `openspec status --change <name>`, чтобы увидеть, что блокирует процесс
+- Проверьте наличие необходимых артефактов
+- Сначала создайте недостающие артефакты-зависимости
+
+### "Schema not found" (Схема не найдена)
+
+Указанная схема не существует.
+
+**Решения:**
+- Выведите список доступных схем: `openspec schemas`
+- Проверьте написание имени схемы
+- Создайте схему, если она кастомная: `openspec schema init <name>`
+
+### Команды не распознаются
+
+ИИ-инструмент не распознает команды OpenSpec.
+
+**Решения:**
+- Убедитесь, что OpenSpec инициализирован: `openspec init`
+- Перегенерируйте навыки: `openspec update`
+- Проверьте наличие директории `.claude/skills/` (для Claude Code)
+- Перезапустите ИИ-инструмент, чтобы он подхватил новые навыки
+
+### Артефакты генерируются некорректно
+
+ИИ создает неполные или неверные артефакты.
+
+**Решения:**
+- Добавьте контекст проекта в `openspec/config.yaml`
+- Добавьте правила для конкретных артефактов для более точного руководства
+- Предоставьте больше деталей в описании изменения
+- Используйте `/opsx:continue` вместо `/opsx:ff` для большего контроля
+
+---
+
+## Следующие шаги
+
+- [Процессы](workflows.md) — распространенные паттерны и информация о том, когда использовать каждую команду
+- [CLI](cli.md) — команды терминала для управления и валидации
+- [Кастомизация](customization.md) — создание кастомных схем и шаблонов

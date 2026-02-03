@@ -1,17 +1,17 @@
-# Supported Tools
+# Поддерживаемые инструменты
 
-OpenSpec works with 20+ AI coding assistants. When you run `openspec init`, you'll be prompted to select which tools you use, and OpenSpec will configure the appropriate integrations.
+OpenSpec работает более чем с 20 ИИ-ассистентами для программирования. При запуске `openspec init` вам будет предложено выбрать инструменты, которые вы используете, и OpenSpec настроит соответствующие интеграции.
 
-## How It Works
+## Как это работает
 
-For each tool you select, OpenSpec installs:
+Для каждого выбранного инструмента OpenSpec устанавливает:
 
-1. **Skills** — Reusable instruction files that power the `/opsx:*` workflow commands
-2. **Commands** — Tool-specific slash command bindings
+1. **Навыки (Skills)** — файлы с инструкциями многократного использования, которые обеспечивают работу команд процесса `/opsx:*`.
+2. **Команды (Commands)** — привязки слеш-команд, специфичные для каждого инструмента.
 
-## Tool Directory Reference
+## Справочник директорий инструментов
 
-| Tool | Skills Location | Commands Location |
+| Инструмент | Расположение навыков | Расположение команд |
 |------|-----------------|-------------------|
 | Amazon Q Developer | `.amazonq/skills/` | `.amazonq/prompts/` |
 | Antigravity | `.agent/skills/` | `.agent/workflows/` |
@@ -33,55 +33,55 @@ For each tool you select, OpenSpec installs:
 | Qoder | `.qoder/skills/` | `.qoder/commands/opsx/` |
 | Qwen Code | `.qwen/skills/` | `.qwen/commands/` |
 | RooCode | `.roo/skills/` | `.roo/commands/` |
-| Trae | `.trae/skills/` | `.trae/skills/` (via `/openspec-*`) |
+| Trae | `.trae/skills/` | `.trae/skills/` (через `/openspec-*`) |
 | Windsurf | `.windsurf/skills/` | `.windsurf/workflows/` |
 
-\* Codex commands are installed to the global home directory (`~/.codex/prompts/` or `$CODEX_HOME/prompts/`), not the project directory.
+\* Команды Codex устанавливаются в глобальную домашнюю директорию (`~/.codex/prompts/` или `$CODEX_HOME/prompts/`), а не в директорию проекта.
 
-## Non-Interactive Setup
+## Неинтерактивная настройка
 
-For CI/CD or scripted setup, use the `--tools` flag:
+Для CI/CD или автоматизированной настройки используйте флаг `--tools`:
 
 ```bash
-# Configure specific tools
+# Настроить конкретные инструменты
 openspec init --tools claude,cursor
 
-# Configure all supported tools
+# Настроить все поддерживаемые инструменты
 openspec init --tools all
 
-# Skip tool configuration
+# Пропустить настройку инструментов
 openspec init --tools none
 ```
 
-**Available tool IDs:** `amazon-q`, `antigravity`, `auggie`, `claude`, `cline`, `codebuddy`, `codex`, `continue`, `costrict`, `crush`, `cursor`, `factory`, `gemini`, `github-copilot`, `iflow`, `kilocode`, `opencode`, `qoder`, `qwen`, `roocode`, `trae`, `windsurf`
+**Доступные ID инструментов:** `amazon-q`, `antigravity`, `auggie`, `claude`, `cline`, `codebuddy`, `codex`, `continue`, `costrict`, `crush`, `cursor`, `factory`, `gemini`, `github-copilot`, `iflow`, `kilocode`, `opencode`, `qoder`, `qwen`, `roocode`, `trae`, `windsurf`
 
-## What Gets Installed
+## Что устанавливается
 
-For each tool, OpenSpec generates 10 skill files that power the OPSX workflow:
+Для каждого инструмента OpenSpec генерирует 10 файлов навыков, которые обеспечивают работу процесса OPSX:
 
-| Skill | Purpose |
+| Навык | Назначение |
 |-------|---------|
-| `openspec-explore` | Thinking partner for exploring ideas |
-| `openspec-new-change` | Start a new change |
-| `openspec-continue-change` | Create the next artifact |
-| `openspec-ff-change` | Fast-forward through all planning artifacts |
-| `openspec-apply-change` | Implement tasks |
-| `openspec-verify-change` | Verify implementation completeness |
-| `openspec-sync-specs` | Sync delta specs to main (optional—archive prompts if needed) |
-| `openspec-archive-change` | Archive a completed change |
-| `openspec-bulk-archive-change` | Archive multiple changes at once |
-| `openspec-onboard` | Guided onboarding through a complete workflow cycle |
+| `openspec-explore` | Партнер для обсуждения и исследования идей |
+| `openspec-new-change` | Начало нового изменения |
+| `openspec-continue-change` | Создание следующего артефакта |
+| `openspec-ff-change` | Быстрое создание всех артефактов планирования |
+| `openspec-apply-change` | Выполнение задач |
+| `openspec-verify-change` | Проверка полноты реализации |
+| `openspec-sync-specs` | Синхронизация дельта-спецификаций с основными (опционально) |
+| `openspec-archive-change` | Архивирование завершенного изменения |
+| `openspec-bulk-archive-change` | Архивирование нескольких изменений одновременно |
+| `openspec-onboard` | Пошаговое руководство через полный цикл рабочего процесса |
 
-These skills are invoked via slash commands like `/opsx:new`, `/opsx:apply`, etc. See [Commands](commands.md) for the full list.
+Эти навыки вызываются через слеш-команды, такие как `/opsx:new`, `/opsx:apply` и т. д. Полный список см. в разделе [Команды](commands.md).
 
-## Adding a New Tool
+## Добавление нового инструмента
 
-Want to add support for another AI coding assistant? Check out the [command adapter pattern](../CONTRIBUTING.md) or open an issue on GitHub.
+Хотите добавить поддержку другого ИИ-ассистента? Ознакомьтесь с [паттерном адаптера команд](../CONTRIBUTING.md) или откройте issue на GitHub.
 
 ---
 
-## Related
+## Связанные разделы
 
-- [CLI Reference](cli.md) — Terminal commands
-- [Commands](commands.md) — Slash commands and skills
-- [Getting Started](getting-started.md) — First-time setup
+- [Справочник CLI](cli.md) — команды терминала
+- [Команды](commands.md) — слеш-команды и навыки
+- [Начало работы](getting-started.md) — первая настройка

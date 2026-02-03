@@ -1,188 +1,188 @@
-# CLI Reference
+# Справочник CLI (CLI Reference)
 
-The OpenSpec CLI (`openspec`) provides terminal commands for project setup, validation, status inspection, and management. These commands complement the AI slash commands (like `/opsx:new`) documented in [Commands](commands.md).
+CLI OpenSpec (`openspec`) предоставляет терминальные команды для настройки проекта, валидации, проверки статуса и управления. Эти команды дополняют слеш-команды ИИ (такие как `/opsx:new`), описанные в разделе [Команды](commands.md).
 
-## Summary
+## Сводка
 
-| Category | Commands | Purpose |
+| Категория | Команды | Назначение |
 |----------|----------|---------|
-| **Setup** | `init`, `update` | Initialize and update OpenSpec in your project |
-| **Browsing** | `list`, `view`, `show` | Explore changes and specs |
-| **Validation** | `validate` | Check changes and specs for issues |
-| **Lifecycle** | `archive` | Finalize completed changes |
-| **Workflow** | `status`, `instructions`, `templates`, `schemas` | Artifact-driven workflow support |
-| **Schemas** | `schema init`, `schema fork`, `schema validate`, `schema which` | Create and manage custom workflows |
-| **Config** | `config` | View and modify settings |
-| **Utility** | `feedback`, `completion` | Feedback and shell integration |
+| **Настройка** | `init`, `update` | Инициализация и обновление OpenSpec в вашем проекте |
+| **Просмотр** | `list`, `view`, `show` | Просмотр изменений и спецификаций |
+| **Валидация** | `validate` | Проверка изменений и спецификаций на наличие ошибок |
+| **Жизненный цикл** | `archive` | Завершение выполненных изменений |
+| **Рабочий процесс** | `status`, `instructions`, `templates`, `schemas` | Поддержка рабочего процесса на основе артефактов |
+| **Схемы** | `schema init`, `schema fork`, `schema validate`, `schema which` | Создание и управление кастомными рабочими процессами |
+| **Конфигурация** | `config` | Просмотр и изменение настроек |
+| **Утилиты** | `feedback`, `completion` | Обратная связь и интеграция с оболочкой (shell) |
 
 ---
 
-## Human vs Agent Commands
+## Команды для человека и для агента
 
-Most CLI commands are designed for **human use** in a terminal. Some commands also support **agent/script use** via JSON output.
+Большинство команд CLI предназначены для **использования человеком** в терминале. Некоторые команды также поддерживают **использование агентами/скриптами** через вывод в формате JSON.
 
-### Human-Only Commands
+### Команды только для человека
 
-These commands are interactive and designed for terminal use:
+Эти команды являются интерактивными и предназначены для использования в терминале:
 
-| Command | Purpose |
+| Команда | Назначение |
 |---------|---------|
-| `openspec init` | Initialize project (interactive prompts) |
-| `openspec view` | Interactive dashboard |
-| `openspec config edit` | Open config in editor |
-| `openspec feedback` | Submit feedback via GitHub |
-| `openspec completion install` | Install shell completions |
+| `openspec init` | Инициализация проекта (интерактивные подсказки) |
+| `openspec view` | Интерактивный дашборд |
+| `openspec config edit` | Открыть конфиг в редакторе |
+| `openspec feedback` | Отправить отзыв через GitHub |
+| `openspec completion install` | Установить автодополнение для оболочки |
 
-### Agent-Compatible Commands
+### Команды, совместимые с агентами
 
-These commands support `--json` output for programmatic use by AI agents and scripts:
+Эти команды поддерживают опцию `--json` для программного использования ИИ-агентами и скриптами:
 
-| Command | Human Use | Agent Use |
+| Команда | Использование человеком | Использование агентом |
 |---------|-----------|-----------|
-| `openspec list` | Browse changes/specs | `--json` for structured data |
-| `openspec show <item>` | Read content | `--json` for parsing |
-| `openspec validate` | Check for issues | `--all --json` for bulk validation |
-| `openspec status` | See artifact progress | `--json` for structured status |
-| `openspec instructions` | Get next steps | `--json` for agent instructions |
-| `openspec templates` | Find template paths | `--json` for path resolution |
-| `openspec schemas` | List available schemas | `--json` for schema discovery |
+| `openspec list` | Просмотр изменений/спецификаций | `--json` для структурированных данных |
+| `openspec show <item>` | Чтение контента | `--json` для парсинга |
+| `openspec validate` | Проверка на наличие проблем | `--all --json` для массовой валидации |
+| `openspec status` | Просмотр прогресса артефактов | `--json` для структурированного статуса |
+| `openspec instructions` | Получение следующих шагов | `--json` для инструкций агенту |
+| `openspec templates` | Поиск путей к шаблонам | `--json` для разрешения путей |
+| `openspec schemas` | Список доступных схем | `--json` для обнаружения схем |
 
 ---
 
-## Global Options
+## Глобальные опции
 
-These options work with all commands:
+Эти опции работают со всеми командами:
 
-| Option | Description |
+| Опция | Описание |
 |--------|-------------|
-| `--version`, `-V` | Show version number |
-| `--no-color` | Disable color output |
-| `--help`, `-h` | Display help for command |
+| `--version`, `-V` | Показать номер версии |
+| `--no-color` | Отключить цветной вывод |
+| `--help`, `-h` | Показать справку по команде |
 
 ---
 
-## Setup Commands
+## Команды настройки
 
 ### `openspec init`
 
-Initialize OpenSpec in your project. Creates the folder structure and configures AI tool integrations.
+Инициализация OpenSpec в вашем проекте. Создает структуру папок и настраивает интеграцию с ИИ-инструментами.
 
 ```
 openspec init [path] [options]
 ```
 
-**Arguments:**
+**Аргументы:**
 
-| Argument | Required | Description |
+| Аргумент | Обязательный | Описание |
 |----------|----------|-------------|
-| `path` | No | Target directory (default: current directory) |
+| `path` | Нет | Целевая директория (по умолчанию: текущая директория) |
 
-**Options:**
+**Опции:**
 
-| Option | Description |
+| Опция | Описание |
 |--------|-------------|
-| `--tools <list>` | Configure AI tools non-interactively. Use `all`, `none`, or comma-separated list |
-| `--force` | Auto-cleanup legacy files without prompting |
+| `--tools <list>` | Настроить ИИ-инструменты неинтерактивно. Используйте `all`, `none` или список через запятую |
+| `--force` | Автоматическая очистка устаревших файлов без подтверждения |
 
-**Supported tools:** `amazon-q`, `antigravity`, `auggie`, `claude`, `cline`, `codex`, `codebuddy`, `continue`, `costrict`, `crush`, `cursor`, `factory`, `gemini`, `github-copilot`, `iflow`, `kilocode`, `opencode`, `qoder`, `qwen`, `roocode`, `windsurf`
+**Поддерживаемые инструменты:** `amazon-q`, `antigravity`, `auggie`, `claude`, `cline`, `codex`, `codebuddy`, `continue`, `costrict`, `crush`, `cursor`, `factory`, `gemini`, `github-copilot`, `iflow`, `kilocode`, `opencode`, `qoder`, `qwen`, `roocode`, `windsurf`
 
-**Examples:**
+**Примеры:**
 
 ```bash
-# Interactive initialization
+# Интерактивная инициализация
 openspec init
 
-# Initialize in a specific directory
+# Инициализация в конкретной директории
 openspec init ./my-project
 
-# Non-interactive: configure for Claude and Cursor
+# Неинтерактивно: настройка для Claude и Cursor
 openspec init --tools claude,cursor
 
-# Configure for all supported tools
+# Настройка для всех поддерживаемых инструментов
 openspec init --tools all
 
-# Skip prompts and auto-cleanup legacy files
+# Пропустить подсказки и автоматически очистить старые файлы
 openspec init --force
 ```
 
-**What it creates:**
+**Что создается:**
 
 ```
 openspec/
-├── specs/              # Your specifications (source of truth)
-├── changes/            # Proposed changes
-└── config.yaml         # Project configuration
+├── specs/              # Ваши спецификации (источник истины)
+├── changes/            # Предлагаемые изменения
+└── config.yaml         # Конфигурация проекта
 
-.claude/skills/         # Claude Code skill files (if claude selected)
-.cursor/rules/          # Cursor rules (if cursor selected)
-... (other tool configs)
+.claude/skills/         # Файлы навыков Claude Code (если выбран claude)
+.cursor/rules/          # Правила Cursor (если выбран cursor)
+... (конфиги других инструментов)
 ```
 
 ---
 
 ### `openspec update`
 
-Update OpenSpec instruction files after upgrading the CLI. Re-generates AI tool configuration files.
+Обновление файлов инструкций OpenSpec после обновления CLI. Перегенерирует файлы конфигурации ИИ-инструментов.
 
 ```
 openspec update [path] [options]
 ```
 
-**Arguments:**
+**Аргументы:**
 
-| Argument | Required | Description |
+| Аргумент | Обязательный | Описание |
 |----------|----------|-------------|
-| `path` | No | Target directory (default: current directory) |
+| `path` | Нет | Целевая директория (по умолчанию: текущая директория) |
 
-**Options:**
+**Опции:**
 
-| Option | Description |
+| Опция | Описание |
 |--------|-------------|
-| `--force` | Force update even when files are up to date |
+| `--force` | Принудительное обновление, даже если файлы актуальны |
 
-**Example:**
+**Пример:**
 
 ```bash
-# Update instruction files after npm upgrade
+# Обновление файлов инструкций после npm upgrade
 npm update @fission-ai/openspec
 openspec update
 ```
 
 ---
 
-## Browsing Commands
+## Команды просмотра
 
 ### `openspec list`
 
-List changes or specs in your project.
+Список изменений или спецификаций в вашем проекте.
 
 ```
 openspec list [options]
 ```
 
-**Options:**
+**Опции:**
 
-| Option | Description |
+| Опция | Описание |
 |--------|-------------|
-| `--specs` | List specs instead of changes |
-| `--changes` | List changes (default) |
-| `--sort <order>` | Sort by `recent` (default) or `name` |
-| `--json` | Output as JSON |
+| `--specs` | Вывести список спецификаций вместо изменений |
+| `--changes` | Вывести список изменений (по умолчанию) |
+| `--sort <order>` | Сортировка по `recent` (недавние, по умолчанию) или `name` (по имени) |
+| `--json` | Вывод в формате JSON |
 
-**Examples:**
+**Примеры:**
 
 ```bash
-# List all active changes
+# Список всех активных изменений
 openspec list
 
-# List all specs
+# Список всех спецификаций
 openspec list --specs
 
-# JSON output for scripts
+# Вывод в JSON для скриптов
 openspec list --json
 ```
 
-**Output (text):**
+**Вывод (текст):**
 
 ```
 Active changes:
@@ -194,119 +194,119 @@ Active changes:
 
 ### `openspec view`
 
-Display an interactive dashboard for exploring specs and changes.
+Отображение интерактивного дашборда для изучения спецификаций и изменений.
 
 ```
 openspec view
 ```
 
-Opens a terminal-based interface for navigating your project's specifications and changes.
+Открывает терминальный интерфейс для навигации по спецификациям и изменениям вашего проекта.
 
 ---
 
 ### `openspec show`
 
-Display details of a change or spec.
+Отображение деталей изменения или спецификации.
 
 ```
 openspec show [item-name] [options]
 ```
 
-**Arguments:**
+**Аргументы:**
 
-| Argument | Required | Description |
+| Аргумент | Обязательный | Описание |
 |----------|----------|-------------|
-| `item-name` | No | Name of change or spec (prompts if omitted) |
+| `item-name` | Нет | Имя изменения или спецификации (запрашивается, если опущено) |
 
-**Options:**
+**Опции:**
 
-| Option | Description |
+| Опция | Описание |
 |--------|-------------|
-| `--type <type>` | Specify type: `change` or `spec` (auto-detected if unambiguous) |
-| `--json` | Output as JSON |
-| `--no-interactive` | Disable prompts |
+| `--type <type>` | Указать тип: `change` или `spec` (определяется автоматически, если нет двусмысленности) |
+| `--json` | Вывод в формате JSON |
+| `--no-interactive` | Отключить интерактивные подсказки |
 
-**Change-specific options:**
+**Опции только для изменений:**
 
-| Option | Description |
+| Опция | Описание |
 |--------|-------------|
-| `--deltas-only` | Show only delta specs (JSON mode) |
+| `--deltas-only` | Показать только дельта-спецификации (в режиме JSON) |
 
-**Spec-specific options:**
+**Опции только для спецификаций:**
 
-| Option | Description |
+| Опция | Описание |
 |--------|-------------|
-| `--requirements` | Show only requirements, exclude scenarios (JSON mode) |
-| `--no-scenarios` | Exclude scenario content (JSON mode) |
-| `-r, --requirement <id>` | Show specific requirement by 1-based index (JSON mode) |
+| `--requirements` | Показать только требования, исключить сценарии (в режиме JSON) |
+| `--no-scenarios` | Исключить содержание сценариев (в режиме JSON) |
+| `-r, --requirement <id>` | Показать конкретное требование по индексу (начиная с 1, в режиме JSON) |
 
-**Examples:**
+**Примеры:**
 
 ```bash
-# Interactive selection
+# Интерактивный выбор
 openspec show
 
-# Show a specific change
+# Показать конкретное изменение
 openspec show add-dark-mode
 
-# Show a specific spec
+# Показать конкретную спецификацию
 openspec show auth --type spec
 
-# JSON output for parsing
+# Вывод в JSON для парсинга
 openspec show add-dark-mode --json
 ```
 
 ---
 
-## Validation Commands
+## Команды валидации
 
 ### `openspec validate`
 
-Validate changes and specs for structural issues.
+Валидация изменений и спецификаций на наличие структурных проблем.
 
 ```
 openspec validate [item-name] [options]
 ```
 
-**Arguments:**
+**Аргументы:**
 
-| Argument | Required | Description |
+| Аргумент | Обязательный | Описание |
 |----------|----------|-------------|
-| `item-name` | No | Specific item to validate (prompts if omitted) |
+| `item-name` | Нет | Конкретный элемент для валидации (запрашивается, если опущено) |
 
-**Options:**
+**Опции:**
 
-| Option | Description |
+| Опция | Описание |
 |--------|-------------|
-| `--all` | Validate all changes and specs |
-| `--changes` | Validate all changes |
-| `--specs` | Validate all specs |
-| `--type <type>` | Specify type when name is ambiguous: `change` or `spec` |
-| `--strict` | Enable strict validation mode |
-| `--json` | Output as JSON |
-| `--concurrency <n>` | Max parallel validations (default: 6, or `OPENSPEC_CONCURRENCY` env) |
-| `--no-interactive` | Disable prompts |
+| `--all` | Валидация всех изменений и спецификаций |
+| `--changes` | Валидация всех изменений |
+| `--specs` | Валидация всех спецификаций |
+| `--type <type>` | Указать тип, если имя двусмысленно: `change` или `spec` |
+| `--strict` | Включить строгий режим валидации |
+| `--json` | Вывод в формате JSON |
+| `--concurrency <n>` | Максимальное количество параллельных валидаций (по умолчанию: 6 или переменная `OPENSPEC_CONCURRENCY`) |
+| `--no-interactive` | Отключить интерактивные подсказки |
 
-**Examples:**
+**Примеры:**
 
 ```bash
-# Interactive validation
+# Интерактивная валидация
 openspec validate
 
-# Validate a specific change
+# Валидация конкретного изменения
 openspec validate add-dark-mode
 
-# Validate all changes
+# Валидация всех изменений
 openspec validate --changes
 
-# Validate everything with JSON output (for CI/scripts)
+# Валидация всего с выводом в JSON (для CI/скриптов)
 openspec validate --all --json
 
-# Strict validation with increased parallelism
+# Строгая валидация с повышенным параллелизмом
 openspec validate --all --strict --concurrency 12
 ```
 
-**Output (text):**
+**Вывод (текст):**
 
 ```
 Validating add-dark-mode...
@@ -317,7 +317,7 @@ Validating add-dark-mode...
 1 warning found
 ```
 
-**Output (JSON):**
+**Вывод (JSON):**
 
 ```json
 {
@@ -341,89 +341,89 @@ Validating add-dark-mode...
 
 ---
 
-## Lifecycle Commands
+## Команды жизненного цикла
 
 ### `openspec archive`
 
-Archive a completed change and merge delta specs into main specs.
+Архивация завершенного изменения и слияние дельта-спецификаций с основными спецификациями.
 
 ```
 openspec archive [change-name] [options]
 ```
 
-**Arguments:**
+**Аргументы:**
 
-| Argument | Required | Description |
+| Аргумент | Обязательный | Описание |
 |----------|----------|-------------|
-| `change-name` | No | Change to archive (prompts if omitted) |
+| `change-name` | Нет | Изменение для архивации (запрашивается, если опущено) |
 
-**Options:**
+**Опции:**
 
-| Option | Description |
+| Опция | Описание |
 |--------|-------------|
-| `-y, --yes` | Skip confirmation prompts |
-| `--skip-specs` | Skip spec updates (for infrastructure/tooling/doc-only changes) |
-| `--no-validate` | Skip validation (requires confirmation) |
+| `-y, --yes` | Пропустить подтверждение |
+| `--skip-specs` | Пропустить обновление спецификаций (для изменений инфраструктуры/инструментария/только документации) |
+| `--no-validate` | Пропустить валидацию (требует подтверждения) |
 
-**Examples:**
+**Примеры:**
 
 ```bash
-# Interactive archive
+# Интерактивная архивация
 openspec archive
 
-# Archive specific change
+# Архивация конкретного изменения
 openspec archive add-dark-mode
 
-# Archive without prompts (CI/scripts)
+# Архивация без подсказок (для CI/скриптов)
 openspec archive add-dark-mode --yes
 
-# Archive a tooling change that doesn't affect specs
+# Архивация изменения инструментов, которое не влияет на спецификации
 openspec archive update-ci-config --skip-specs
 ```
 
-**What it does:**
+**Что она делает:**
 
-1. Validates the change (unless `--no-validate`)
-2. Prompts for confirmation (unless `--yes`)
-3. Merges delta specs into `openspec/specs/`
-4. Moves change folder to `openspec/changes/archive/YYYY-MM-DD-<name>/`
+1. Валидирует изменение (если не указано `--no-validate`)
+2. Запрашивает подтверждение (если не указано `--yes`)
+3. Сливает дельта-спецификации в `openspec/specs/`
+4. Перемещает папку изменения в `openspec/changes/archive/ГГГГ-ММ-ДД-<имя>/`
 
 ---
 
-## Workflow Commands
+## Команды рабочего процесса
 
-These commands support the artifact-driven OPSX workflow. They're useful for both humans checking progress and agents determining next steps.
+Эти команды поддерживают рабочий процесс OPSX на основе артефактов. Они полезны как для людей, проверяющих прогресс, так и для агентов, определяющих следующие шаги.
 
 ### `openspec status`
 
-Display artifact completion status for a change.
+Отображение статуса завершения артефактов для изменения.
 
 ```
 openspec status [options]
 ```
 
-**Options:**
+**Опции:**
 
-| Option | Description |
+| Опция | Описание |
 |--------|-------------|
-| `--change <id>` | Change name (prompts if omitted) |
-| `--schema <name>` | Schema override (auto-detected from change's config) |
-| `--json` | Output as JSON |
+| `--change <id>` | Имя изменения (запрашивается, если опущено) |
+| `--schema <name>` | Переопределение схемы (автоматически определяется из конфига изменения) |
+| `--json` | Вывод в формате JSON |
 
-**Examples:**
+**Примеры:**
 
 ```bash
-# Interactive status check
+# Интерактивная проверка статуса
 openspec status
 
-# Status for specific change
+# Статус для конкретного изменения
 openspec status --change add-dark-mode
 
-# JSON for agent use
+# JSON для использования агентом
 openspec status --change add-dark-mode --json
 ```
 
-**Output (text):**
+**Вывод (текст):**
 
 ```
 Change: add-dark-mode
@@ -438,7 +438,7 @@ Artifacts:
 Next: Create design using /opsx:continue
 ```
 
-**Output (JSON):**
+**Вывод (JSON):**
 
 ```json
 {
@@ -458,82 +458,82 @@ Next: Create design using /opsx:continue
 
 ### `openspec instructions`
 
-Get enriched instructions for creating an artifact or applying tasks. Used by AI agents to understand what to create next.
+Получение расширенных инструкций для создания артефакта или реализации задач. Используется ИИ-агентами для понимания того, что создавать дальше.
 
 ```
 openspec instructions [artifact] [options]
 ```
 
-**Arguments:**
+**Аргументы:**
 
-| Argument | Required | Description |
+| Аргумент | Обязательный | Описание |
 |----------|----------|-------------|
-| `artifact` | No | Artifact ID: `proposal`, `specs`, `design`, `tasks`, or `apply` |
+| `artifact` | Нет | ID артефакта: `proposal`, `specs`, `design`, `tasks` или `apply` |
 
-**Options:**
+**Опции:**
 
-| Option | Description |
+| Опция | Описание |
 |--------|-------------|
-| `--change <id>` | Change name (required in non-interactive mode) |
-| `--schema <name>` | Schema override |
-| `--json` | Output as JSON |
+| `--change <id>` | Имя изменения (обязательно в неинтерактивном режиме) |
+| `--schema <name>` | Переопределение схемы |
+| `--json` | Вывод в формате JSON |
 
-**Special case:** Use `apply` as the artifact to get task implementation instructions.
+**Особый случай:** Используйте `apply` в качестве артефакта, чтобы получить инструкции по реализации задач.
 
-**Examples:**
+**Примеры:**
 
 ```bash
-# Get instructions for next artifact
+# Получить инструкции для следующего артефакта
 openspec instructions --change add-dark-mode
 
-# Get specific artifact instructions
+# Получить инструкции для конкретного артефакта
 openspec instructions design --change add-dark-mode
 
-# Get apply/implementation instructions
+# Получить инструкции по реализации (apply)
 openspec instructions apply --change add-dark-mode
 
-# JSON for agent consumption
+# JSON для использования агентом
 openspec instructions design --change add-dark-mode --json
 ```
 
-**Output includes:**
+**Вывод включает:**
 
-- Template content for the artifact
-- Project context from config
-- Content from dependency artifacts
-- Per-artifact rules from config
+- Содержимое шаблона для артефакта
+- Контекст проекта из конфига
+- Содержимое зависимых артефактов
+- Правила для конкретного артефакта из конфига
 
 ---
 
 ### `openspec templates`
 
-Show resolved template paths for all artifacts in a schema.
+Показать разрешенные пути к шаблонам для всех артефактов в схеме.
 
 ```
 openspec templates [options]
 ```
 
-**Options:**
+**Опции:**
 
-| Option | Description |
+| Опция | Описание |
 |--------|-------------|
-| `--schema <name>` | Schema to inspect (default: `spec-driven`) |
-| `--json` | Output as JSON |
+| `--schema <name>` | Схема для проверки (по умолчанию: `spec-driven`) |
+| `--json` | Вывод в формате JSON |
 
-**Examples:**
+**Примеры:**
 
 ```bash
-# Show template paths for default schema
+# Показать пути к шаблонам для схемы по умолчанию
 openspec templates
 
-# Show templates for custom schema
+# Показать шаблоны для кастомной схемы
 openspec templates --schema my-workflow
 
-# JSON for programmatic use
+# JSON для программного использования
 openspec templates --json
 ```
 
-**Output (text):**
+**Вывод (текст):**
 
 ```
 Schema: spec-driven
@@ -549,25 +549,25 @@ Templates:
 
 ### `openspec schemas`
 
-List available workflow schemas with their descriptions and artifact flows.
+Список доступных схем рабочих процессов с их описаниями и потоками артефактов.
 
 ```
 openspec schemas [options]
 ```
 
-**Options:**
+**Опции:**
 
-| Option | Description |
+| Опция | Описание |
 |--------|-------------|
-| `--json` | Output as JSON |
+| `--json` | Вывод в формате JSON |
 
-**Example:**
+**Пример:**
 
 ```bash
 openspec schemas
 ```
 
-**Output:**
+**Вывод:**
 
 ```
 Available schemas:
@@ -583,55 +583,55 @@ Available schemas:
 
 ---
 
-## Schema Commands
+## Команды схем (Schema Commands)
 
-Commands for creating and managing custom workflow schemas.
+Команды для создания и управления кастомными схемами рабочих процессов.
 
 ### `openspec schema init`
 
-Create a new project-local schema.
+Создание новой локальной схемы проекта.
 
 ```
 openspec schema init <name> [options]
 ```
 
-**Arguments:**
+**Аргументы:**
 
-| Argument | Required | Description |
+| Аргумент | Обязательный | Описание |
 |----------|----------|-------------|
-| `name` | Yes | Schema name (kebab-case) |
+| `name` | Да | Имя схемы (в формате kebab-case) |
 
-**Options:**
+**Опции:**
 
-| Option | Description |
+| Опция | Описание |
 |--------|-------------|
-| `--description <text>` | Schema description |
-| `--artifacts <list>` | Comma-separated artifact IDs (default: `proposal,specs,design,tasks`) |
-| `--default` | Set as project default schema |
-| `--no-default` | Don't prompt to set as default |
-| `--force` | Overwrite existing schema |
-| `--json` | Output as JSON |
+| `--description <text>` | Описание схемы |
+| `--artifacts <list>` | Список ID артефактов через запятую (по умолчанию: `proposal,specs,design,tasks`) |
+| `--default` | Установить как схему по умолчанию для проекта |
+| `--no-default` | Не предлагать установку в качестве схемы по умолчанию |
+| `--force` | Перезаписать существующую схему |
+| `--json` | Вывод в формате JSON |
 
-**Examples:**
+**Примеры:**
 
 ```bash
-# Interactive schema creation
+# Интерактивное создание схемы
 openspec schema init research-first
 
-# Non-interactive with specific artifacts
+# Неинтерактивно с конкретными артефактами
 openspec schema init rapid \
   --description "Rapid iteration workflow" \
   --artifacts "proposal,tasks" \
   --default
 ```
 
-**What it creates:**
+**Что создается:**
 
 ```
 openspec/schemas/<name>/
-├── schema.yaml           # Schema definition
+├── schema.yaml           # Определение схемы
 └── templates/
-    ├── proposal.md       # Template for each artifact
+    ├── proposal.md       # Шаблон для каждого артефакта
     ├── specs.md
     ├── design.md
     └── tasks.md
@@ -641,30 +641,30 @@ openspec/schemas/<name>/
 
 ### `openspec schema fork`
 
-Copy an existing schema to your project for customization.
+Копирование существующей схемы в проект для кастомизации.
 
 ```
 openspec schema fork <source> [name] [options]
 ```
 
-**Arguments:**
+**Аргументы:**
 
-| Argument | Required | Description |
+| Аргумент | Обязательный | Описание |
 |----------|----------|-------------|
-| `source` | Yes | Schema to copy |
-| `name` | No | New schema name (default: `<source>-custom`) |
+| `source` | Да | Схема для копирования |
+| `name` | Нет | Имя новой схемы (по умолчанию: `<source>-custom`) |
 
-**Options:**
+**Опции:**
 
-| Option | Description |
+| Опция | Описание |
 |--------|-------------|
-| `--force` | Overwrite existing destination |
-| `--json` | Output as JSON |
+| `--force` | Перезаписать существующую целевую схему |
+| `--json` | Вывод в формате JSON |
 
-**Example:**
+**Пример:**
 
 ```bash
-# Fork the built-in spec-driven schema
+# Форк встроенной схемы spec-driven
 openspec schema fork spec-driven my-workflow
 ```
 
@@ -672,32 +672,32 @@ openspec schema fork spec-driven my-workflow
 
 ### `openspec schema validate`
 
-Validate a schema's structure and templates.
+Валидация структуры схемы и её шаблонов.
 
 ```
 openspec schema validate [name] [options]
 ```
 
-**Arguments:**
+**Аргументы:**
 
-| Argument | Required | Description |
+| Аргумент | Обязательный | Описание |
 |----------|----------|-------------|
-| `name` | No | Schema to validate (validates all if omitted) |
+| `name` | Нет | Схема для валидации (валидирует все, если опущено) |
 
-**Options:**
+**Опции:**
 
-| Option | Description |
+| Опция | Описание |
 |--------|-------------|
-| `--verbose` | Show detailed validation steps |
-| `--json` | Output as JSON |
+| `--verbose` | Показать подробные шаги валидации |
+| `--json` | Вывод в формате JSON |
 
-**Example:**
+**Пример:**
 
 ```bash
-# Validate a specific schema
+# Валидация конкретной схемы
 openspec schema validate my-workflow
 
-# Validate all schemas
+# Валидация всех схем
 openspec schema validate
 ```
 
@@ -705,124 +705,124 @@ openspec schema validate
 
 ### `openspec schema which`
 
-Show where a schema resolves from (useful for debugging precedence).
+Показать, откуда разрешается схема (полезно для отладки приоритетов).
 
 ```
 openspec schema which [name] [options]
 ```
 
-**Arguments:**
+**Аргументы:**
 
-| Argument | Required | Description |
+| Аргумент | Обязательный | Описание |
 |----------|----------|-------------|
-| `name` | No | Schema name |
+| `name` | Нет | Имя схемы |
 
-**Options:**
+**Опции:**
 
-| Option | Description |
+| Опция | Описание |
 |--------|-------------|
-| `--all` | List all schemas with their sources |
-| `--json` | Output as JSON |
+| `--all` | Список всех схем с их источниками |
+| `--json` | Вывод в формате JSON |
 
-**Example:**
+**Пример:**
 
 ```bash
-# Check where a schema comes from
+# Проверить источник схемы
 openspec schema which spec-driven
 ```
 
-**Output:**
+**Вывод:**
 
 ```
 spec-driven resolves from: package
   Source: /usr/local/lib/node_modules/@fission-ai/openspec/schemas/spec-driven
 ```
 
-**Schema precedence:**
+**Приоритет схем:**
 
-1. Project: `openspec/schemas/<name>/`
-2. User: `~/.local/share/openspec/schemas/<name>/`
-3. Package: Built-in schemas
+1. Проект: `openspec/schemas/<name>/`
+2. Пользователь: `~/.local/share/openspec/schemas/<name>/`
+3. Пакет: Встроенные схемы
 
 ---
 
-## Configuration Commands
+## Команды конфигурации
 
 ### `openspec config`
 
-View and modify global OpenSpec configuration.
+Просмотр и изменение глобальной конфигурации OpenSpec.
 
 ```
 openspec config <subcommand> [options]
 ```
 
-**Subcommands:**
+**Подкоманды:**
 
-| Subcommand | Description |
+| Подкоманда | Описание |
 |------------|-------------|
-| `path` | Show config file location |
-| `list` | Show all current settings |
-| `get <key>` | Get a specific value |
-| `set <key> <value>` | Set a value |
-| `unset <key>` | Remove a key |
-| `reset` | Reset to defaults |
-| `edit` | Open in `$EDITOR` |
+| `path` | Показать путь к файлу конфигурации |
+| `list` | Показать все текущие настройки |
+| `get <key>` | Получить конкретное значение |
+| `set <key> <value>` | Установить значение |
+| `unset <key>` | Удалить ключ |
+| `reset` | Сбросить до настроек по умолчанию |
+| `edit` | Открыть в `$EDITOR` |
 
-**Examples:**
+**Примеры:**
 
 ```bash
-# Show config file path
+# Показать путь к файлу конфига
 openspec config path
 
-# List all settings
+# Список всех настроек
 openspec config list
 
-# Get a specific value
+# Получить конкретное значение
 openspec config get telemetry.enabled
 
-# Set a value
+# Установить значение
 openspec config set telemetry.enabled false
 
-# Set a string value explicitly
+# Явно установить строковое значение
 openspec config set user.name "My Name" --string
 
-# Remove a custom setting
+# Удалить пользовательскую настройку
 openspec config unset user.name
 
-# Reset all configuration
+# Сбросить всю конфигурацию
 openspec config reset --all --yes
 
-# Edit config in your editor
+# Редактировать конфиг в вашем редакторе
 openspec config edit
 ```
 
 ---
 
-## Utility Commands
+## Утилиты
 
 ### `openspec feedback`
 
-Submit feedback about OpenSpec. Creates a GitHub issue.
+Отправить отзыв об OpenSpec. Создает issue на GitHub.
 
 ```
 openspec feedback <message> [options]
 ```
 
-**Arguments:**
+**Аргументы:**
 
-| Argument | Required | Description |
+| Аргумент | Обязательный | Описание |
 |----------|----------|-------------|
-| `message` | Yes | Feedback message |
+| `message` | Да | Сообщение отзыва |
 
-**Options:**
+**Опции:**
 
-| Option | Description |
+| Опция | Описание |
 |--------|-------------|
-| `--body <text>` | Detailed description |
+| `--body <text>` | Подробное описание |
 
-**Requirements:** GitHub CLI (`gh`) must be installed and authenticated.
+**Требования:** Должен быть установлен и аутентифицирован GitHub CLI (`gh`).
 
-**Example:**
+**Пример:**
 
 ```bash
 openspec feedback "Add support for custom artifact types" \
@@ -833,62 +833,62 @@ openspec feedback "Add support for custom artifact types" \
 
 ### `openspec completion`
 
-Manage shell completions for the OpenSpec CLI.
+Управление автодополнением команд OpenSpec в оболочке.
 
 ```
 openspec completion <subcommand> [shell]
 ```
 
-**Subcommands:**
+**Подкоманды:**
 
-| Subcommand | Description |
+| Подкоманда | Описание |
 |------------|-------------|
-| `generate [shell]` | Output completion script to stdout |
-| `install [shell]` | Install completion for your shell |
-| `uninstall [shell]` | Remove installed completions |
+| `generate [shell]` | Вывести скрипт автодополнения в stdout |
+| `install [shell]` | Установить автодополнение для вашей оболочки |
+| `uninstall [shell]` | Удалить установленные автодополнения |
 
-**Supported shells:** `bash`, `zsh`, `fish`, `powershell`
+**Поддерживаемые оболочки:** `bash`, `zsh`, `fish`, `powershell`
 
-**Examples:**
+**Примеры:**
 
 ```bash
-# Install completions (auto-detects shell)
+# Установить автодополнение (автоопределение оболочки)
 openspec completion install
 
-# Install for specific shell
+# Установить для конкретной оболочки
 openspec completion install zsh
 
-# Generate script for manual installation
+# Генерация скрипта для ручной установки
 openspec completion generate bash > ~/.bash_completion.d/openspec
 
-# Uninstall
+# Удалить
 openspec completion uninstall
 ```
 
 ---
 
-## Exit Codes
+## Коды выхода (Exit Codes)
 
-| Code | Meaning |
+| Код | Значение |
 |------|---------|
-| `0` | Success |
-| `1` | Error (validation failure, missing files, etc.) |
+| `0` | Успех |
+| `1` | Ошибка (ошибка валидации, отсутствие файлов и т.д.) |
 
 ---
 
-## Environment Variables
+## Переменные окружения
 
-| Variable | Description |
+| Переменная | Описание |
 |----------|-------------|
-| `OPENSPEC_CONCURRENCY` | Default concurrency for bulk validation (default: 6) |
-| `EDITOR` or `VISUAL` | Editor for `openspec config edit` |
-| `NO_COLOR` | Disable color output when set |
+| `OPENSPEC_CONCURRENCY` | Параллелизм по умолчанию для массовой валидации (по умолчанию: 6) |
+| `EDITOR` или `VISUAL` | Редактор для `openspec config edit` |
+| `NO_COLOR` | Отключить цветной вывод при установке |
 
 ---
 
-## Related Documentation
+## Связанная документация
 
-- [Commands](commands.md) - AI slash commands (`/opsx:new`, `/opsx:apply`, etc.)
-- [Workflows](workflows.md) - Common patterns and when to use each command
-- [Customization](customization.md) - Create custom schemas and templates
-- [Getting Started](getting-started.md) - First-time setup guide
+- [Команды](commands.md) — слеш-команды ИИ (`/opsx:new`, `/opsx:apply` и т.д.)
+- [Процессы](workflows.md) — распространенные паттерны и информация о том, когда использовать каждую команду
+- [Кастомизация](customization.md) — создание кастомных схем и шаблонов
+- [Начало работы](getting-started.md) — руководство по первой настройке

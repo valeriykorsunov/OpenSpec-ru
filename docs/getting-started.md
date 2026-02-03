@@ -1,273 +1,274 @@
-# Getting Started
+# Начало работы
 
-This guide explains how OpenSpec works after you've installed and initialized it. For installation instructions, see the [main README](../README.md#quick-start).
+В этом руководстве объясняется, как работает OpenSpec после установки и инициализации. Инструкции по установке см. в [основном README](../README.md#quick-start).
 
-## How It Works
+## Как это работает
 
-OpenSpec helps you and your AI coding assistant agree on what to build before any code is written. The workflow follows a simple pattern:
+OpenSpec помогает вам и вашему ИИ-ассистенту договориться о том, что именно нужно создать, еще до написания кода. Рабочий процесс следует простому паттерну:
 
 ```
 ┌────────────────────┐
-│ Start a Change     │  /opsx:new
+│ Начать изменение   │  /opsx:new
 └────────┬───────────┘
          │
          ▼
 ┌────────────────────┐
-│ Create Artifacts   │  /opsx:ff or /opsx:continue
-│ (proposal, specs,  │
-│  design, tasks)    │
+│ Создать артефакты  │  /opsx:ff или /opsx:continue
+│ (предложение,      │
+│ спецификации,      │
+│ дизайн, задачи)    │
 └────────┬───────────┘
          │
          ▼
 ┌────────────────────┐
-│ Implement Tasks    │  /opsx:apply
-│ (AI writes code)   │
+│ Выполнить задачи   │  /opsx:apply
+│ (ИИ пишет код)     │
 └────────┬───────────┘
          │
          ▼
 ┌────────────────────┐
-│ Archive & Merge    │  /opsx:archive
-│ Specs              │
+│ Архивация и слияние│  /opsx:archive
+│ спецификаций       │
 └────────────────────┘
 ```
 
-## What OpenSpec Creates
+## Что создает OpenSpec
 
-After running `openspec init`, your project has this structure:
+После запуска `openspec init` ваш проект получает следующую структуру:
 
 ```
 openspec/
-├── specs/              # Source of truth (your system's behavior)
-│   └── <domain>/
+├── specs/              # Источник истины (поведение вашей системы)
+│   └── <домен>/
 │       └── spec.md
-├── changes/            # Proposed updates (one folder per change)
-│   └── <change-name>/
+├── changes/            # Предлагаемые обновления (одна папка на изменение)
+│   └── <имя-изменения>/
 │       ├── proposal.md
 │       ├── design.md
 │       ├── tasks.md
-│       └── specs/      # Delta specs (what's changing)
-│           └── <domain>/
+│       └── specs/      # Дельта-спецификации (что меняется)
+│           └── <домен>/
 │               └── spec.md
-└── config.yaml         # Project configuration (optional)
+└── config.yaml         # Конфигурация проекта (опционально)
 ```
 
-**Two key directories:**
+**Две ключевые директории:**
 
-- **`specs/`** - The source of truth. These specs describe how your system currently behaves. Organized by domain (e.g., `specs/auth/`, `specs/payments/`).
+- **`specs/`** — Источник истины. Эти спецификации описывают, как ваша система ведет себя в данный момент. Организованы по доменам (например, `specs/auth/`, `specs/payments/`).
 
-- **`changes/`** - Proposed modifications. Each change gets its own folder with all related artifacts. When a change is complete, its specs merge into the main `specs/` directory.
+- **`changes/`** — Предлагаемые модификации. Каждое изменение получает свою папку со всеми сопутствующими артефактами. Когда изменение завершено, его спецификации объединяются с основной директорией `specs/`.
 
-## Understanding Artifacts
+## Понимание артефактов
 
-Each change folder contains artifacts that guide the work:
+Каждая папка изменения содержит артефакты, которые направляют работу:
 
-| Artifact | Purpose |
+| Артефакт | Назначение |
 |----------|---------|
-| `proposal.md` | The "why" and "what" - captures intent, scope, and approach |
-| `specs/` | Delta specs showing ADDED/MODIFIED/REMOVED requirements |
-| `design.md` | The "how" - technical approach and architecture decisions |
-| `tasks.md` | Implementation checklist with checkboxes |
+| `proposal.md` | "Почему" и "Что" — фиксирует намерения, объем и подход |
+| `specs/` | Дельта-спецификации, показывающие ДОБАВЛЕННЫЕ/ИЗМЕНЕННЫЕ/УДАЛЕННЫЕ требования |
+| `design.md` | "Как" — технический подход и архитектурные решения |
+| `tasks.md` | Список задач для реализации с чекбоксами |
 
-**Artifacts build on each other:**
+**Артефакты строятся друг на друге:**
 
 ```
-proposal ──► specs ──► design ──► tasks ──► implement
-   ▲           ▲          ▲                    │
-   └───────────┴──────────┴────────────────────┘
-            update as you learn
+предложение ──► спецификации ──► дизайн ──► задачи ──► реализация
+      ▲               ▲               ▲                     │
+      └───────────────┴───────────────┴─────────────────────┘
+                 обновляйте по мере обучения
 ```
 
-You can always go back and refine earlier artifacts as you learn more during implementation.
+Вы всегда можете вернуться и доработать предыдущие артефакты, если в процессе реализации узнаете что-то новое.
 
-## How Delta Specs Work
+## Как работают дельта-спецификации
 
-Delta specs are the key concept in OpenSpec. They show what's changing relative to your current specs.
+Дельта-спецификации — это ключевая концепция OpenSpec. Они показывают, что именно меняется относительно ваших текущих спецификаций.
 
-### The Format
+### Формат
 
-Delta specs use sections to indicate the type of change:
+Дельта-спецификации используют разделы для указания типа изменений:
 
 ```markdown
-# Delta for Auth
+# Дельта для Auth
 
-## ADDED Requirements
+## ДОБАВЛЕННЫЕ требования (ADDED Requirements)
 
-### Requirement: Two-Factor Authentication
-The system MUST require a second factor during login.
+### Требование: Двухфакторная аутентификация
+Система ДОЛЖНА требовать второй фактор при входе в систему.
 
-#### Scenario: OTP required
-- GIVEN a user with 2FA enabled
-- WHEN the user submits valid credentials
-- THEN an OTP challenge is presented
+#### Сценарий: Требуется OTP
+- ДАНО: пользователь с включенным 2FA
+- КОГДА: пользователь вводит верные учетные данные
+- ТОГДА: предъявляется запрос OTP
 
-## MODIFIED Requirements
+## ИЗМЕНЕННЫЕ требования (MODIFIED Requirements)
 
-### Requirement: Session Timeout
-The system SHALL expire sessions after 30 minutes of inactivity.
-(Previously: 60 minutes)
+### Требование: Тайм-аут сессии
+Система ДОЛЖНА аннулировать сессии после 30 минут бездействия.
+(Ранее: 60 минут)
 
-#### Scenario: Idle timeout
-- GIVEN an authenticated session
-- WHEN 30 minutes pass without activity
-- THEN the session is invalidated
+#### Сценарий: Тайм-аут при бездействии
+- ДАНО: аутентифицированная сессия
+- КОГДА: проходит 30 минут без активности
+- ТОГДА: сессия становится недействительной
 
-## REMOVED Requirements
+## УДАЛЕННЫЕ требования (REMOVED Requirements)
 
-### Requirement: Remember Me
-(Deprecated in favor of 2FA)
+### Требование: Запомнить меня
+(Устарело в пользу 2FA)
 ```
 
-### What Happens on Archive
+### Что происходит при архивации
 
-When you archive a change:
+Когда вы архивируете изменение:
 
-1. **ADDED** requirements are appended to the main spec
-2. **MODIFIED** requirements replace the existing version
-3. **REMOVED** requirements are deleted from the main spec
+1. **ДОБАВЛЕННЫЕ** требования дописываются в основную спецификацию.
+2. **ИЗМЕНЕННЫЕ** требования заменяют существующую версию.
+3. **УДАЛЕННЫЕ** требования удаляются из основной спецификации.
 
-The change folder moves to `openspec/changes/archive/` for audit history.
+Папка изменения перемещается в `openspec/changes/archive/` для сохранения истории аудита.
 
-## Example: Your First Change
+## Пример: Ваше первое изменение
 
-Let's walk through adding dark mode to an application.
+Давайте разберем процесс добавления темной темы в приложение.
 
-### 1. Start the Change
-
-```
-You: /opsx:new add-dark-mode
-
-AI:  Created openspec/changes/add-dark-mode/
-     Ready to create: proposal
-```
-
-### 2. Create Artifacts
-
-Use `/opsx:ff` (fast-forward) to create all planning artifacts at once:
+### 1. Начало изменения
 
 ```
-You: /opsx:ff
+Вы: /opsx:new add-dark-mode
 
-AI:  Creating artifacts for add-dark-mode...
-     ✓ proposal.md — why we're doing this, what's changing
-     ✓ specs/       — requirements and scenarios
-     ✓ design.md    — technical approach
-     ✓ tasks.md     — implementation checklist
-     Ready for implementation!
+ИИ: Создана папка openspec/changes/add-dark-mode/
+    Готов к созданию: предложение (proposal)
 ```
 
-### 3. What Gets Created
+### 2. Создание артефактов
 
-**proposal.md** - Captures the intent:
+Используйте `/opsx:ff` (fast-forward), чтобы создать все артефакты планирования одновременно:
+
+```
+Вы: /opsx:ff
+
+ИИ: Создаю артефакты для add-dark-mode...
+    ✓ proposal.md — зачем мы это делаем, что меняется
+    ✓ specs/       — требования и сценарии
+    ✓ design.md    — технический подход
+    ✓ tasks.md     — список задач для реализации
+    Готов к реализации!
+```
+
+### 3. Что создается
+
+**proposal.md** — фиксирует намерения:
 
 ```markdown
-# Proposal: Add Dark Mode
+# Предложение: Добавить темную тему
 
-## Intent
-Users have requested a dark mode option to reduce eye strain
-during nighttime usage.
+## Намерение
+Пользователи запрашивали возможность включения темной темы для снижения 
+нагрузки на глаза при использовании в ночное время.
 
-## Scope
-- Add theme toggle in settings
-- Support system preference detection
-- Persist preference in localStorage
+## Объем
+- Добавить переключатель темы в настройках
+- Поддерживать определение системных предпочтений
+- Сохранять предпочтения в localStorage
 
-## Approach
-Use CSS custom properties for theming with a React context
-for state management.
+## Подход
+Использовать CSS-переменные для темизации и React context 
+для управления состоянием.
 ```
 
-**specs/ui/spec.md** - Delta showing new requirements:
+**specs/ui/spec.md** — дельта с новыми требованиями:
 
 ```markdown
-# Delta for UI
+# Дельта для UI
 
-## ADDED Requirements
+## ДОБАВЛЕННЫЕ требования
 
-### Requirement: Theme Selection
-The system SHALL allow users to choose between light and dark themes.
+### Требование: Выбор темы
+Система ДОЛЖНА позволять пользователям выбирать между светлой и темной темами.
 
-#### Scenario: Manual toggle
-- GIVEN a user on any page
-- WHEN the user clicks the theme toggle
-- THEN the theme switches immediately
-- AND the preference persists across sessions
+#### Сценарий: Ручное переключение
+- ДАНО: пользователь на любой странице
+- КОГДА: пользователь нажимает на переключатель темы
+- ТОГДА: тема меняется немедленно
+- И: предпочтение сохраняется между сессиями
 
-#### Scenario: System preference
-- GIVEN a user with no saved preference
-- WHEN the application loads
-- THEN the system's preferred color scheme is used
+#### Сценарий: Системные предпочтения
+- ДАНО: пользователь без сохраненных предпочтений
+- КОГДА: приложение загружается
+- ТОГДА: используется системная цветовая схема
 ```
 
-**tasks.md** - Implementation checklist:
+**tasks.md** — список задач для реализации:
 
 ```markdown
-# Tasks
+# Задачи
 
-## 1. Theme Infrastructure
-- [ ] 1.1 Create ThemeContext with light/dark state
-- [ ] 1.2 Add CSS custom properties for colors
-- [ ] 1.3 Implement localStorage persistence
+## 1. Инфраструктура тем
+- [ ] 1.1 Создать ThemeContext с состояниями light/dark
+- [ ] 1.2 Добавить CSS-переменные для цветов
+- [ ] 1.3 Реализовать сохранение в localStorage
 
-## 2. UI Components
-- [ ] 2.1 Create ThemeToggle component
-- [ ] 2.2 Add toggle to settings page
-- [ ] 2.3 Update Header to include quick toggle
+## 2. UI Компоненты
+- [ ] 2.1 Создать компонент ThemeToggle
+- [ ] 2.2 Добавить переключатель на страницу настроек
+- [ ] 2.3 Обновить Header, включив быстрый переключатель
 
-## 3. Styling
-- [ ] 3.1 Define dark theme color palette
-- [ ] 3.2 Update components to use CSS variables
+## 3. Стилизация
+- [ ] 3.1 Определить палитру цветов для темной темы
+- [ ] 3.2 Обновить компоненты для использования CSS-переменных
 ```
 
-### 4. Implement
+### 4. Реализация
 
 ```
-You: /opsx:apply
+Вы: /opsx:apply
 
-AI:  Working through tasks...
-     ✓ 1.1 Created ThemeContext with light/dark state
-     ✓ 1.2 Added CSS custom properties to globals.css
-     ✓ 1.3 Implemented localStorage persistence
-     ✓ 2.1 Created ThemeToggle component
-     ...
-     All tasks complete!
+ИИ: Выполняю задачи...
+    ✓ 1.1 Создан ThemeContext с состояниями light/dark
+    ✓ 1.2 Добавлены CSS-переменные в globals.css
+    ✓ 1.3 Реализовано сохранение в localStorage
+    ✓ 2.1 Создан компонент ThemeToggle
+    ...
+    Все задачи выполнены!
 ```
 
-During implementation, if you discover the design needs adjustment, just update the artifact and continue.
+В процессе реализации, если вы обнаружите, что дизайн требует корректировки, просто обновите артефакт и продолжайте.
 
-### 5. Archive
+### 5. Архивация
 
 ```
-You: /opsx:archive
+Вы: /opsx:archive
 
-AI:  Archiving add-dark-mode...
-     ✓ Merged specs into openspec/specs/ui/spec.md
-     ✓ Moved to openspec/changes/archive/2025-01-24-add-dark-mode/
-     Done! Ready for the next feature.
+ИИ: Архивирую add-dark-mode...
+    ✓ Спецификации объединены в openspec/specs/ui/spec.md
+    ✓ Изменение перемещено в openspec/changes/archive/2025-01-24-add-dark-mode/
+    Готово! Можно приступать к следующей фиче.
 ```
 
-Your delta specs are now part of the main specs, documenting how your system works.
+Ваши дельта-спецификации теперь стали частью основных спецификаций, документируя работу вашей системы.
 
-## Verifying and Reviewing
+## Проверка и обзор
 
-Use the CLI to check on your changes:
+Используйте CLI для контроля ваших изменений:
 
 ```bash
-# List active changes
+# Список активных изменений
 openspec list
 
-# View change details
+# Просмотр деталей изменения
 openspec show add-dark-mode
 
-# Validate spec formatting
+# Проверка форматирования спецификаций
 openspec validate add-dark-mode
 
-# Interactive dashboard
+# Интерактивный дашборд
 openspec view
 ```
 
-## Next Steps
+## Следующие шаги
 
-- [Workflows](workflows.md) - Common patterns and when to use each command
-- [Commands](commands.md) - Full reference for all slash commands
-- [Concepts](concepts.md) - Deeper understanding of specs, changes, and schemas
-- [Customization](customization.md) - Make OpenSpec work your way
+- [Процессы](workflows.md) — распространенные паттерны и использование команд
+- [Команды](commands.md) — полный справочник всех слеш-команд
+- [Концепции](concepts.md) — глубокое понимание спецификаций, изменений и схем
+- [Кастомизация](customization.md) — настройка OpenSpec под ваши нужды
